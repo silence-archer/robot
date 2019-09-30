@@ -1,0 +1,22 @@
+{
+  "reqType":0,
+  "perception": {
+    "inputText": {
+      "text": "用完了？"
+    },
+    "inputImage": {
+      "url": "imageUrl"
+    },
+    "selfInfo": {
+      "location": {
+        "city": "北京",
+        "province": "北京",
+        "street": "信息路"
+      }
+    }
+  },
+  "userInfo": {
+    "apiKey": "db102bba955342ee8e32c2e3f317704e",
+    "userId": "508353"
+  }
+}
