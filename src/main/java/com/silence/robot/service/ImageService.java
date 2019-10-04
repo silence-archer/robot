@@ -1,7 +1,6 @@
 package com.silence.robot.service;
 
 import org.springframework.stereotype.Service;
-import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
@@ -9,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Random;
 
 @Service
@@ -72,8 +72,9 @@ public class ImageService {
             e.printStackTrace();
         }
         byte[] bytes = baos.toByteArray();//转换成字节
-        BASE64Encoder encoder = new BASE64Encoder();
-        String pngBase64 = encoder.encodeBuffer(bytes).trim();
+//        BASE64Encoder encoder = new BASE64Encoder();
+//        String pngBase64 = encoder.encodeBuffer(bytes).trim();
+        String pngBase64 = Base64.getEncoder().encodeToString(bytes);
         pngBase64 = pngBase64.replaceAll("\n", "").replaceAll("\r", "");//删除 \r\n
         return pngBase64;
 
