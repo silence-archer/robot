@@ -12,7 +12,7 @@
     <artifactId>robot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>robot</name>
-    <description>Demo project for Spring Boot</description>
+    <description>robot</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -24,6 +24,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.6</version>
@@ -32,6 +36,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.60</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
