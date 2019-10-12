@@ -1,0 +1,20 @@
+silence:
+  filter:
+    cors: true
+robot:
+  api:
+    url: http://openapi.tuling123.com/openapi/api/v2
+    userId: 508353
+    key: db102bba955342ee8e32c2e3f317704e
+server:
+  port: 8081
+spring:
+  profiles:
+    active: mysql
+logging:
+  level:
+    root: DEBUG
+mybatis:
+  mapper-locations: classpath*:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

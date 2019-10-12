@@ -4,10 +4,10 @@
 DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE `t_user` (
   `ID` varchar(32) NOT NULL COMMENT '物理主键',
-  `USER_NAME` varchar(64) DEFAULT NULL COMMENT '用户名',
+  `USERNAME` varchar(64) DEFAULT NULL COMMENT '用户名',
   `NICKNAME` varchar(64) DEFAULT NULL COMMENT '昵称',
   `PASSWORD` varchar(60) DEFAULT NULL COMMENT '密码',
-  `ROLE_ID` varchar(32) DEFAULT NULL COMMENT '角色ID',
+  `ROLE_NO` varchar(32) DEFAULT NULL COMMENT '角色编号',
   `CREATE_TIME` datetime NOT NULL COMMENT '创建时间',
   `CREATE_USER` varchar(32) DEFAULT NULL COMMENT '创建人',
   `UPDATE_TIME` datetime NOT NULL COMMENT '修改时间',
@@ -48,4 +48,15 @@ CREATE TABLE `t_menu` (
   `UPDATE_TIME` datetime NOT NULL COMMENT '修改时间',
   `UPDATE_USER` varchar(32) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`ID`)
-) COMMENT='角色信息表';
+) COMMENT='菜单信息表';
+
+-- ----------------------------
+-- Table structure for t_sequence
+-- ----------------------------
+DROP TABLE IF EXISTS `t_sequence`;
+CREATE TABLE `t_sequence` (
+  `ID` varchar(32) NOT NULL COMMENT '物理主键',
+  `SEQ_NAME` varchar(64) DEFAULT NULL COMMENT '序列名称',
+  `SEQ_VALUE` varchar(64) DEFAULT NULL COMMENT '序列值',
+  PRIMARY KEY (`ID`)
+) COMMENT='菜单信息表';
