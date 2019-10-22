@@ -1,5 +1,8 @@
 package com.silence.robot.domain;
 
+import java.util.Date;
+
+
 public class UserInfo {
     private String username;
     private String password;
@@ -12,7 +15,16 @@ public class UserInfo {
 
     private String id;
 
+    private Date createTime;
 
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
     public String getId() {
         return id;
@@ -71,6 +83,7 @@ public class UserInfo {
                 ", nickname='" + nickname + '\'' +
                 ", imageWithVerifyCode='" + imageWithVerifyCode + '\'' +
                 ", id='" + id + '\'' +
+                ", createTime=" + createTime +
                 '}';
     }
 }

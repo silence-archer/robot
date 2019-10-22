@@ -49,13 +49,13 @@ public class UserController {
         return new DataResponse<>();
     }
 
-    @GetMapping("/updateUser")
+    @PostMapping("/updateUser")
     public DataResponse<UserInfo> updateUser(@RequestBody UserInfo userInfo){
         userService.updateUser(userInfo);
         return new DataResponse<>();
     }
 
-    @GetMapping("/deleteUser")
+    @PostMapping("/deleteUser")
     public DataResponse<UserInfo> deleteUser(@RequestBody UserInfo userInfo){
         userService.deleteUser(userInfo);
         return new DataResponse<>();

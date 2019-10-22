@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 @ControllerAdvice
 public class RobotControllerAdvice {
 
@@ -18,6 +20,13 @@ public class RobotControllerAdvice {
     public DataResponse<?> errorHandle(Exception e){
         log.error("未知错误",e);
         return new DataResponse<>("99999","未知错误");
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    @ResponseBody
+    public DataResponse<?> errorBusinessHandle(SQLIntegrityConstraintViolationException e){
+        log.error("插入重复",e);
+        return new DataResponse<>("99998","插入重复");
     }
 
     @ExceptionHandler(BusinessException.class)
