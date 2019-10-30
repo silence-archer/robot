@@ -41,6 +41,31 @@ public class CommonUtils {
         }
     }
 
+    public static boolean isNotEmpty(Object o){
+        return !isEmpty(o);
+    }
+
+    public static String getOsName(){
+        String osName = System.getProperty("os.name");
+        if(osName.toLowerCase().contains("windows")){
+            osName =  "windows";
+        }else if(osName.toLowerCase().contains("mac")){
+            osName = "mac";
+        }else if(osName.toLowerCase().contains("linux")){
+            osName = "linux";
+        }
+        return osName;
+
+    }
+
+    public static String getCmdCharset(){
+        if(getOsName().equals("windows")){
+            return "GBK";
+        }else{
+            return "UTF-8";
+        }
+    }
+
     public static <O, T> List<T> copyList(Class<T> destClazz, List<O> sourceObjList) {
         List<T> list = new ArrayList<>();
         if(isEmpty(sourceObjList)){

@@ -13,7 +13,7 @@ spring:
     active: mysql
 logging:
   level:
-    root: DEBUG
+    root: info
 mybatis:
   mapper-locations: classpath*:/mapper/*.xml
   configuration:
