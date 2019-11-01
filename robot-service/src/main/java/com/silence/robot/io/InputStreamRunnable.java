@@ -33,12 +33,15 @@ public class InputStreamRunnable implements Runnable {
     private final Logger logger = LoggerFactory.getLogger(InputStreamRunnable.class);
     private BufferedReader bReader;
 
+    private InputStream inputStream;
+
     private String type;
 
     public InputStreamRunnable(InputStream inputStream, String type) {
         try {
             bReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(inputStream), CommonUtils.getCmdCharset()));
             this.type = type;
+            this.inputStream = inputStream;
         } catch (Exception ex) {
             logger.error("输入流读取异常", ex);
         }
@@ -70,6 +73,7 @@ public class InputStreamRunnable implements Runnable {
             Path overPath = Paths.get(type + "Over.txt");
             Files.createFile(overPath);
             bReader.close();
+            inputStream.close();
         } catch (IOException e) {
             logger.error("命令输入流读取异常", e);
         }

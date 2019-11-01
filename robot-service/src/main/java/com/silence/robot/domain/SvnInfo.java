@@ -20,14 +20,34 @@ package com.silence.robot.domain;
  */
 public class SvnInfo {
 
+    /**
+     * svn url地址
+     */
     private String url;
 
+    /**
+     * svn 远程文件名
+     */
     private String name;
 
+    /**
+     * svn 检出文件夹名称
+     */
+    private String svnName;
+
+    /**
+     * svn 检出本地地址
+     */
     private String localUrl;
 
+    /**
+     * svn 用户名
+     */
     private String username;
 
+    /**
+     * svn 密码
+     */
     private String password;
 
     public String getLocalUrl() {
@@ -70,11 +90,20 @@ public class SvnInfo {
         this.name = name;
     }
 
+    public String getSvnName() {
+        return svnName;
+    }
+
+    public void setSvnName(String svnName) {
+        this.svnName = svnName;
+    }
+
     @Override
     public String toString() {
         return "SvnInfo{" +
                 "url='" + url + '\'' +
                 ", name='" + name + '\'' +
+                ", svnName='" + svnName + '\'' +
                 ", localUrl='" + localUrl + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +

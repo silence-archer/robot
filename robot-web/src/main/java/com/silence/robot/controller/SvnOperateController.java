@@ -13,6 +13,7 @@ package com.silence.robot.controller;
 import com.silence.robot.domain.FileDto;
 import com.silence.robot.domain.SvnInfo;
 import com.silence.robot.dto.DataResponse;
+import com.silence.robot.model.TSvnInfo;
 import com.silence.robot.service.SvnOperateService;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,24 @@ public class SvnOperateController {
     public DataResponse<FileDto> getSvnLogInfo(@RequestParam Integer pos){
         FileDto fileDto = svnOperateService.getSvnLogInfo(pos);
         return new DataResponse<>(fileDto);
+    }
+
+    @GetMapping("/getLocalSvnInfo")
+    public DataResponse<List<FileDto>> getLocalSvnInfo(@RequestParam String url){
+        List<FileDto> list = svnOperateService.getLocalSvnInfo(url);
+        return new DataResponse<>(list);
+    }
+
+    @PostMapping("/postLocalSvnInfo")
+    public DataResponse<List<FileDto>> postLocalSvnInfo(@RequestBody List<FileDto> fileDtos){
+        List<FileDto> list = svnOperateService.getLocalSvnInfo(fileDtos);
+        return new DataResponse<>(list);
+    }
+
+    @GetMapping("/getUrls")
+    public DataResponse<List<SvnInfo>> getUrls(){
+        List<SvnInfo> list = svnOperateService.getUrls();
+        return new DataResponse<>(list);
     }
 
     @GetMapping("/checkoutStop")

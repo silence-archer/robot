@@ -37,7 +37,7 @@
                <!--enableSelectByExample="false" enableUpdateByExample="false"/>-->
         <!--<table schema="robot" tableName="t_menu" enableCountByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" enableUpdateByExample="false"/>-->
-        <table schema="robot" tableName="t_sequence" enableCountByExample="false" enableDeleteByExample="false"
+        <table schema="robot" tableName="t_svn_info" enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false"/>
     </context>
 </generatorConfiguration>

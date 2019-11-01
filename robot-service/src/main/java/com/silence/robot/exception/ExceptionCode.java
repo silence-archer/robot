@@ -11,7 +11,10 @@ public enum ExceptionCode {
     NO_EXIST("100006","记录不存在"),
     CMD_ERROR("100007","输入的命令不正确"),
     CMD_STATE_ERROR("100008","当前没有正在运行的命令"),
-    CMD_CHECKOUT_ERROR("100008","当前有正在检出的命令"),
+    CMD_CHECKOUT_ERROR("100009","当前有正在运行的命令"),
+    CHECK_NULL_ERROR("100010","入参不能为空"),
+    QUERY_ERROR("100011","查询出来的数据条数不正确"),
+    RUNNING_ERROR("100012","任务正在执行中，请稍后再试"),
     VERIFY_ERROR("100003","验证码输入错误");
 
     private String code;
