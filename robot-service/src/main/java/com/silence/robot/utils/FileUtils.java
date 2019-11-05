@@ -13,18 +13,19 @@ package com.silence.robot.utils;
 import com.silence.robot.domain.FileDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.security.provider.Sun;
 
+import javax.swing.filechooser.FileSystemView;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -92,7 +93,7 @@ public class FileUtils {
         return fileDto;
     }
 
-    public static List<String> splitReadFile(long startPos, long endPos, File file){
+    public static List<String> splitReadFile(long startPos, long endPos, File file) {
         List<String> list = new ArrayList<>();
         RandomAccessFile fileRead = null;
         try {
@@ -113,7 +114,7 @@ public class FileUtils {
             }
         } catch (IOException e) {
             logger.error("文件读取失败", e);
-        }finally {
+        } finally {
             try {
                 fileRead.close();
             } catch (IOException e) {
@@ -194,13 +195,17 @@ public class FileUtils {
 
     }
 
-    public static String convertFileName(String path){
-        String[] split = path.split("\\\\");
-        String fileName = split[split.length-1].split("\\.")[0] + ".txt";
+    public static String convertFileName(String path) {
+        String regex = "/";
+        if(CommonUtils.getOsName().equals("windows")){
+            regex = "\\\\";
+        }
+        String[] split = path.split(regex);
+        String fileName = split[split.length - 1].split("\\.")[0] + ".txt";
         return fileName;
     }
 
-    public static void threadPoolExecute(Runnable runnable){
+    public static void threadPoolExecute(Runnable runnable) {
         while (true) {
             if (FileUtils.FILE_READ_POOL.getQueue().isEmpty()) {
                 FileUtils.FILE_READ_POOL.execute(runnable);
@@ -209,23 +214,101 @@ public class FileUtils {
         }
     }
 
+    public static void writeFileAppend(String fileName, String content) {
+        BufferedWriter bufferedWriter = null;
+        try {
+            Path path = Paths.get(getDefaultLocalUrl(fileName));
+            if (Files.notExists(path)) {
+                Files.createFile(path);
+            }
+            bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND);
+            bufferedWriter.write(content);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            logger.error("文件写入失败", e);
+        }finally {
+            try {
+                bufferedWriter.close();
+            } catch (IOException e) {
+                logger.error("文件流关闭失败", e);
+            }
+        }
+    }
+
+    public static void writeFile(String fileName, String content) {
+        BufferedWriter bufferedWriter = null;
+        try {
+            Path path = Paths.get(getDefaultLocalUrl(fileName));
+            if (Files.notExists(path)) {
+                Files.createFile(path);
+            }
+            bufferedWriter = Files.newBufferedWriter(path);
+            bufferedWriter.write(content);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            logger.error("文件写入失败", e);
+        }finally {
+            try {
+                bufferedWriter.close();
+            } catch (IOException e) {
+                logger.error("文件流关闭失败", e);
+            }
+        }
+    }
+
+    public static String getDefaultLocalUrl(String fileName){
+        String s = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "/robot/";
+        Path path = Paths.get(s);
+        if(Files.notExists(path)){
+            try {
+                Files.createDirectory(path);
+            } catch (IOException e) {
+                logger.error("文件创建失败", e);
+            }
+        }
+        return s + fileName;
+    }
+
+    public static List<String> readAllLines(String fileName){
+        List<String> list = new ArrayList<>();
+        Path path = Paths.get(getDefaultLocalUrl(fileName));
+        if(Files.exists(path)){
+            try {
+                list = Files.readAllLines(path);
+            } catch (IOException e) {
+                logger.error("文件读取失败", e);
+            }
+        }
+
+        return list;
+    }
+
+    public static String readAllContents(String fileName){
+        String content = "";
+        Path path = Paths.get(getDefaultLocalUrl(fileName));
+        if(Files.exists(path)){
+            try {
+                content = new String(Files.readAllBytes(path));
+            } catch (IOException e) {
+                logger.error("文件读取失败", e);
+            }
+        }
+
+        return content;
+    }
+
+    public static boolean exists(String name){
+        String fileName = FileUtils.getDefaultLocalUrl(name);
+        return Files.exists(Paths.get(fileName));
+    }
+
+    public static boolean notExists(String name){
+        return !exists(name);
+    }
+
 
     public static void main(String[] args) {
-        int sum = 100;
-        int split = 9;
-        int ervery = sum / split;
-        int left = 0;
-        for(int i=1; i<= split; i++){
 
-            if(i == split){
-                System.out.println(sum);
-            }else{
-                System.out.println(ervery);
-                sum = sum -ervery;
-            }
-
-
-        }
     }
 
 

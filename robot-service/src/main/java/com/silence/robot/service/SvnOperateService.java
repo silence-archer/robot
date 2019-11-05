@@ -65,17 +65,8 @@ public class SvnOperateService {
         List<SvnInfo> results = new ArrayList<>();
         String command = "svn list " + url;
         cmdOperate(command, true);
-        List<String> list = new ArrayList<>();
-        String errorMsg = "";
-        try {
-            list = Files.readAllLines(Paths.get("normalCmd.txt"));
-            if (Files.exists(Paths.get("errorCmd.txt"))) {
-                errorMsg = new String(Files.readAllBytes(Paths.get("errorCmd.txt")));
-            }
-
-        } catch (IOException e) {
-            logger.error("文件读取异常", e);
-        }
+        List<String> list = FileUtils.readAllLines("normalCmd.txt");
+        String errorMsg = FileUtils.readAllContents("errorCmd.txt");
 
         if (CommonUtils.isNotEmpty(errorMsg)) {
             throw new BusinessException(ExceptionCode.CMD_ERROR);
@@ -105,8 +96,8 @@ public class SvnOperateService {
         }
 
         if (CommonUtils.isEmpty(svnInfo.getLocalUrl())) {
-            String localUrl = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath();
-            svnInfo.setLocalUrl(localUrl + "\\" + svnInfo.getSvnName());
+            String localUrl = FileUtils.getDefaultLocalUrl(svnInfo.getSvnName());
+            svnInfo.setLocalUrl(localUrl);
         }
         //防止并发
         synchronized (running) {
@@ -148,6 +139,7 @@ public class SvnOperateService {
             } catch (InterruptedException e) {
                 logger.error("线程被打断", e);
             }
+            running = false;
         }
     }
 
@@ -158,14 +150,14 @@ public class SvnOperateService {
      * @return
      */
     public FileDto getSvnLogInfo(long pos) {
-        String errorContent = FileUtils.getFileContent("errorCmd.txt");
+        String errorContent = FileUtils.readAllContents("errorCmd.txt");
         FileDto fileDto = new FileDto();
         synchronized (running) {
             if (running) {
                 if (CommonUtils.isNotEmpty(errorContent)) {
                     fileDto.setType("error");
                     fileDto.setContent(errorContent);
-                    if (Files.exists(Paths.get("errorOver.txt"))) {
+                    if (FileUtils.exists("errorOver.txt")) {
                         running = false;
                         fileDto.setOverFlag(true);
                         //导出出错，删除重新导入
@@ -179,8 +171,9 @@ public class SvnOperateService {
                     }
                 } else {
                     fileDto.setType("normal");
-                    fileDto = FileUtils.readLine(pos, 10, "normalCmd.txt");
-                    if (Files.exists(Paths.get("normalOver.txt")) && fileDto.getLineNum() < 10) {
+                    String fileName = FileUtils.getDefaultLocalUrl("normalCmd.txt");
+                    fileDto = FileUtils.readLine(pos, 10, fileName);
+                    if (FileUtils.exists("normalOver.txt") && fileDto.getLineNum() < 10) {
                         running = false;
                         fileDto.setOverFlag(true);
                         //检出完毕
@@ -207,7 +200,7 @@ public class SvnOperateService {
     public void checkoutStop() {
 
         synchronized (running) {
-            if (!running || Files.exists(Paths.get("normalOver.txt"))) {
+            if (!running || FileUtils.exists("normalOver.txt")) {
                 throw new BusinessException(ExceptionCode.CMD_STATE_ERROR);
             }
             if (running) {
@@ -259,13 +252,13 @@ public class SvnOperateService {
     public List<FileDto> getLocalSvnInfo(List<FileDto> fileDtos) {
         synchronized (running) {
             if (running) {
-                boolean notExistsError = Files.notExists(Paths.get("errorOver.txt"));
-                boolean notExists = Files.notExists(Paths.get("normalOver.txt"));
+                boolean notExistsError = FileUtils.notExists("errorOver.txt");
+                boolean notExists = FileUtils.notExists("normalOver.txt");
                 if (notExistsError || notExists) {
                     throw new BusinessException(ExceptionCode.RUNNING_ERROR);
                 }
-                if (!notExistsError && Files.exists(Paths.get("errorCmd.txt"))) {
-                    String errorContent = FileUtils.getFileContent("errorCmd.txt");
+                String errorContent = FileUtils.readAllContents("errorCmd.txt");
+                if(CommonUtils.isNotEmpty(errorContent)){
                     running = false;
                     throw new BusinessException(errorContent, new RuntimeException("命令执行出错"));
                 }
@@ -273,7 +266,8 @@ public class SvnOperateService {
                     running = false;
                     fileDtos.forEach(fileDto -> {
                         if (!fileDto.isDirectory()) {
-                            searchContent("normalCmd.txt", fileDto.getFilePath());
+                            String fileName = FileUtils.getDefaultLocalUrl("normalCmd.txt");
+                            searchContent(fileName, fileDto.getFilePath());
 
                         }
                     });
@@ -284,6 +278,7 @@ public class SvnOperateService {
             fileDtos.forEach(fileDto -> {
                 if (!fileDto.isDirectory()) {
                     String fileName = FileUtils.convertFileName(fileDto.getFilePath());
+                    fileName = FileUtils.getDefaultLocalUrl(fileName);
                     String svnStatus = getFileSvnInfo(fileName);
                     fileDto.setFileSvnStatus(svnStatus);
 

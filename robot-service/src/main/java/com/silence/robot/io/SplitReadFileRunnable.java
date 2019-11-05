@@ -16,16 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈split read〉
  *
  * @author silence
@@ -41,7 +36,7 @@ public class SplitReadFileRunnable implements Runnable {
     private File file;
     private String content;
 
-    public SplitReadFileRunnable(long startPos, long endPos, File file, String content){
+    public SplitReadFileRunnable(long startPos, long endPos, File file, String content) {
         this.startPos = startPos;
         this.endPos = endPos;
         this.file = file;
@@ -51,17 +46,14 @@ public class SplitReadFileRunnable implements Runnable {
     @Override
     public void run() {
         List<String> list = FileUtils.splitReadFile(startPos, endPos, file);
-        logger.info("开始字节{},终止字节{},查询内容{},当前读取到的文件片段"+list,startPos,endPos,content);
+        logger.info("开始字节{},终止字节{},查询内容{},当前读取到的文件片段" + list, startPos, endPos, content);
         List<String> targets = list.stream().filter(str -> str.contains(content)).collect(Collectors.toList());
-        if(targets.size() > 0){
+        if (targets.size() > 0) {
             String target = targets.get(0);
-            if(CommonUtils.isNotEmpty(target)){
-                try {
-                    String fileName = FileUtils.convertFileName(content);
-                    Files.write(Paths.get(fileName),target.getBytes());
-                } catch (IOException e) {
-                    logger.error("写查询结果文件失败",e);
-                }
+            if (CommonUtils.isNotEmpty(target)) {
+                String fileName = FileUtils.convertFileName(content);
+                FileUtils.writeFile(fileName, target);
+
             }
 
         }

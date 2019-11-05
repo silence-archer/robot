@@ -11,6 +11,7 @@
 package com.silence.robot.io;
 
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,16 +62,17 @@ public class InputStreamRunnable implements Runnable {
                 sb.append(line + "\n");
                 i++;
                 if (i == 100) {
-                    writeFile(sb);
+                    FileUtils.writeFileAppend(type + "Cmd.txt",sb.toString());
                     sb.delete(0, sb.length());
                     i = 0;
                 }
             }
             if (sb.length() > 0) {
-                writeFile(sb);
+                FileUtils.writeFileAppend(type + "Cmd.txt",sb.toString());
             }
             logger.info("命令读取结束");
-            Path overPath = Paths.get(type + "Over.txt");
+            String fileName = FileUtils.getDefaultLocalUrl(type + "Over.txt");
+            Path overPath = Paths.get(fileName);
             Files.createFile(overPath);
             bReader.close();
             inputStream.close();
@@ -80,18 +82,12 @@ public class InputStreamRunnable implements Runnable {
 
     }
 
-    private void writeFile(StringBuilder sb) throws IOException {
-        Path path = Paths.get(type + "Cmd.txt");
-
-        if (Files.notExists(path)) {
-            Files.createFile(path);
-        }
-        Files.write(path, sb.toString().getBytes(), StandardOpenOption.APPEND);
-    }
 
     private void deleteFile() throws IOException {
-        Path path = Paths.get(type + "Cmd.txt");
-        Path overPath = Paths.get(type + "Over.txt");
+        String fileName = FileUtils.getDefaultLocalUrl(type + "Cmd.txt");
+        String fileOver = FileUtils.getDefaultLocalUrl(type + "Over.txt");
+        Path path = Paths.get(fileName);
+        Path overPath = Paths.get(fileOver);
 
 
         if (Files.exists(path)) {
