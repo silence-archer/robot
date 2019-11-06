@@ -14,10 +14,12 @@ import com.silence.robot.domain.MenuData;
 import com.silence.robot.domain.NavigationMenu;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.MenuService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

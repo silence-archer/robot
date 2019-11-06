@@ -13,7 +13,6 @@ package com.silence.robot.service;
 import com.silence.robot.mapper.TSequenceMapper;
 import com.silence.robot.model.TSequence;
 import com.silence.robot.utils.CommonUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

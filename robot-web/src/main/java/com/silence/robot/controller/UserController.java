@@ -1,17 +1,15 @@
 package com.silence.robot.controller;
 
 import com.silence.robot.domain.UserInfo;
-import com.silence.robot.dto.DataRequest;
+import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
-import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class UserController {

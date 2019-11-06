@@ -23,10 +23,8 @@ import com.silence.robot.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import sun.security.provider.Sun;
 
 import javax.annotation.Resource;
-import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -118,6 +116,9 @@ public class SvnOperateService {
             //检出未完成
             tSvnInfo.setOverFlag("0");
             tSvnInfoMapper.insert(tSvnInfo);
+        }else{
+            info.setOverFlag("0");
+            tSvnInfoMapper.updateByPrimaryKey(info);
         }
 
     }
@@ -153,41 +154,36 @@ public class SvnOperateService {
         String errorContent = FileUtils.readAllContents("errorCmd.txt");
         FileDto fileDto = new FileDto();
         synchronized (running) {
-            if (running) {
-                if (CommonUtils.isNotEmpty(errorContent)) {
-                    fileDto.setType("error");
-                    fileDto.setContent(errorContent);
-                    if (FileUtils.exists("errorOver.txt")) {
-                        running = false;
-                        fileDto.setOverFlag(true);
-                        //导出出错，删除重新导入
-                        List<TSvnInfo> infos = tSvnInfoMapper.selectByOverFlag("0");
-                        if (infos.size() != 1) {
-                            throw new BusinessException(ExceptionCode.QUERY_ERROR);
-                        }
-                        //暂时手动删除避免误删
+            if (CommonUtils.isNotEmpty(errorContent)) {
+                fileDto.setType("error");
+                fileDto.setContent(errorContent);
+                if (FileUtils.exists("errorOver.txt")) {
+                    fileDto.setOverFlag(true);
+                    //导出出错，删除重新导入
+                    List<TSvnInfo> infos = tSvnInfoMapper.selectByOverFlag("0");
+                    if (infos.size() != 1) {
+                        throw new BusinessException(ExceptionCode.QUERY_ERROR);
+                    }
+                    //暂时手动删除避免误删
 //                        new Thread(() -> FileUtils.delFolder(infos.get(0).getLocalUrl()));
-                        tSvnInfoMapper.deleteByPrimaryKey(infos.get(0).getId());
+                    tSvnInfoMapper.deleteByPrimaryKey(infos.get(0).getId());
+                }
+            } else {
+                fileDto.setType("normal");
+                String fileName = FileUtils.getDefaultLocalUrl("normalCmd.txt");
+                fileDto = FileUtils.readLine(pos, 10, fileName);
+                if (FileUtils.exists("normalOver.txt") && fileDto.getLineNum() < 10) {
+                    fileDto.setOverFlag(true);
+                    //检出完毕
+                    List<TSvnInfo> infos = tSvnInfoMapper.selectByOverFlag("0");
+                    if (infos.size() != 1) {
+                        throw new BusinessException(ExceptionCode.QUERY_ERROR);
                     }
-                } else {
-                    fileDto.setType("normal");
-                    String fileName = FileUtils.getDefaultLocalUrl("normalCmd.txt");
-                    fileDto = FileUtils.readLine(pos, 10, fileName);
-                    if (FileUtils.exists("normalOver.txt") && fileDto.getLineNum() < 10) {
-                        running = false;
-                        fileDto.setOverFlag(true);
-                        //检出完毕
-                        List<TSvnInfo> infos = tSvnInfoMapper.selectByOverFlag("0");
-                        if (infos.size() != 1) {
-                            throw new BusinessException(ExceptionCode.QUERY_ERROR);
-                        }
-                        infos.get(0).setOverFlag("1");
-                        tSvnInfoMapper.updateByPrimaryKey(infos.get(0));
+                    infos.get(0).setOverFlag("1");
+                    tSvnInfoMapper.updateByPrimaryKey(infos.get(0));
 
-                    }
                 }
             }
-
         }
 
 
@@ -222,6 +218,7 @@ public class SvnOperateService {
         list.forEach(tSvnInfo -> {
             SvnInfo svnInfo = new SvnInfo();
             svnInfo.setUrl(tSvnInfo.getUrl());
+            svnInfo.setLocalUrl(tSvnInfo.getLocalUrl());
             svnInfo.setSvnName(tSvnInfo.getRemark());
             svnInfoList.add(svnInfo);
         });
@@ -235,9 +232,12 @@ public class SvnOperateService {
      * @return
      */
     public List<FileDto> getLocalSvnInfo(String url) {
-        TSvnInfo tSvnInfo = tSvnInfoMapper.selectByUrl(url);
-        List<FileDto> fileList = FileUtils.getFileList(tSvnInfo.getLocalUrl());
-        String cmd = "svn status -u -v " + tSvnInfo.getLocalUrl();
+        if (CommonUtils.isEmpty(url)) {
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        String localUrl = tSvnInfoMapper.selectByUrl(url).getLocalUrl();
+        List<FileDto> fileList = FileUtils.getFileList(localUrl);
+        String cmd = "svn status -u -v " + localUrl;
         //防止并发
         synchronized (running) {
             if (running) {
@@ -249,6 +249,12 @@ public class SvnOperateService {
         return fileList;
     }
 
+    /**
+     * 获取本地svn信息
+     *
+     * @param fileDtos
+     * @return
+     */
     public List<FileDto> getLocalSvnInfo(List<FileDto> fileDtos) {
         synchronized (running) {
             if (running) {
@@ -258,12 +264,10 @@ public class SvnOperateService {
                     throw new BusinessException(ExceptionCode.RUNNING_ERROR);
                 }
                 String errorContent = FileUtils.readAllContents("errorCmd.txt");
-                if(CommonUtils.isNotEmpty(errorContent)){
-                    running = false;
+                if (CommonUtils.isNotEmpty(errorContent)) {
                     throw new BusinessException(errorContent, new RuntimeException("命令执行出错"));
                 }
                 if (!notExists) {
-                    running = false;
                     fileDtos.forEach(fileDto -> {
                         if (!fileDto.isDirectory()) {
                             String fileName = FileUtils.getDefaultLocalUrl("normalCmd.txt");
@@ -289,9 +293,34 @@ public class SvnOperateService {
         return fileDtos;
     }
 
+    /**
+     * 获取本地svn信息
+     *
+     * @param localUrl
+     * @param fileName
+     * @return
+     */
     public List<FileDto> getLocalSvnInfo(String localUrl, String fileName) {
         return FileUtils.getFileList(localUrl + "\\" + fileName);
     }
+
+    /**
+     * 更新svn
+     *
+     * @param url
+     */
+    public void updateSvnInfo(String url) {
+        if (CommonUtils.isEmpty(url)) {
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        TSvnInfo tSvnInfo = tSvnInfoMapper.selectByUrl(url);
+        tSvnInfo.setOverFlag("0");
+        tSvnInfoMapper.updateByPrimaryKey(tSvnInfo);
+        String localUrl = tSvnInfo.getLocalUrl();
+        String cmd = "svn update " + localUrl;
+        cmdOperate(cmd, false);
+    }
+
 
     private String getFileSvnInfo(String fileName) {
         String content = "";
@@ -316,6 +345,7 @@ public class SvnOperateService {
 
     /**
      * 并发查询
+     *
      * @param fileName
      * @param str
      */
@@ -327,13 +357,13 @@ public class SvnOperateService {
         long endPos = 0L;
         //改为一次读10000字节
         long taskCounts = 10000L;
-        while(true){
+        while (true) {
             SplitReadFileRunnable splitReadFileRunnable;
-            if(taskCounts > total){
+            if (taskCounts > total) {
                 splitReadFileRunnable = new SplitReadFileRunnable(startPos, sum, file, str);
                 FileUtils.threadPoolExecute(splitReadFileRunnable);
                 break;
-            }else {
+            } else {
                 total = total - taskCounts;
                 endPos = endPos + taskCounts;
                 splitReadFileRunnable = new SplitReadFileRunnable(startPos, endPos, file, str);
@@ -341,6 +371,13 @@ public class SvnOperateService {
                 startPos = endPos;
             }
 
+        }
+
+    }
+
+    public void setRunning(boolean running) {
+        synchronized (this.running) {
+            this.running = running;
         }
 
     }

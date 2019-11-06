@@ -10,8 +10,10 @@
  */
 package com.silence.robot.io;
 
+import com.silence.robot.service.SvnOperateService;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.FileUtils;
+import com.silence.robot.utils.SpringContextHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +21,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -74,6 +75,8 @@ public class InputStreamRunnable implements Runnable {
             String fileName = FileUtils.getDefaultLocalUrl(type + "Over.txt");
             Path overPath = Paths.get(fileName);
             Files.createFile(overPath);
+            SvnOperateService svnOperateService = SpringContextHelper.getBean(SvnOperateService.class);
+            svnOperateService.setRunning(false);
             bReader.close();
             inputStream.close();
         } catch (IOException e) {

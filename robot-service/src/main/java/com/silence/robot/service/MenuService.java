@@ -20,8 +20,6 @@ import com.silence.robot.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
-
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
