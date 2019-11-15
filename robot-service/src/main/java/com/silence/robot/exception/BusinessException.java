@@ -4,38 +4,40 @@ package com.silence.robot.exception;
 
 public class BusinessException extends RuntimeException {
 
-    private String code;
+    private int code;
 
-    private String message;
+    private String msg;
 
     private Throwable throwable;
 
-    public BusinessException(String message, Throwable throwable){
-        this.code = "66666";
-        this.message = message;
+    public BusinessException(String msg, Throwable throwable){
+        super(msg,throwable);
+        this.code = 66666;
+        this.msg = msg;
         this.throwable = throwable;
+
     }
 
     public BusinessException(ExceptionCode exceptionCode){
+        super(exceptionCode.getMsg());
         this.code = exceptionCode.getCode();
-        this.message = exceptionCode.getMessage();
+        this.msg = exceptionCode.getMsg();
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    @Override
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public Throwable getThrowable() {
@@ -49,8 +51,9 @@ public class BusinessException extends RuntimeException {
     @Override
     public String toString() {
         return "BusinessException{" +
-                "code='" + code + '\'' +
-                ", message='" + message + '\'' +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", throwable=" + throwable +
                 '}';
     }
 }

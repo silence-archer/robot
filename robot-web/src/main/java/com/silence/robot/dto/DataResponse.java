@@ -4,38 +4,38 @@ package com.silence.robot.dto;
 public class DataResponse<T> {
 
     public DataResponse(){
-        this.code = "000000";
-        this.message = "交易成功";
+        this.code = 0;
+        this.msg = "交易成功";
     }
     public DataResponse(T data){
-        this.code = "000000";
-        this.message = "交易成功";
+        this.code = 0;
+        this.msg = "交易成功";
         this.data = data;
     }
-    public DataResponse(String code, String message){
+    public DataResponse(int code, String msg){
         this.code = code;
-        this.message = message;
+        this.msg = msg;
     }
 
-    private String code;
-    private String message;
+    private int code;
+    private String msg;
 
     private T data;
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public T getData() {
@@ -49,8 +49,8 @@ public class DataResponse<T> {
     @Override
     public String toString() {
         return "DataResponse{" +
-                "code='" + code + '\'' +
-                ", message='" + message + '\'' +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
                 ", data=" + data +
                 '}';
     }

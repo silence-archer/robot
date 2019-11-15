@@ -10,21 +10,20 @@
  */
 package com.silence.robot.utils;
 
+import com.alibaba.fastjson.JSONReader;
 import com.silence.robot.domain.FileDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.filechooser.FileSystemView;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -304,6 +303,18 @@ public class FileUtils {
 
     public static boolean notExists(String name){
         return !exists(name);
+    }
+
+    /**
+     * 在类路径下读取json文件
+     * @param fileName
+     * @return
+     */
+    public static <T> T readJsonFile(String fileName, Class<T> clazz){
+        InputStream inputStream = FileUtils.class.getClassLoader().getResourceAsStream(fileName);
+        Reader reader = new InputStreamReader(inputStream);
+        JSONReader jsonReader = new JSONReader(reader);
+        return jsonReader.readObject(clazz);
     }
 
 

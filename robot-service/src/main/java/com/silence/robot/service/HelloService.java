@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONReader;
 import com.silence.robot.domain.TulingRequestInfo;
 import com.silence.robot.domain.TulingResponseInfo;
+import com.silence.robot.utils.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -38,8 +39,7 @@ public class HelloService {
     public TulingResponseInfo hello(TulingRequestInfo requestInfo){
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost httpPost = new HttpPost(apiUrl);
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("config/tuling.json");
-        Map map = getJsonMap(inputStream);
+        Map map = FileUtils.readJsonFile("config/tuling.json",Map.class);
         Map perception = (Map) map.get("perception");
         Map userInfo = (Map) map.get("userInfo");
         userInfo.put("apiKey",apiKey);

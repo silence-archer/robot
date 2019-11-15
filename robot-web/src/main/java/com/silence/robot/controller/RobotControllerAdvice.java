@@ -19,14 +19,14 @@ public class RobotControllerAdvice {
     @ResponseBody
     public DataResponse<?> errorHandle(Exception e){
         log.error("未知错误",e);
-        return new DataResponse<>("99999","未知错误");
+        return new DataResponse<>(99999,"未知错误");
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     @ResponseBody
     public DataResponse<?> errorBusinessHandle(SQLIntegrityConstraintViolationException e){
         log.error("插入重复",e);
-        return new DataResponse<>("99998","插入重复");
+        return new DataResponse<>(99998,"插入重复");
     }
 
     @ExceptionHandler(BusinessException.class)
@@ -37,7 +37,7 @@ public class RobotControllerAdvice {
         }else{
             log.error("业务错误",e);
         }
-        return new DataResponse<>(e.getCode(),e.getMessage());
+        return new DataResponse<>(e.getCode(),e.getMsg());
     }
 
 
