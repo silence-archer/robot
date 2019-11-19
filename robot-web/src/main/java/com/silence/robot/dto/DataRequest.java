@@ -10,6 +10,8 @@ public class DataRequest<T> {
 
     private Integer limit;
 
+    private String type;
+
     private T data;
 
     public String getApiCd() {
@@ -44,12 +46,21 @@ public class DataRequest<T> {
         this.limit = limit;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "DataRequest{" +
                 "apiCd='" + apiCd + '\'' +
                 ", page=" + page +
                 ", limit=" + limit +
+                ", type='" + type + '\'' +
                 ", data=" + data +
                 '}';
     }

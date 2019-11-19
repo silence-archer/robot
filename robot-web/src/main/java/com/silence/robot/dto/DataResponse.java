@@ -20,6 +20,8 @@ public class DataResponse<T> {
     private int code;
     private String msg;
 
+    private String type;
+
     private T data;
 
     public int getCode() {
@@ -46,11 +48,20 @@ public class DataResponse<T> {
         this.data = data;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "DataResponse{" +
                 "code=" + code +
                 ", msg='" + msg + '\'' +
+                ", type='" + type + '\'' +
                 ", data=" + data +
                 '}';
     }

@@ -55,6 +55,26 @@ public class InstantMsgMineDto {
      */
     private String type;
 
+    /**
+     * 是否我发送的消息，如果为true，则会显示在右方
+     */
+    private Boolean mine;
+
+    /**
+     * 消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
+     */
+    private String fromid;
+
+    /**
+     * 服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
+     */
+    private long timestamp;
+
+    /**
+     * 消息id，可不传。除非你要对消息进行一些操作（如撤回）
+     */
+    private int cid;
+
     public String getId() {
         return id;
     }
@@ -111,6 +131,38 @@ public class InstantMsgMineDto {
         this.type = type;
     }
 
+    public Boolean isMine() {
+        return mine;
+    }
+
+    public void setMine(Boolean mine) {
+        this.mine = mine;
+    }
+
+    public String getFromid() {
+        return fromid;
+    }
+
+    public void setFromid(String fromid) {
+        this.fromid = fromid;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public int getCid() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
+
     @Override
     public String toString() {
         return "InstantMsgMineDto{" +
@@ -121,6 +173,10 @@ public class InstantMsgMineDto {
                 ", avatar='" + avatar + '\'' +
                 ", content='" + content + '\'' +
                 ", type='" + type + '\'' +
+                ", mine=" + mine +
+                ", fromid='" + fromid + '\'' +
+                ", timestamp=" + timestamp +
+                ", cid=" + cid +
                 '}';
     }
 }

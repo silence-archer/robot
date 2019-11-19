@@ -37,7 +37,16 @@
                <!--enableSelectByExample="false" enableUpdateByExample="false"/>-->
         <!--<table schema="robot" tableName="t_menu" enableCountByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" enableUpdateByExample="false"/>-->
-        <table schema="robot" tableName="t_svn_info" enableCountByExample="false" enableDeleteByExample="false"
+        <!--<table schema="robot" tableName="t_svn_info" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"/>-->
+        <table schema="robot" tableName="t_user_talk_info" enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table schema="robot" tableName="t_user_talk_friend" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table schema="robot" tableName="t_user_talk_group" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table schema="robot" tableName="t_user_talk_members" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"/>
+
     </context>
 </generatorConfiguration>

@@ -21,6 +21,7 @@ public class LoginService {
         TUser user = userMapper.selectByUsername(userInfo.getUsername());
         if(user != null && user.getPassword().equals(userInfo.getPassword())){
             userInfo.setNickname(user.getNickname());
+            userInfo.setId(user.getId());
         }else{
             throw new BusinessException(ExceptionCode.LOGIN_ERROR);
         }
