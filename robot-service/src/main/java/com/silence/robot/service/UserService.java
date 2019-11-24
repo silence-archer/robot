@@ -11,13 +11,20 @@
 package com.silence.robot.service;
 
 import com.silence.robot.domain.UserInfo;
+import com.silence.robot.exception.BusinessException;
+import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TUserMapper;
+import com.silence.robot.mapper.TUserTalkFriendMapper;
+import com.silence.robot.mapper.TUserTalkInfoMapper;
+import com.silence.robot.mapper.TUserTalkMembersMapper;
 import com.silence.robot.model.TUser;
+import com.silence.robot.model.TUserTalkInfo;
 import com.silence.robot.utils.CommonUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,10 +42,22 @@ public class UserService {
     @Resource
     private TUserMapper userMapper;
 
+    @Resource
+    private TUserTalkInfoMapper userTalkInfoMapper;
+
+    @Resource
+    private InstantMessagingService instantMessagingService;
+
+    @Resource
+    private TUserTalkFriendMapper userTalkFriendMapper;
+
+    @Resource
+    private TUserTalkMembersMapper userTalkMembersMapper;
+
     public List<UserInfo> getUserInfo(){
         List<TUser> userList = userMapper.selectAll();
-        List<UserInfo> list = CommonUtils.copyList(UserInfo.class, userList);
-        return list;
+
+        return appendUserInfo(userList);
 
     }
 
@@ -46,28 +65,67 @@ public class UserService {
         TUser user = new TUser();
         BeanUtils.copyProperties(userInfo, user);
         List<TUser> userList = userMapper.selectByCondition(user);
-        List<UserInfo> list = CommonUtils.copyList(UserInfo.class, userList);
-        return list;
+        return appendUserInfo(userList);
     }
 
     public void addUser(UserInfo userInfo){
         TUser user = new TUser();
         BeanUtils.copyProperties(userInfo, user);
+        TUser userFlag = userMapper.selectByUsername(user.getUsername());
+        if(CommonUtils.isNotEmpty(userFlag)){
+            throw new BusinessException(ExceptionCode.EXIST_ERROR);
+        }
+        user.setPassword(user.getUsername());
         user.setCreateTime(new Date());
         user.setId(CommonUtils.getUuid());
         user.setUpdateTime(new Date());
         userMapper.insert(user);
+        //添加到聊天面板
+        instantMessagingService.registerUser(userInfo);
 
     }
 
     public void updateUser(UserInfo userInfo){
-        TUser user = new TUser();
-        BeanUtils.copyProperties(userInfo, user);
+        TUser user = userMapper.selectByUsername(userInfo.getUsername());
+        if(CommonUtils.isEmpty(user)){
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        user.setNickname(userInfo.getNickname());
         user.setUpdateTime(new Date());
         userMapper.updateByPrimaryKey(user);
+        TUserTalkInfo userTalkInfo = userTalkInfoMapper.selectByPrimaryKey(userInfo.getUsername());
+        userTalkInfo.setSign(userInfo.getSign());
+        userTalkInfo.setAvatar(userInfo.getAvatar());
+        userTalkInfo.setUsername(userInfo.getNickname());
+        userTalkInfoMapper.updateByPrimaryKey(userTalkInfo);
     }
 
-    public void deleteUser(UserInfo userInfo){
-        userMapper.deleteByPrimaryKey(userInfo.getId());
+    public void deleteUser(String id){
+        TUser user = userMapper.selectByPrimaryKey(id);
+        if(CommonUtils.isEmpty(user)){
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        userMapper.deleteByPrimaryKey(id);
+        userTalkInfoMapper.deleteByPrimaryKey(user.getUsername());
+        //删除改用户在群组和其他人好友列表的记录
+        userTalkFriendMapper.deleteByFriendId(user.getUsername());
+        userTalkFriendMapper.deleteByMineId(user.getUsername());
+        userTalkMembersMapper.deleteByMemberId(user.getUsername());
+    }
+
+    private List<UserInfo> appendUserInfo(List<TUser> userList){
+        List<UserInfo> list = new ArrayList<>();
+        userList.forEach(user -> {
+            UserInfo userInfo = new UserInfo();
+            TUserTalkInfo userTalkInfo = userTalkInfoMapper.selectByPrimaryKey(user.getUsername());
+            userInfo.setId(user.getId());
+            userInfo.setUsername(user.getUsername());
+            userInfo.setNickname(user.getNickname());
+            userInfo.setCreateTime(CommonUtils.getStringDate(user.getCreateTime()));
+            userInfo.setSign(userTalkInfo.getSign());
+            userInfo.setAvatar(userTalkInfo.getAvatar());
+            list.add(userInfo);
+        });
+        return list;
     }
 }

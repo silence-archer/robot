@@ -14,6 +14,7 @@ spring:
 logging:
   level:
     root: info
+    com.silence.robot.mapper: debug
 mybatis:
   mapper-locations: classpath*:/mapper/*.xml
   configuration:

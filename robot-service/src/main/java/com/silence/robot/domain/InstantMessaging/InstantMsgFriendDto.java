@@ -24,7 +24,7 @@ public class InstantMsgFriendDto {
     /**
      * 分组ID
      */
-    private String id;
+    private int id;
 
     /**
      * 好友分组名
@@ -36,11 +36,11 @@ public class InstantMsgFriendDto {
      */
     private List<InstantMsgMineDto> list;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

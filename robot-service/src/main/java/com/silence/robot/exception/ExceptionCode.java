@@ -15,6 +15,7 @@ public enum ExceptionCode {
     CHECK_NULL_ERROR(100010,"入参不能为空"),
     QUERY_ERROR(100011,"查询出来的数据条数不正确"),
     RUNNING_ERROR(100012,"任务正在执行中，请稍后再试"),
+    EXIST_ERROR(100013,"当前记录已存在"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private int code;

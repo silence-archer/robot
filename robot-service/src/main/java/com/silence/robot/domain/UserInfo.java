@@ -4,25 +4,74 @@ import java.util.Date;
 
 
 public class UserInfo {
+
+    /**
+     * 用户登录名
+     */
     private String username;
+
+    /**
+     * 用户登录密码
+     */
     private String password;
 
+    /**
+     * 用户登录验证码
+     */
     private String imageCode;
 
+    /**
+     * 用户昵称
+     */
     private String nickname;
 
+    /**
+     * 验证码生成的图片信息
+     */
     private String imageWithVerifyCode;
 
+    /**
+     * 用户ID
+     */
     private String id;
 
-    private Date createTime;
+    /**
+     * 用户创建时间
+     */
+    private String createTime;
+
+    /**
+     * 我的签名
+     */
+    private String sign;
+
+    /**
+     * 我的头像
+     */
+    private String avatar;
 
 
-    public Date getCreateTime() {
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -84,6 +133,8 @@ public class UserInfo {
                 ", imageWithVerifyCode='" + imageWithVerifyCode + '\'' +
                 ", id='" + id + '\'' +
                 ", createTime=" + createTime +
+                ", sign='" + sign + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

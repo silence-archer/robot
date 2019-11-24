@@ -53,9 +53,9 @@ public class UserController {
         return new DataResponse<>();
     }
 
-    @PostMapping("/deleteUser")
-    public DataResponse<UserInfo> deleteUser(@RequestBody UserInfo userInfo){
-        userService.deleteUser(userInfo);
+    @GetMapping("/deleteUser")
+    public DataResponse<UserInfo> deleteUser(@RequestParam String id){
+        userService.deleteUser(id);
         return new DataResponse<>();
     }
 }

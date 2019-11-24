@@ -13,7 +13,9 @@ package com.silence.robot.utils;
 import com.silence.robot.exception.BusinessException;
 import org.springframework.beans.BeanUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +28,8 @@ import java.util.UUID;
  * @since 1.0.0
  */
 public class CommonUtils {
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     public static String getUuid(){
         return UUID.randomUUID().toString().replaceAll("-","");
@@ -85,6 +89,10 @@ public class CommonUtils {
             list.add(target);
         });
         return list;
+    }
+
+    public static String getStringDate(Date date){
+        return DATE_FORMAT.format(date);
     }
 
 }
