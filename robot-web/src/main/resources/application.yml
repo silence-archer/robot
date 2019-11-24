@@ -15,6 +15,7 @@ logging:
   level:
     root: info
     com.silence.robot.mapper: debug
+  path: logs
 mybatis:
   mapper-locations: classpath*:/mapper/*.xml
   configuration:
