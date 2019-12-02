@@ -6,5 +6,4 @@ then
    kill -9 $pid
 fi
 echo "Starting SpringBoot Application"
-/Users/Shared/Jenkins/Home/reattach-to-user-namespace nohup java -jar robot-web/target/robot-web-0.0.1-SNAPSHOT.jar --spring.profiles.active=h2 -
-\logging.path=/Users/Shared/Jenkins/home/workspace/logs >/dev/null 2>&1 &
+nohup java -jar robot-web/target/robot-web-0.0.1-SNAPSHOT.jar --spring.profiles.active=h2 --logging.path=/home/silence/logs >/dev/null 2>&1 &

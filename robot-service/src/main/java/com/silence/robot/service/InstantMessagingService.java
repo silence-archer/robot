@@ -99,6 +99,7 @@ public class InstantMessagingService {
                 friendDto.setUsername(talkInfo.getUsername());
                 list.add(friendDto);
             });
+            friend.add(instantMsgFriendDto);
         });
         instantMessagingDto.setFriend(friend);
         //组装群聊信息

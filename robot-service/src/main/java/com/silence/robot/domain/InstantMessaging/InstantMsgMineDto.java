@@ -68,12 +68,12 @@ public class InstantMsgMineDto {
     /**
      * 服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
      */
-    private long timestamp;
+    private Long timestamp;
 
     /**
      * 消息id，可不传。除非你要对消息进行一些操作（如撤回）
      */
-    private int cid;
+    private Integer cid;
 
     public String getId() {
         return id;
@@ -147,19 +147,19 @@ public class InstantMsgMineDto {
         this.fromid = fromid;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
-    public int getCid() {
+    public Integer getCid() {
         return cid;
     }
 
-    public void setCid(int cid) {
+    public void setCid(Integer cid) {
         this.cid = cid;
     }
 

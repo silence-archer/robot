@@ -10,6 +10,8 @@
  */
 package com.silence.robot.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.domain.InstantMessagingDto;
 import com.silence.robot.domain.InstantMsgMembersDto;
 import com.silence.robot.dto.DataResponse;
@@ -36,9 +38,10 @@ public class InstantMessagingController {
     private InstantMessagingService instantMessagingService;
 
     @GetMapping("/getInitData/{id}")
-    public DataResponse<InstantMessagingDto> getInitData(@PathVariable String id){
+    public DataResponse<JSONObject> getInitData(@PathVariable String id){
         InstantMessagingDto initData = instantMessagingService.getInitData(id);
-        return new DataResponse<>(initData);
+        JSONObject parse = JSONObject.parseObject(JSON.toJSONString(initData));
+        return new DataResponse<>(parse);
     }
 
     @GetMapping("/getMembers/{id}")
