@@ -25,3 +25,44 @@ INSERT INTO `t_user` VALUES ('32c72423988f423a8e0cc5e0c370b088', 'archer', '弓�
 INSERT INTO `t_user` VALUES ('100001', 'silence', '我是谁', 'silence', null, '2019-10-21 21:55:30', null, '2019-10-21 22:28:53', null);
 INSERT INTO `t_user` VALUES ('cddafacf06344148aeaa9500e4493b93', 'lancer', '枪兵', null, null, '2019-10-20 22:35:46', null, '2019-10-21 22:29:26', null);
 INSERT INTO `t_user` VALUES ('ed46e38afcde4eb8992c750659ce39d0', 'saber', '剑士', null, null, '2019-10-28 03:03:04', null, '2019-10-28 04:24:28', null);
+
+-- ----------------------------
+-- Records of t_user_talk_friend
+-- ----------------------------
+INSERT INTO `t_user_talk_friend` VALUES ('13b7a3a42832498c8253ba3227b33548', '0', 'silence', 'admin');
+INSERT INTO `t_user_talk_friend` VALUES ('63dcdcd642cf403db76536ee67b3d42a', '0', 'saber', 'admin');
+INSERT INTO `t_user_talk_friend` VALUES ('74579b02b0794796958830b28b36c4c5', '0', 'archer', 'admin');
+INSERT INTO `t_user_talk_friend` VALUES ('d017cc4d0a0941c291f31a77b0d94e7c', '0', 'lancer', 'admin');
+
+-- ----------------------------
+-- Records of t_user_talk_friend_group
+-- ----------------------------
+INSERT INTO `t_user_talk_friend_group` VALUES ('1', 'silence', '0', '机器人组');
+INSERT INTO `t_user_talk_friend_group` VALUES ('2', 'saber', '0', '机器人组');
+INSERT INTO `t_user_talk_friend_group` VALUES ('3', 'lancer', '0', '机器人组');
+INSERT INTO `t_user_talk_friend_group` VALUES ('4', 'archer', '0', '机器人组');
+
+-- ----------------------------
+-- Records of t_user_talk_group
+-- ----------------------------
+INSERT INTO `t_user_talk_group` VALUES ('1', '0', 'silence', '大家庭', 'image/avatar/30.jpg');
+INSERT INTO `t_user_talk_group` VALUES ('2', '0', 'saber', '大家庭', 'image/avatar/30.jpg');
+INSERT INTO `t_user_talk_group` VALUES ('3', '0', 'lancer', '大家庭', 'image/avatar/30.jpg');
+INSERT INTO `t_user_talk_group` VALUES ('4', '0', 'archer', '大家庭', 'image/avatar/30.jpg');
+
+-- ----------------------------
+-- Records of t_user_talk_info
+-- ----------------------------
+INSERT INTO `t_user_talk_info` VALUES ('admin', '管理员', 'online', '我是机器人', 'image/touxiang.png');
+INSERT INTO `t_user_talk_info` VALUES ('archer', '弓兵', 'hide', '世间万物皆系于一箭之上', 'image/avatar/4.jpg');
+INSERT INTO `t_user_talk_info` VALUES ('lancer', '枪兵', 'hide', '自古枪兵幸运E', 'image/avatar/3.jpg');
+INSERT INTO `t_user_talk_info` VALUES ('saber', '剑士', 'hide', '断剑重铸之日，骑士归来之时', 'image/avatar/2.jpg');
+INSERT INTO `t_user_talk_info` VALUES ('silence', '我是谁', 'hide', '死亡如风，常伴吾生', 'image/avatar/1.jpg');
+
+-- ----------------------------
+-- Records of t_user_talk_members
+-- ----------------------------
+INSERT INTO `t_user_talk_members` VALUES ('1', '0', 'silence');
+INSERT INTO `t_user_talk_members` VALUES ('2', '0', 'archer');
+INSERT INTO `t_user_talk_members` VALUES ('3', '0', 'saber');
+INSERT INTO `t_user_talk_members` VALUES ('4', '0', 'lancer');

@@ -17,7 +17,7 @@ CREATE TABLE `t_menu` (
   `UPDATE_USER` varchar(32) DEFAULT '' COMMENT '修改人',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `MENU_UQ_IDX` (`MENU_NO`)
-) COMMENT='角色信息表';
+) COMMENT='菜单信息表';
 
 -- ----------------------------
 -- Table structure for t_role
@@ -78,4 +78,67 @@ CREATE TABLE `t_user` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `USER_UQ_IDX` (`USERNAME`) USING BTREE
 ) COMMENT='用户信息表';
+
+-- ----------------------------
+-- Table structure for t_user_talk_friend
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_talk_friend`;
+CREATE TABLE `t_user_talk_friend` (
+  `id` varchar(64) NOT NULL COMMENT '物理主键',
+  `group_id` int(11) DEFAULT NULL COMMENT '分组id',
+  `mine_id` varchar(64) DEFAULT NULL COMMENT '我的id',
+  `friend_id` varchar(64) DEFAULT NULL COMMENT '朋友id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户即时聊天好友信息表';
+
+-- ----------------------------
+-- Table structure for t_user_talk_friend_group
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_talk_friend_group`;
+CREATE TABLE `t_user_talk_friend_group` (
+  `id` varchar(64) NOT NULL COMMENT '物理主键',
+  `mine_id` varchar(64) DEFAULT NULL COMMENT '我的ID',
+  `group_id` int(11) DEFAULT NULL COMMENT '分组ID',
+  `groupname` varchar(255) DEFAULT NULL COMMENT '分组名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='即时聊天好友分组信息表';
+
+-- ----------------------------
+-- Table structure for t_user_talk_group
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_talk_group`;
+CREATE TABLE `t_user_talk_group` (
+  `id` varchar(64) NOT NULL COMMENT '唯一标识',
+  `group_id` varchar(64) DEFAULT NULL COMMENT '群聊ID',
+  `mine_id` varchar(64) DEFAULT NULL COMMENT '我的id',
+  `groupname` varchar(255) DEFAULT NULL COMMENT '群组名称',
+  `avatar` varchar(255) DEFAULT NULL COMMENT '群组头像地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户即时聊天群组信息表';
+
+-- ----------------------------
+-- Table structure for t_user_talk_info
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_talk_info`;
+CREATE TABLE `t_user_talk_info` (
+  `id` varchar(64) NOT NULL DEFAULT '' COMMENT '用户编号',
+  `username` varchar(255) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL COMMENT '状态',
+  `sign` varchar(255) DEFAULT NULL COMMENT '签名',
+  `avatar` varchar(255) DEFAULT NULL COMMENT '头像地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户即时聊天信息表';
+
+-- ----------------------------
+-- Table structure for t_user_talk_members
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_talk_members`;
+CREATE TABLE `t_user_talk_members` (
+  `id` varchar(64) NOT NULL COMMENT '唯一标识',
+  `group_id` varchar(64) DEFAULT NULL COMMENT '群组id',
+  `member_id` varchar(64) DEFAULT NULL COMMENT '成员Id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户即时聊天群组成员信息表';
+
+
 

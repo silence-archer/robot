@@ -18,14 +18,8 @@ import com.silence.robot.domain.InstantMessaging.InstantMsgMineDto;
 import com.silence.robot.domain.InstantMessaging.InstantMsgTalkDto;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
-import com.silence.robot.mapper.TUserTalkFriendGroupMapper;
-import com.silence.robot.mapper.TUserTalkFriendMapper;
-import com.silence.robot.mapper.TUserTalkGroupMapper;
-import com.silence.robot.mapper.TUserTalkInfoMapper;
-import com.silence.robot.model.TUserTalkFriend;
-import com.silence.robot.model.TUserTalkFriendGroup;
-import com.silence.robot.model.TUserTalkGroup;
-import com.silence.robot.model.TUserTalkInfo;
+import com.silence.robot.mapper.*;
+import com.silence.robot.model.*;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.FileUtils;
 import com.silence.robot.websocket.WebSocketServer;
@@ -61,6 +55,9 @@ public class InstantMessagingService {
 
     @Resource
     private TUserTalkGroupMapper userTalkGroupMapper;
+
+    @Resource
+    private TUserTalkMembersMapper userTalkMembersMapper;
 
     public InstantMessagingDto getInitData(String id){
         TUserTalkInfo userTalkInfo = userTalkInfoMapper.selectByPrimaryKey(id);
@@ -117,7 +114,19 @@ public class InstantMessagingService {
     }
 
     public InstantMsgMembersDto getMembers(String id){
-        InstantMsgMembersDto instantMsgMembersDto = FileUtils.readJsonFile("config/InstantMsgMembers.json", InstantMsgMembersDto.class);
+        List<TUserTalkMembers> userTalkMembers = userTalkMembersMapper.selectByGroupId(id);
+        InstantMsgMembersDto instantMsgMembersDto = new InstantMsgMembersDto();
+        List<InstantMsgMineDto> list = new ArrayList<>(userTalkMembers.size());
+        userTalkMembers.forEach(userTalkMember ->{
+            InstantMsgMineDto instantMsgMineDto = new InstantMsgMineDto();
+            TUserTalkInfo userTalkInfo = userTalkInfoMapper.selectByPrimaryKey(userTalkMember.getMemberId());
+            instantMsgMineDto.setId(userTalkInfo.getId());
+            instantMsgMineDto.setUsername(userTalkInfo.getUsername());
+            instantMsgMineDto.setSign(userTalkInfo.getSign());
+            instantMsgMineDto.setAvatar(userTalkInfo.getAvatar());
+            list.add(instantMsgMineDto);
+        });
+        instantMsgMembersDto.setList(list);
         return instantMsgMembersDto;
     }
 

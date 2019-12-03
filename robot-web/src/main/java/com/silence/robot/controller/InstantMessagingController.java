@@ -18,6 +18,7 @@ import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.InstantMessagingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -44,8 +45,8 @@ public class InstantMessagingController {
         return new DataResponse<>(parse);
     }
 
-    @GetMapping("/getMembers/{id}")
-    public DataResponse<InstantMsgMembersDto> getMembers(@PathVariable String id) {
+    @GetMapping("/getMembers")
+    public DataResponse<InstantMsgMembersDto> getMembers(@RequestParam String id) {
         InstantMsgMembersDto members = instantMessagingService.getMembers(id);
         return new DataResponse<>(members);
     }
