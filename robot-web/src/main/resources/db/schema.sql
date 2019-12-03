@@ -89,7 +89,7 @@ CREATE TABLE `t_user_talk_friend` (
   `mine_id` varchar(64) DEFAULT NULL COMMENT '我的id',
   `friend_id` varchar(64) DEFAULT NULL COMMENT '朋友id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户即时聊天好友信息表';
+)  COMMENT='用户即时聊天好友信息表';
 
 -- ----------------------------
 -- Table structure for t_user_talk_friend_group
@@ -101,7 +101,7 @@ CREATE TABLE `t_user_talk_friend_group` (
   `group_id` int(11) DEFAULT NULL COMMENT '分组ID',
   `groupname` varchar(255) DEFAULT NULL COMMENT '分组名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='即时聊天好友分组信息表';
+)  COMMENT='即时聊天好友分组信息表';
 
 -- ----------------------------
 -- Table structure for t_user_talk_group
@@ -114,7 +114,7 @@ CREATE TABLE `t_user_talk_group` (
   `groupname` varchar(255) DEFAULT NULL COMMENT '群组名称',
   `avatar` varchar(255) DEFAULT NULL COMMENT '群组头像地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户即时聊天群组信息表';
+)  COMMENT='用户即时聊天群组信息表';
 
 -- ----------------------------
 -- Table structure for t_user_talk_info
@@ -127,7 +127,7 @@ CREATE TABLE `t_user_talk_info` (
   `sign` varchar(255) DEFAULT NULL COMMENT '签名',
   `avatar` varchar(255) DEFAULT NULL COMMENT '头像地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户即时聊天信息表';
+)  COMMENT='用户即时聊天信息表';
 
 -- ----------------------------
 -- Table structure for t_user_talk_members
@@ -138,7 +138,7 @@ CREATE TABLE `t_user_talk_members` (
   `group_id` varchar(64) DEFAULT NULL COMMENT '群组id',
   `member_id` varchar(64) DEFAULT NULL COMMENT '成员Id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户即时聊天群组成员信息表';
+)  COMMENT='用户即时聊天群组成员信息表';
 
 
 
