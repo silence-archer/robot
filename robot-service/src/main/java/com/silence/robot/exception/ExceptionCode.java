@@ -16,6 +16,7 @@ public enum ExceptionCode {
     QUERY_ERROR(100011,"查询出来的数据条数不正确"),
     RUNNING_ERROR(100012,"任务正在执行中，请稍后再试"),
     EXIST_ERROR(100013,"当前记录已存在"),
+    SESSION_ERROR(100014,"当前登录已失效,请刷新重试"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private int code;

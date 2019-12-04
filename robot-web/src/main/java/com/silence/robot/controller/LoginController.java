@@ -4,30 +4,48 @@ import com.silence.robot.domain.UserInfo;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
+import com.silence.robot.listener.SessionListener;
 import com.silence.robot.service.LoginService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class LoginController {
+
+    private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Resource
     private LoginService loginService;
 
     @PostMapping("/login")
     public DataResponse<?> login(@RequestBody UserInfo userInfo, HttpSession httpSession) {
-        if(userInfo.getImageCode().equals(httpSession.getAttribute("imageCode"))){
+        if (userInfo.getImageCode().equals(httpSession.getAttribute("imageCode"))) {
             //TODO 验证码过期 及时刷新
             httpSession.removeAttribute("imageCode");
-        }else{
+        } else {
             throw new BusinessException(ExceptionCode.VERIFY_ERROR);
         }
         loginService.login(userInfo);
-        httpSession.setAttribute("userInfo",userInfo);
+        httpSession.setAttribute("userInfo", userInfo);
+        //防止并发
+        HttpSession session = SessionListener.map.get(userInfo.getUsername());
+        if (session != null && !session.getId().equals(httpSession.getId())) {
+            logger.info("开始销毁session：{}",userInfo.getUsername());
+            synchronized (session) {
+                session.invalidate();
+            }
+
+        }
+        SessionListener.map.put(userInfo.getUsername(), httpSession);
+
+
         return new DataResponse<>();
     }
 }

@@ -1,6 +1,11 @@
 silence:
   filter:
     cors: true
+  interceptor:
+    paths:
+      - /login
+      - /getUser
+      - /verifyCode
 robot:
   api:
     url: http://openapi.tuling123.com/openapi/api/v2

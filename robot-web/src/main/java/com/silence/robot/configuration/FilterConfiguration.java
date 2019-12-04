@@ -1,5 +1,6 @@
-package com.silence.robot.filter;
+package com.silence.robot.configuration;
 
+import com.silence.robot.filter.MyFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
