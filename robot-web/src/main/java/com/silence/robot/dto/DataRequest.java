@@ -12,6 +12,8 @@ public class DataRequest<T> {
 
     private String type;
 
+    private Integer count;
+
     private T data;
 
     public String getApiCd() {
@@ -54,6 +56,14 @@ public class DataRequest<T> {
         this.type = type;
     }
 
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
     @Override
     public String toString() {
         return "DataRequest{" +
@@ -61,6 +71,7 @@ public class DataRequest<T> {
                 ", page=" + page +
                 ", limit=" + limit +
                 ", type='" + type + '\'' +
+                ", count=" + count +
                 ", data=" + data +
                 '}';
     }

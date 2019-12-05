@@ -5,6 +5,8 @@ import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -13,6 +15,8 @@ import java.util.List;
 
 @RestController
 public class UserController {
+
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Resource
     private UserService userService;
@@ -23,6 +27,7 @@ public class UserController {
         if(userInfo == null){
             throw new BusinessException(ExceptionCode.AUTH_ERROR);
         }
+        logger.info("当前session id 为：{},用户名为：{}",httpSession.getId(), userInfo.getUsername());
         DataResponse<UserInfo> userDataResponse = new DataResponse<>();
         userDataResponse.setData(userInfo);
         return userDataResponse;
@@ -31,8 +36,11 @@ public class UserController {
     @GetMapping("/getUserInfo")
     public DataResponse<List<UserInfo>> getUserInfo(@RequestParam Integer page, @RequestParam Integer limit){
         //分页
-        List<UserInfo> userInfo = userService.getUserInfo();
-        return new DataResponse<>(userInfo);
+        List<UserInfo> userInfos = userService.getUserInfo();
+
+        DataResponse<List<UserInfo>> dataResponse = new DataResponse<>(userInfos);
+        dataResponse.setCount(userInfos.size());
+        return dataResponse;
     }
 
     @PostMapping("/getUserInfoByCondition")

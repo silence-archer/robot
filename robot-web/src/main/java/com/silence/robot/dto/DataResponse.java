@@ -22,7 +22,17 @@ public class DataResponse<T> {
 
     private String type;
 
+    private Integer count;
+
     private T data;
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
     public int getCode() {
         return code;
@@ -62,6 +72,7 @@ public class DataResponse<T> {
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 ", type='" + type + '\'' +
+                ", count=" + count +
                 ", data=" + data +
                 '}';
     }
