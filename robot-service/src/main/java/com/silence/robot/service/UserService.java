@@ -24,6 +24,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.management.relation.RoleUnresolved;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +76,7 @@ public class UserService {
         if(CommonUtils.isNotEmpty(userFlag)){
             throw new BusinessException(ExceptionCode.EXIST_ERROR);
         }
-        user.setPassword(user.getUsername());
+        user.setPassword(CommonUtils.strToMD5(user.getUsername()));
         user.setCreateTime(new Date());
         user.setId(CommonUtils.getUuid());
         user.setUpdateTime(new Date());
@@ -113,6 +114,33 @@ public class UserService {
         userTalkMembersMapper.deleteByMemberId(user.getUsername());
     }
 
+    public void modifyPassword(UserInfo userInfo){
+        //暂时用id代替原密码
+        TUser user = userMapper.selectByUsername(userInfo.getUsername());
+        String md5 = CommonUtils.strToMD5(userInfo.getId());
+        if(!user.getPassword().equals(md5)){
+            throw new BusinessException(ExceptionCode.PASSWORD_ERROR);
+        }
+
+        String password = userInfo.getPassword();
+        password = CommonUtils.strToMD5(password);
+        if(user.getPassword().equals(password)){
+            throw new BusinessException(ExceptionCode.PASSWORD_SAME_ERROR);
+        }
+        user.setPassword(password);
+        userMapper.updateByPrimaryKey(user);
+    }
+
+    public void resetPassword(List<UserInfo> list){
+        list.forEach(userInfo -> {
+            String username = userInfo.getUsername();
+            TUser user = userMapper.selectByUsername(username);
+            user.setPassword(CommonUtils.strToMD5(username));
+            userMapper.updateByPrimaryKey(user);
+        });
+    }
+
+
     private List<UserInfo> appendUserInfo(List<TUser> userList){
         List<UserInfo> list = new ArrayList<>();
         userList.forEach(user -> {
@@ -128,4 +156,6 @@ public class UserService {
         });
         return list;
     }
+
+
 }

@@ -12,12 +12,13 @@ package com.silence.robot.utils;
 
 import com.silence.robot.exception.BusinessException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.DigestUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -30,6 +31,8 @@ import java.util.UUID;
 public class CommonUtils {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+    private static final String slat = "&%5123***&&%%$$#@";
 
     public static String getUuid(){
         return UUID.randomUUID().toString().replaceAll("-","");
@@ -94,5 +97,23 @@ public class CommonUtils {
     public static String getStringDate(Date date){
         return DATE_FORMAT.format(date);
     }
+
+    public static String strToMD5(String str){
+        str = str+"/"+slat;
+        return DigestUtils.md5DigestAsHex(str.getBytes());
+    }
+
+    /**
+     * 集合去重
+     * @param keyExtractor
+     * @param <T>
+     * @return
+     */
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+
+
 
 }

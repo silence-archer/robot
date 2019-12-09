@@ -90,6 +90,8 @@ public class MenuService {
         menuData.setId("1");
         menuData.setTitle("后台管理系统");
         menuData.setSpread(true);
+        menuData.setChecked(false);
+        menuData.setDisabled(false);
         menuData.setChildren(new ArrayList<>());
         List<TMenu> list1 = menus.stream().filter(menu -> menu.getMenuLevel() == 1).collect(Collectors.toList());
         List<TMenu> list2 = menus.stream().filter(menu -> menu.getMenuLevel() == 2).collect(Collectors.toList());

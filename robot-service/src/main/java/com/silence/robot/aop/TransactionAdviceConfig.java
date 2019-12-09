@@ -43,14 +43,22 @@ public class TransactionAdviceConfig {
     @Bean
     public TransactionInterceptor txAdvice(){
         DefaultTransactionAttribute txAttrRequired = new DefaultTransactionAttribute();
+        DefaultTransactionAttribute txAttrReadOnly = new DefaultTransactionAttribute();
         txAttrRequired.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-
+        txAttrReadOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        txAttrReadOnly.setReadOnly(true);
         NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
         source.addTransactionalMethod("add*",txAttrRequired);
         source.addTransactionalMethod("update*",txAttrRequired);
         source.addTransactionalMethod("delete*",txAttrRequired);
         source.addTransactionalMethod("insert*",txAttrRequired);
         source.addTransactionalMethod("modify*",txAttrRequired);
+        source.addTransactionalMethod("reset*",txAttrRequired);
+
+        source.addTransactionalMethod("select*",txAttrReadOnly);
+        source.addTransactionalMethod("find*",txAttrReadOnly);
+        source.addTransactionalMethod("get*",txAttrReadOnly);
+        source.addTransactionalMethod("query*",txAttrReadOnly);
 
         TransactionInterceptor transactionInterceptor = new TransactionInterceptor(platformTransactionManager, source);
         return transactionInterceptor;

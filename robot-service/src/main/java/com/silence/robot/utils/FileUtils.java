@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -319,7 +320,17 @@ public class FileUtils {
 
 
     public static void main(String[] args) {
-
+        List<String> list = Arrays.asList("aaa", "bbb", "ccc");
+        List<FileDto> results = new ArrayList<>();
+        FileDto fileDto = new FileDto();
+        fileDto.setFileName("111111111");
+        list.forEach(str ->{
+            FileDto rs = fileDto;
+            results.add(rs);
+            rs = new FileDto();
+            rs.setFileName("2222222");
+        });
+        results.forEach(result -> System.out.println(result.getFileName()));
     }
 
 

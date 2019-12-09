@@ -17,6 +17,8 @@ public enum ExceptionCode {
     RUNNING_ERROR(100012,"任务正在执行中，请稍后再试"),
     EXIST_ERROR(100013,"当前记录已存在"),
     SESSION_ERROR(100014,"当前登录已失效,请刷新重试"),
+    PASSWORD_ERROR(100015,"原密码输入错误"),
+    PASSWORD_SAME_ERROR(100016,"新密码与原密码重复"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private int code;

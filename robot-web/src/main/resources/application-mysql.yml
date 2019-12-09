@@ -1,5 +1,5 @@
 spring:
   datasource:
     url: jdbc:mysql://192.168.84.131:3306/robot
-    username: mzh
-    password: 930927
+    username: ENC(XcB5qY088lqkF1zIW/4ypg==)
+    password: ENC(NnkDNOxHTaEju3+FeK2YRw==)

@@ -4,6 +4,7 @@ import com.silence.robot.domain.UserInfo;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
+import com.silence.robot.listener.SessionListener;
 import com.silence.robot.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,20 +51,41 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public DataResponse<UserInfo> addUser(@RequestBody UserInfo userInfo){
+    public DataResponse<?> addUser(@RequestBody UserInfo userInfo){
         userService.addUser(userInfo);
         return new DataResponse<>();
     }
 
     @PostMapping("/updateUser")
-    public DataResponse<UserInfo> updateUser(@RequestBody UserInfo userInfo){
+    public DataResponse<?> updateUser(@RequestBody UserInfo userInfo){
         userService.updateUser(userInfo);
         return new DataResponse<>();
     }
 
     @GetMapping("/deleteUser")
-    public DataResponse<UserInfo> deleteUser(@RequestParam String id){
+    public DataResponse<?> deleteUser(@RequestParam String id){
         userService.deleteUser(id);
+        return new DataResponse<>();
+    }
+
+    @PostMapping("/modifyPassword")
+    public DataResponse<?> modifyPassword(@RequestBody UserInfo userInfo){
+        userService.modifyPassword(userInfo);
+        //修改密码成功后需要重新登录
+        //防止并发
+        HttpSession session = SessionListener.map.get(userInfo.getUsername());
+        if (session != null) {
+            logger.info("开始销毁session：{}",userInfo.getUsername());
+            synchronized (session) {
+                session.invalidate();
+            }
+        }
+        return new DataResponse<>();
+    }
+
+    @PostMapping("/resetPassword")
+    public DataResponse<?> resetPassword(@RequestBody List<UserInfo> list){
+        userService.resetPassword(list);
         return new DataResponse<>();
     }
 }
