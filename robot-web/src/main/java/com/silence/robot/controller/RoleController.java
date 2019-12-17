@@ -15,10 +15,7 @@ import com.silence.robot.domain.RoleInfo;
 import com.silence.robot.dto.DataRequest;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.RoleService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -39,13 +36,30 @@ public class RoleController {
     private RoleService roleService;
 
     @GetMapping("/getRoleInfo")
-    public DataResponse<List<RoleInfo>> getRoleInfo(){
+    public DataResponse<List<RoleInfo>> getRoleInfo(@RequestParam Integer page, @RequestParam Integer limit){
         return new DataResponse<>(roleService.getRoleInfo());
+    }
+
+    @GetMapping("/queryRoleSelectInfo")
+    public DataResponse<List<RoleInfo>> queryRoleSelectInfo(){
+        return new DataResponse<>(roleService.getRoleInfo(false));
+    }
+
+    @GetMapping("/deleteRole")
+    public DataResponse<?> deleteRole(@RequestParam String roleNo){
+        roleService.deleteRole(roleNo);
+        return new DataResponse<>();
     }
 
     @PostMapping("/addRole")
     public DataResponse<?> addRole(@RequestBody DataRequest<List<MenuData>> request){
         roleService.addRole(request.getType(), request.getData());
+        return new DataResponse<>();
+    }
+
+    @PostMapping("/modifyRole")
+    public DataResponse<?> modifyRole(@RequestBody DataRequest<List<MenuData>> request){
+        roleService.modifyRole(request.getApiCd(), request.getType(), request.getData());
         return new DataResponse<>();
     }
 

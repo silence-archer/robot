@@ -25,6 +25,7 @@ public class LoginService {
         if(user != null && user.getPassword().equals(password)){
             userInfo.setNickname(user.getNickname());
             userInfo.setId(user.getId());
+            userInfo.setRoleNo(user.getRoleNo());
         }else{
             throw new BusinessException(ExceptionCode.LOGIN_ERROR);
         }

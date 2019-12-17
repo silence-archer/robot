@@ -19,6 +19,7 @@ public enum ExceptionCode {
     SESSION_ERROR(100014,"当前登录已失效,请刷新重试"),
     PASSWORD_ERROR(100015,"原密码输入错误"),
     PASSWORD_SAME_ERROR(100016,"新密码与原密码重复"),
+    ROLE_NO_EXIST(100017,"角色代码不能为空"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private int code;

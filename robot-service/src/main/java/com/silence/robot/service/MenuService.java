@@ -12,10 +12,13 @@ package com.silence.robot.service;
 
 import com.silence.robot.domain.MenuData;
 import com.silence.robot.domain.NavigationMenu;
+import com.silence.robot.domain.RoleInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TMenuMapper;
+import com.silence.robot.mapper.TRoleMapper;
 import com.silence.robot.model.TMenu;
+import com.silence.robot.model.TRole;
 import com.silence.robot.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -43,8 +46,8 @@ public class MenuService {
     @Resource
     private SequenceService sequenceService;
 
-    @Autowired
-    private DataSourceTransactionManager dataSourceTransactionManager;
+    @Resource
+    private TRoleMapper roleMapper;
 
     public void addMenu(MenuData menuData){
         TMenu menu = new TMenu();
@@ -109,9 +112,17 @@ public class MenuService {
         return list;
     }
 
-    public List<NavigationMenu> getNavigationMenu(){
+    public List<NavigationMenu> getNavigationMenu(String roleNo){
+        if(CommonUtils.isEmpty(roleNo)){
+            throw new BusinessException(ExceptionCode.ROLE_NO_EXIST);
+        }
+        List<TRole> roles = roleMapper.selectByRoleNo(roleNo);
+        if(roles.isEmpty()){
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        List<String> collect = roles.stream().map(TRole::getMenuNo).collect(Collectors.toList());
         List<NavigationMenu> list = new ArrayList<>();
-        List<TMenu> menus = menuMapper.selectAll();
+        List<TMenu> menus = menuMapper.selectByMenuNos(collect);
         List<TMenu> list1 = menus.stream().filter(menu -> menu.getMenuLevel() == 1).collect(Collectors.toList());
         getLevelMenu(list1, list, menus);
         return list;

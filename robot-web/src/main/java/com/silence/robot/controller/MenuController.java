@@ -12,7 +12,10 @@ package com.silence.robot.controller;
 
 import com.silence.robot.domain.MenuData;
 import com.silence.robot.domain.NavigationMenu;
+import com.silence.robot.domain.UserInfo;
 import com.silence.robot.dto.DataResponse;
+import com.silence.robot.exception.BusinessException;
+import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.service.MenuService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -62,8 +66,12 @@ public class MenuController {
     }
 
     @RequestMapping("/getNavigationMenu")
-    public DataResponse<List<NavigationMenu>> getNavigationMenu(){
-        List<NavigationMenu> dataList = menuService.getNavigationMenu();
+    public DataResponse<List<NavigationMenu>> getNavigationMenu(HttpSession httpSession){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        if(userInfo == null){
+            throw new BusinessException(ExceptionCode.AUTH_ERROR);
+        }
+        List<NavigationMenu> dataList = menuService.getNavigationMenu(userInfo.getRoleNo());
         return new DataResponse<>(dataList);
     }
 }

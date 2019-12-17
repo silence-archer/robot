@@ -12,6 +12,8 @@ package com.silence.robot.service;
 
 import com.silence.robot.domain.MenuData;
 import com.silence.robot.domain.RoleInfo;
+import com.silence.robot.exception.BusinessException;
+import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TRoleMapper;
 import com.silence.robot.model.TRole;
 import com.silence.robot.utils.CommonUtils;
@@ -50,28 +52,63 @@ public class RoleService {
         addRoleMenuInfo(roleNo, roleName, children);
     }
 
+    public void modifyRole(String roleNo, String roleName, List<MenuData> menuDataList){
+        //先删除再添加
+        roleMapper.deleteByRoleNo(roleNo);
+        //TODO 暂时忽略掉第一级菜单
+        List<MenuData> children = menuDataList.get(0).getChildren();
+        addRoleMenuInfo(roleNo, roleName, children);
+    }
+
+    public void deleteRole(String roleNo){
+        roleMapper.deleteByRoleNo(roleNo);
+    }
+
+
+
     public List<RoleInfo> getRoleInfo() {
+
+        return getRoleInfo(true);
+    }
+
+    public String getRoleName(String roleNo) {
+        List<TRole> roles = roleMapper.selectByRoleNo(roleNo);
+        if(roles.isEmpty()){
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        return roles.get(0).getRoleName();
+    }
+
+    public List<RoleInfo> getRoleInfo(boolean isQueryList) {
         List<TRole> roles = roleMapper.selectAll();
         List<MenuData> menuNos = menuService.getMenuData();
-        List<RoleInfo> list = new ArrayList<>();
-        List<TRole> collect = roles.stream().filter(CommonUtils.distinctByKey(TRole::getRoleNo)).collect(Collectors.toList());
-        collect.forEach(role -> {
-            //初始化菜单都不勾选 每循环一次创建一个菜单对象
-            List<MenuData> results = new ArrayList<>();
-            initMenuChecked(menuNos, results);
-            RoleInfo roleInfo = new RoleInfo();
-            roleInfo.setId(role.getId());
-            roleInfo.setRoleName(role.getRoleName());
-            roleInfo.setRoleNo(role.getRoleNo());
-            roleInfo.setCreateTime(CommonUtils.getStringDate(role.getCreateTime()));
-            roleInfo.setMenuNos(results);
-            List<TRole> roleList = roles.stream().filter(menuRole -> menuRole.getRoleNo().equals(role.getRoleNo())).collect(Collectors.toList());
-            getMenuChecked(results, roleList);
-            list.add(roleInfo);
 
-        });
-        return list;
+        List<TRole> collect = roles.stream().filter(CommonUtils.distinctByKey(TRole::getRoleNo)).collect(Collectors.toList());
+        if(isQueryList){
+            List<RoleInfo> list = new ArrayList<>();
+            collect.forEach(role -> {
+                //初始化菜单都不勾选 每循环一次创建一个菜单对象
+                List<MenuData> results = new ArrayList<>();
+                initMenuChecked(menuNos, results);
+                RoleInfo roleInfo = new RoleInfo();
+                roleInfo.setId(role.getId());
+                roleInfo.setRoleName(role.getRoleName());
+                roleInfo.setRoleNo(role.getRoleNo());
+                roleInfo.setCreateTime(CommonUtils.getStringDate(role.getCreateTime()));
+                roleInfo.setMenuNos(results);
+                List<TRole> roleList = roles.stream().filter(menuRole -> menuRole.getRoleNo().equals(role.getRoleNo())).collect(Collectors.toList());
+                getMenuChecked(results, roleList);
+                list.add(roleInfo);
+
+            });
+            return list;
+        }else{
+            List<RoleInfo> list = CommonUtils.copyList(RoleInfo.class, collect);
+            return list;
+        }
+
     }
+
 
     private void addRoleMenuInfo(String roleNo, String roleName, List<MenuData> menuDataList) {
         menuDataList.forEach(menuData -> {

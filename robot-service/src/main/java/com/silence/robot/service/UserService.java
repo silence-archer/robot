@@ -55,6 +55,9 @@ public class UserService {
     @Resource
     private TUserTalkMembersMapper userTalkMembersMapper;
 
+    @Resource
+    private RoleService roleService;
+
     public List<UserInfo> getUserInfo(){
         List<TUser> userList = userMapper.selectAll();
 
@@ -92,6 +95,7 @@ public class UserService {
             throw new BusinessException(ExceptionCode.NO_EXIST);
         }
         user.setNickname(userInfo.getNickname());
+        user.setRoleNo(userInfo.getRoleNo());
         user.setUpdateTime(new Date());
         userMapper.updateByPrimaryKey(user);
         TUserTalkInfo userTalkInfo = userTalkInfoMapper.selectByPrimaryKey(userInfo.getUsername());
@@ -152,6 +156,9 @@ public class UserService {
             userInfo.setCreateTime(CommonUtils.getStringDate(user.getCreateTime()));
             userInfo.setSign(userTalkInfo.getSign());
             userInfo.setAvatar(userTalkInfo.getAvatar());
+            userInfo.setRoleNo(user.getRoleNo());
+            String roleName = roleService.getRoleName(user.getRoleNo());
+            userInfo.setRoleName(roleName);
             list.add(userInfo);
         });
         return list;

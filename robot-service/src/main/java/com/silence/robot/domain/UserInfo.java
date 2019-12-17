@@ -26,6 +26,16 @@ public class UserInfo {
     private String nickname;
 
     /**
+     * 角色代码
+     */
+    private String roleNo;
+
+    /**
+     * 角色名称
+     */
+    private String roleName;
+
+    /**
      * 验证码生成的图片信息
      */
     private String imageWithVerifyCode;
@@ -50,6 +60,14 @@ public class UserInfo {
      */
     private String avatar;
 
+
+    public String getRoleNo() {
+        return roleNo;
+    }
+
+    public void setRoleNo(String roleNo) {
+        this.roleNo = roleNo;
+    }
 
     public String getSign() {
         return sign;
@@ -123,6 +141,14 @@ public class UserInfo {
         this.imageWithVerifyCode = imageWithVerifyCode;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -130,9 +156,11 @@ public class UserInfo {
                 ", password='" + password + '\'' +
                 ", imageCode='" + imageCode + '\'' +
                 ", nickname='" + nickname + '\'' +
+                ", roleNo='" + roleNo + '\'' +
+                ", roleName='" + roleName + '\'' +
                 ", imageWithVerifyCode='" + imageWithVerifyCode + '\'' +
                 ", id='" + id + '\'' +
-                ", createTime=" + createTime +
+                ", createTime='" + createTime + '\'' +
                 ", sign='" + sign + '\'' +
                 ", avatar='" + avatar + '\'' +
                 '}';
