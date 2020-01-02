@@ -53,7 +53,7 @@ CREATE TABLE `t_menu` (
   `UPDATE_TIME` datetime NOT NULL COMMENT '修改时间',
   `UPDATE_USER` varchar(32) DEFAULT '' COMMENT '修改人',
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `UQ_IDX` (`MENU_NO`)
+  UNIQUE KEY `MENU_UQ_IDX` (`MENU_NO`)
 )  COMMENT='菜单信息表';
 
 -- ----------------------------
@@ -81,7 +81,7 @@ CREATE TABLE `t_sequence` (
   `seq_name` varchar(255) DEFAULT NULL COMMENT '序列名称',
   `seq_value` int(10) DEFAULT NULL COMMENT '序列值',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UQ_IDX` (`seq_name`) 
+  UNIQUE KEY `SEQ_UQ_IDX` (`seq_name`)
 )  COMMENT='序列表';
 
 -- ----------------------------
@@ -113,7 +113,7 @@ CREATE TABLE `t_svn_info` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `over_flag` varchar(1) DEFAULT NULL COMMENT '检出成功标志',
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `UQ_IDX` (`url`) 
+  UNIQUE KEY `SVN_UQ_IDX` (`url`)
 )  COMMENT='SVN信息表';
 
 -- ----------------------------
