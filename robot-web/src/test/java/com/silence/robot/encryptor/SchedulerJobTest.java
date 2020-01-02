@@ -33,7 +33,7 @@ import javax.annotation.Resource;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("mysql")
+@ActiveProfiles("h2")
 public class SchedulerJobTest {
 
     @Resource
@@ -41,16 +41,6 @@ public class SchedulerJobTest {
 
     @Test
     public void schedulerTest() throws Exception {
-        JobDetailImpl jobDetail = new JobDetailImpl();
-        JobKey jobKey = new JobKey("111");
-        jobDetail.setKey(jobKey);
-        Job subscribeAccessTokenJob = SpringContextHelper.getBean("subscribeAccessTokenJob", Job.class);
-        jobDetail.setJobClass(subscribeAccessTokenJob.getClass());
-        CronTriggerImpl trigger = new CronTriggerImpl();
-        TriggerKey triggerKey = new TriggerKey("1111");
-        trigger.setKey(triggerKey);
-        trigger.setCronExpression("0/5 * * * * ?");
-        scheduler.scheduleJob(jobDetail, trigger);
-        scheduler.start();
+
     }
 }
