@@ -43,7 +43,7 @@
                enableSelectByExample="false" enableUpdateByExample="false"/>-->
         <!--<table schema="robot" tableName="t_user_talk_friend_group" enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false" />-->
-        <table schema="robot" tableName="t_user_talk_group" enableCountByExample="false" enableDeleteByExample="false"
+        <table schema="robot" tableName="t_cron_task_proc_log" enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false"/>
         <!--<table schema="robot" tableName="t_user_talk_members" enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false"/>-->

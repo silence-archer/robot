@@ -1,11 +1,20 @@
 silence:
   filter:
     cors: true
+  subscribe:
+    token: ENC(z/adb94Kn/PADnCarciDoFyDO1kQAcBn)
   interceptor:
     paths:
       - /login
       - /getUser
       - /verifyCode
+      - /signature/*
+  wechat:
+    subscribe:
+      api: https://api.weixin.qq.com/cgi-bin/token
+      grant_type: client_credential
+      appid: wxbaa91f7312261743
+      secret: 35245d830d87fd703eb79df651cdceb5
 robot:
   api:
     url: http://openapi.tuling123.com/openapi/api/v2

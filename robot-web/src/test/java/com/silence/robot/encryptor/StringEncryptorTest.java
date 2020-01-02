@@ -36,7 +36,7 @@ import javax.annotation.Resource;
 //我们在测试使用 websocket的时候需要启动一个完整的服务器，而使用这个注解就是说每次测试都会选用一个随即可用的端口模拟启动一个完整的服务器
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("mysql")
+@ActiveProfiles("h2")
 public class StringEncryptorTest {
 
     @Resource
@@ -50,11 +50,17 @@ public class StringEncryptorTest {
 
     @Value("${spring.datasource.password}")
     private String password;
+    @Value("${silence.subscribe.token}")
+    private String token;
 
     @Test
     public void encry(){
-        String mzh = jasyptStringEncryptor.encrypt("930927");
+
+        String mzh = jasyptStringEncryptor.encrypt("mzh");
         System.out.println(mzh);
+        System.out.println(username);
+        System.out.println(password);
+        System.out.println(token);
     }
 
 

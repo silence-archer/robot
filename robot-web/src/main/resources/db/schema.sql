@@ -1,5 +1,42 @@
 
 -- ----------------------------
+-- Table structure for t_cron_task
+-- ----------------------------
+DROP TABLE IF EXISTS `t_cron_task`;
+CREATE TABLE `t_cron_task` (
+  `ID` varchar(64) NOT NULL COMMENT '物理主键',
+  `job_name` varchar(64) NOT NULL COMMENT '任务名称',
+  `cron_expr` varchar(30) NOT NULL COMMENT 'cron表达式',
+  `job_desc` varchar(200) DEFAULT NULL COMMENT '任务描述',
+  `job_class` varchar(60) DEFAULT NULL COMMENT '任务执行类名',
+  `effect_flag` varchar(1) NOT NULL COMMENT '生效标志',
+  `create_user` varchar(20) DEFAULT NULL COMMENT '创建人',
+  `create_time` date NOT NULL COMMENT '创建时间',
+  `update_user` varchar(20) DEFAULT NULL COMMENT '更新人',
+  `update_time` date NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `t_cron_task_job_name_uindex` (`job_name`)
+) COMMENT='定时任务配置表';
+
+-- ----------------------------
+-- Table structure for t_cron_task_proc_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_cron_task_proc_log`;
+CREATE TABLE `t_cron_task_proc_log` (
+  `ID` varchar(64) NOT NULL COMMENT '物理主键',
+  `job_name` varchar(64) NOT NULL COMMENT '任务名称',
+  `job_desc` varchar(256) DEFAULT NULL COMMENT '任务描述',
+  `proc_status` varchar(10) DEFAULT NULL COMMENT '执行状态',
+  `error_msg` varchar(256) DEFAULT NULL COMMENT '错误信息',
+  `create_time` date NOT NULL COMMENT '创建时间',
+  `create_user` varchar(64) DEFAULT NULL COMMENT '创建人',
+  `update_time` date NOT NULL COMMENT '更新时间',
+  `update_user` varchar(64) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `t_cron_task_proc_log_job_name_uindex` (`job_name`)
+)  COMMENT='定时任务执行日志表';
+
+-- ----------------------------
 -- Table structure for t_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `t_menu`;
@@ -16,8 +53,8 @@ CREATE TABLE `t_menu` (
   `UPDATE_TIME` datetime NOT NULL COMMENT '修改时间',
   `UPDATE_USER` varchar(32) DEFAULT '' COMMENT '修改人',
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `MENU_UQ_IDX` (`MENU_NO`)
-) COMMENT='菜单信息表';
+  UNIQUE KEY `UQ_IDX` (`MENU_NO`)
+)  COMMENT='菜单信息表';
 
 -- ----------------------------
 -- Table structure for t_role
@@ -33,7 +70,7 @@ CREATE TABLE `t_role` (
   `UPDATE_TIME` datetime NOT NULL COMMENT '修改时间',
   `UPDATE_USER` varchar(32) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`ID`)
-) COMMENT='角色信息表';
+)  COMMENT='角色信息表';
 
 -- ----------------------------
 -- Table structure for t_sequence
@@ -44,8 +81,26 @@ CREATE TABLE `t_sequence` (
   `seq_name` varchar(255) DEFAULT NULL COMMENT '序列名称',
   `seq_value` int(10) DEFAULT NULL COMMENT '序列值',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `SEQUENCE_UQ_IDX` (`seq_name`)
-) COMMENT='序列表';
+  UNIQUE KEY `UQ_IDX` (`seq_name`) USING BTREE
+)  COMMENT='序列表';
+
+-- ----------------------------
+-- Table structure for t_subscribe_config_info
+-- ----------------------------
+DROP TABLE IF EXISTS `t_subscribe_config_info`;
+CREATE TABLE `t_subscribe_config_info` (
+  `ID` varchar(64) NOT NULL COMMENT '物理主键',
+  `config_name` varchar(64) NOT NULL COMMENT '配置名称',
+  `config_value` varchar(64) NOT NULL COMMENT '配置值',
+  `config_desc` varchar(256) DEFAULT NULL COMMENT '配置描述',
+  `expire_time` int(11) DEFAULT NULL COMMENT '超时时间',
+  `create_time` date NOT NULL COMMENT '创建时间',
+  `create_user` varchar(64) DEFAULT NULL COMMENT '创建人',
+  `update_time` date DEFAULT NULL COMMENT '更新时间',
+  `update_user` varchar(64) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `t_subscribe_config_info_config_name_uindex` (`config_name`)
+)  COMMENT='微信订阅号配置信息表';
 
 -- ----------------------------
 -- Table structure for t_svn_info
@@ -58,8 +113,8 @@ CREATE TABLE `t_svn_info` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `over_flag` varchar(1) DEFAULT NULL COMMENT '检出成功标志',
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `SVN_INFO_UQ_IDX` (`url`) USING BTREE
-) COMMENT='SVN信息表';
+  UNIQUE KEY `UQ_IDX` (`url`) USING BTREE
+)  COMMENT='SVN信息表';
 
 -- ----------------------------
 -- Table structure for t_user
@@ -76,8 +131,8 @@ CREATE TABLE `t_user` (
   `UPDATE_TIME` datetime NOT NULL COMMENT '修改时间',
   `UPDATE_USER` varchar(32) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `USER_UQ_IDX` (`USERNAME`) USING BTREE
-) COMMENT='用户信息表';
+  UNIQUE KEY `UQ_IDX` (`USERNAME`) USING BTREE
+)  COMMENT='用户信息表';
 
 -- ----------------------------
 -- Table structure for t_user_talk_friend
@@ -139,6 +194,3 @@ CREATE TABLE `t_user_talk_members` (
   `member_id` varchar(64) DEFAULT NULL COMMENT '成员Id',
   PRIMARY KEY (`id`)
 )  COMMENT='用户即时聊天群组成员信息表';
-
-
-

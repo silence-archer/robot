@@ -318,6 +318,13 @@ public class FileUtils {
         return jsonReader.readObject(clazz);
     }
 
+    public static Map getJsonMap(InputStream inputStream) {
+        Reader reader = new InputStreamReader(inputStream);
+        JSONReader jsonReader = new JSONReader(reader);
+        Map map = jsonReader.readObject(Map.class);
+        return map;
+    }
+
 
     public static void main(String[] args) {
         List<String> list = Arrays.asList("aaa", "bbb", "ccc");

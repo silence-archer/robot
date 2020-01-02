@@ -11,9 +11,21 @@
 package com.silence.robot.utils;
 
 import com.silence.robot.exception.BusinessException;
+import com.silence.robot.exception.ExceptionCode;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.quartz.CronExpression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.DigestUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,9 +42,13 @@ import java.util.function.Predicate;
  */
 public class CommonUtils {
 
+    private static Logger logger = LoggerFactory.getLogger(CommonUtils.class);
+
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     private static final String slat = "&%5123***&&%%$$#@";
+
+    public static final String JOB_PACKAGE_NAME = "com.silence.robot.job.";
 
     public static String getUuid(){
         return UUID.randomUUID().toString().replaceAll("-","");
@@ -100,7 +116,16 @@ public class CommonUtils {
 
     public static String strToMD5(String str){
         str = str+"/"+slat;
-        return DigestUtils.md5DigestAsHex(str.getBytes());
+        return DigestUtils.md5Hex(str.getBytes());
+    }
+
+    /**
+     * sha1加密
+     * @param data
+     * @return
+     */
+    public static String sha1(String data){
+        return DigestUtils.sha1Hex(data);
     }
 
     /**
@@ -112,6 +137,54 @@ public class CommonUtils {
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
+    }
+
+    public static String checkCronExpr(String cronExpr){
+        try {
+            CronExpression cronExpression = new CronExpression(cronExpr);
+            return cronExpression.getCronExpression();
+        } catch (ParseException e) {
+            logger.error("cron表达式输入有误",e);
+            throw new BusinessException(ExceptionCode.CRON_ERROR);
+        }
+
+    }
+
+    public static Map httpClientExecute(HttpRequestBase request){
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+        CloseableHttpResponse httpResponse = null;
+        HttpEntity responseEntity = null;
+        Map map = null;
+        try {
+            httpResponse = httpClient.execute(request);
+
+            responseEntity = httpResponse.getEntity();
+            InputStream content = responseEntity.getContent();
+            map = FileUtils.getJsonMap(content);
+        } catch (IOException e) {
+            logger.error("使用流失败",e);
+        }finally {
+            try {
+                if(httpClient != null){
+                    httpClient.close();
+                }
+                if(httpResponse != null){
+                    httpResponse.close();
+                }
+            } catch (IOException e) {
+                logger.error("关闭流失败",e);
+            }
+        }
+        return map;
+    }
+
+    public static void main(String[] args){
+        List<String> list = Arrays.asList("p67845251", "1577156609", "705061741");
+
+        //对三个入参进行字典序排序
+        Collections.sort(list);
+        String s = sha1(list.get(0) + list.get(1) + list.get(2));
+        System.out.println(s.equals("237c18c4c48641bfc84ab38eb29533c2a069af05"));
     }
 
 

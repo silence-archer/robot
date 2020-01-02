@@ -20,6 +20,12 @@ public enum ExceptionCode {
     PASSWORD_ERROR(100015,"原密码输入错误"),
     PASSWORD_SAME_ERROR(100016,"新密码与原密码重复"),
     ROLE_NO_EXIST(100017,"角色代码不能为空"),
+    ILLEGAL_REQUEST(100018,"请求方非微信服务器"),
+    CRON_ERROR(100019,"cron表达式输入有误"),
+    SCHEDULER_START_ERROR(100020,"定时任务启动失败"),
+    SCHEDULER_STOP_ERROR(100021,"定时任务停止失败"),
+    SCHEDULER_RESTART_ERROR(100022,"定时任务重启失败"),
+    SUBSCRIBE_TOKEN_ERROR(100023,"获取微信公众号凭证失败"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private int code;
