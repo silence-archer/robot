@@ -5,6 +5,8 @@ silence:
     token: ENC(z/adb94Kn/PADnCarciDoFyDO1kQAcBn)
   interceptor:
     paths:
+      - /
+      - /error
       - /login
       - /getUser
       - /verifyCode
