@@ -102,6 +102,11 @@
                 <version>4.0.2.RELEASE</version>
             </dependency>
             <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+            <dependency>
                 <groupId>com.silence</groupId>
                 <artifactId>robot-api</artifactId>
                 <version>${robot.version}</version>

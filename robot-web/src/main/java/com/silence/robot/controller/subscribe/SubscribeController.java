@@ -10,16 +10,21 @@
  */
 package com.silence.robot.controller.subscribe;
 
+import com.silence.robot.domain.subscribe.SubscribeMsgInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
+import com.silence.robot.service.HelloService;
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +44,9 @@ public class SubscribeController {
     @Value("${silence.subscribe.token}")
     private String token;
 
+    @Resource
+    private HelloService helloService;
+
     @GetMapping("/checkSignature")
     public String checkSignature(@RequestParam String signature,@RequestParam String timestamp,@RequestParam String nonce,@RequestParam String echostr){
         logger.info("请求的signature为{},timestamp为{},nonce为{},echostr为{},token为{}",signature,timestamp,nonce,echostr,token);
@@ -56,7 +64,16 @@ public class SubscribeController {
     @PostMapping("/checkSignature")
     public String getMessage(@RequestBody String xmlMsg){
         logger.info("接收到用户发送的消息为{}",xmlMsg);
-        return "更多信息请关注蓓婴佑小程序";
+        SubscribeMsgInfo subscribeMsgInfo = FileUtils.convertXmlStrToObject(xmlMsg, SubscribeMsgInfo.class);
+        String txt = helloService.hello(subscribeMsgInfo.getContent());
+        SubscribeMsgInfo msgInfo = new SubscribeMsgInfo();
+        msgInfo.setToUserName(subscribeMsgInfo.getFromUserName());
+        msgInfo.setFromUserName(subscribeMsgInfo.getToUserName());
+        msgInfo.setContent(txt);
+        msgInfo.setMsgType("text");
+        msgInfo.setCreateTime(System.currentTimeMillis());
+
+        return FileUtils.convertToXml(msgInfo);
     }
 
 

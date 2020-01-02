@@ -61,6 +61,13 @@ public class HelloService {
         return tulingResponseInfo;
     }
 
+    public String hello(String txt) {
+        TulingRequestInfo requestInfo = new TulingRequestInfo();
+        requestInfo.setTxt(txt);
+        return hello(requestInfo).getText();
+
+    }
+
 
 
 }

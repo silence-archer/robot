@@ -12,10 +12,20 @@ package com.silence.robot.utils;
 
 import com.alibaba.fastjson.JSONReader;
 import com.silence.robot.domain.FileDto;
+import com.silence.robot.domain.subscribe.SubscribeMsgInfo;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.filechooser.FileSystemView;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -325,19 +335,68 @@ public class FileUtils {
         return map;
     }
 
+    public static <T> T readXml(String xmlStr, Class<T> clazz){
+        try {
+            Document document = DocumentHelper.parseText(xmlStr);
+            Element rootElement = document.getRootElement();
+            List<Element> elements = rootElement.elements();
+            T instance = clazz.newInstance();
+            elements.forEach(element ->{
+                BeanUtils.setProperty(instance,element.getName(),element.getStringValue());
+            });
+
+            return instance;
+        } catch (Exception e) {
+            logger.error("xml字符串{}，转化为对象{}失败",xmlStr,clazz.getName(), e);
+        }
+        return null;
+
+    }
+
+    public static <T> T convertXmlStrToObject(String xmlStr, Class<T> clazz){
+        T xmlObject = null;
+        try {
+            JAXBContext context = JAXBContext.newInstance(clazz);
+            // 进行将Xml转成对象的核心接口
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            StringReader sr = new StringReader(xmlStr);
+            xmlObject = (T) unmarshaller.unmarshal(sr);
+        } catch (JAXBException e) {
+            logger.error("xml字符串{}，转化为对象{}失败",xmlStr,clazz.getName(), e);
+        }
+        return xmlObject;
+    }
+
+    public static String convertToXml(Object obj) {
+        // 创建输出流
+        StringWriter sw = new StringWriter();
+        try {
+            // 利用jdk中自带的转换类实现
+            JAXBContext context = JAXBContext.newInstance(obj.getClass());
+
+            Marshaller marshaller = context.createMarshaller();
+            // 格式化xml输出的格式
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
+                    Boolean.TRUE);
+            // 将对象转换成输出流形式的xml
+            marshaller.marshal(obj, sw);
+        } catch (JAXBException e) {
+            logger.error("对象{}转化xml失败",obj.getClass().getName(), e);
+        }
+        return sw.toString();
+    }
+
 
     public static void main(String[] args) {
-        List<String> list = Arrays.asList("aaa", "bbb", "ccc");
-        List<FileDto> results = new ArrayList<>();
-        FileDto fileDto = new FileDto();
-        fileDto.setFileName("111111111");
-        list.forEach(str ->{
-            FileDto rs = fileDto;
-            results.add(rs);
-            rs = new FileDto();
-            rs.setFileName("2222222");
-        });
-        results.forEach(result -> System.out.println(result.getFileName()));
+        SubscribeMsgInfo subscribeMsgInfo = convertXmlStrToObject("<xml><ToUserName><![CDATA[gh_e46a5a4fc246]]></ToUserName>\n" +
+                "<FromUserName><![CDATA[o9tSfjg9jM_JuvU8gv1dbpmNNAdo]]></FromUserName>\n" +
+                "<CreateTime>1577934196</CreateTime>\n" +
+                "<MsgType><![CDATA[text]]></MsgType>\n" +
+                "<Content><![CDATA[你好]]></Content>\n" +
+                "<MsgId>22590585821471954</MsgId>\n" +
+                "</xml>\n", SubscribeMsgInfo.class);
+        subscribeMsgInfo.setMsgId(null);
+        System.out.println(convertToXml(subscribeMsgInfo));
     }
 
 

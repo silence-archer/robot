@@ -15,10 +15,8 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello(@RequestParam("txt") String txt){
-        TulingRequestInfo requestInfo = new TulingRequestInfo();
-        requestInfo.setTxt(txt);
-        TulingResponseInfo tulingResponseInfo = helloService.hello(requestInfo);
-        return tulingResponseInfo.getText();
+
+        return helloService.hello(txt);
     }
 
     @PostMapping("/say")
