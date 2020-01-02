@@ -36,13 +36,11 @@ public class SessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        logger.info("创建session : {}",se.getSession().getId());
 
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-        logger.info("销毁session : {}",se.getSession().getId());
         UserInfo userInfo = (UserInfo) se.getSession().getAttribute("userInfo");
         if(userInfo != null){
             map.remove(userInfo.getUsername());

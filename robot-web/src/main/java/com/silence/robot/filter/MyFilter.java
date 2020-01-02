@@ -16,7 +16,6 @@ public class MyFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        logger.info("开始过滤url------>  {}, session 为：{}", request.getRequestURI(), request.getSession().getId());
         //跨域请求，*代表允许全部类型
         //配置了allow-credentials之后，如果allow-origin设为*，跨域时会报错说因为允许credentials，origin不能设为通配*，那么就设置为当前domain。
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
