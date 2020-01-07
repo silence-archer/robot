@@ -24,7 +24,7 @@ import java.nio.CharBuffer;
  * @create 2020/1/2
  * @since 1.0.0
  */
-public class BeanUtils {
+public class BeanUtils extends org.springframework.beans.BeanUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(BeanUtils.class);
 

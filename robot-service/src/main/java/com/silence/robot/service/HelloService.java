@@ -6,6 +6,7 @@ import com.silence.robot.domain.TulingRequestInfo;
 import com.silence.robot.domain.TulingResponseInfo;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.FileUtils;
+import com.silence.robot.utils.HttpUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -50,7 +51,7 @@ public class HelloService {
         httpPost.setEntity(entity);
         httpPost.setHeader("Content-Type", "application/json;charset=utf8");
         TulingResponseInfo tulingResponseInfo = new TulingResponseInfo();
-        Map jsonMap = CommonUtils.httpClientExecute(httpPost);
+        Map jsonMap = HttpUtils.httpClientExecute(httpPost);
         List<Map> results = (List<Map>) jsonMap.get("results");
         Map values = (Map) results.get(0).get("values");
         String text = (String) values.get("text");

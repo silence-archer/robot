@@ -10,14 +10,13 @@
  */
 package com.silence.robot.utils;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONReader;
 import com.silence.robot.domain.FileDto;
-import com.silence.robot.domain.subscribe.SubscribeMsgInfo;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -206,12 +205,16 @@ public class FileUtils {
     }
 
     public static String convertFileName(String path) {
+        return convertFileName(path, "txt");
+    }
+
+    public static String convertFileName(String path, String type) {
         String regex = "/";
-        if(CommonUtils.getOsName().equals("windows")){
+        if (CommonUtils.getOsName().equals("windows")) {
             regex = "\\\\";
         }
         String[] split = path.split(regex);
-        String fileName = split[split.length - 1].split("\\.")[0] + ".txt";
+        String fileName = split[split.length - 1].split("\\.")[0] + "."+type;
         return fileName;
     }
 
@@ -236,7 +239,7 @@ public class FileUtils {
             bufferedWriter.flush();
         } catch (IOException e) {
             logger.error("文件写入失败", e);
-        }finally {
+        } finally {
             try {
                 bufferedWriter.close();
             } catch (IOException e) {
@@ -257,7 +260,7 @@ public class FileUtils {
             bufferedWriter.flush();
         } catch (IOException e) {
             logger.error("文件写入失败", e);
-        }finally {
+        } finally {
             try {
                 bufferedWriter.close();
             } catch (IOException e) {
@@ -266,10 +269,10 @@ public class FileUtils {
         }
     }
 
-    public static String getDefaultLocalUrl(String fileName){
+    public static String getDefaultLocalUrl(String fileName) {
         String s = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "/robot/";
         Path path = Paths.get(s);
-        if(Files.notExists(path)){
+        if (Files.notExists(path)) {
             try {
                 Files.createDirectory(path);
             } catch (IOException e) {
@@ -279,10 +282,10 @@ public class FileUtils {
         return s + fileName;
     }
 
-    public static List<String> readAllLines(String fileName){
+    public static List<String> readAllLines(String fileName) {
         List<String> list = new ArrayList<>();
         Path path = Paths.get(getDefaultLocalUrl(fileName));
-        if(Files.exists(path)){
+        if (Files.exists(path)) {
             try {
                 list = Files.readAllLines(path);
             } catch (IOException e) {
@@ -293,10 +296,10 @@ public class FileUtils {
         return list;
     }
 
-    public static String readAllContents(String fileName){
+    public static String readAllContents(String fileName) {
         String content = "";
         Path path = Paths.get(getDefaultLocalUrl(fileName));
-        if(Files.exists(path)){
+        if (Files.exists(path)) {
             try {
                 content = new String(Files.readAllBytes(path));
             } catch (IOException e) {
@@ -307,21 +310,22 @@ public class FileUtils {
         return content;
     }
 
-    public static boolean exists(String name){
+    public static boolean exists(String name) {
         String fileName = FileUtils.getDefaultLocalUrl(name);
         return Files.exists(Paths.get(fileName));
     }
 
-    public static boolean notExists(String name){
+    public static boolean notExists(String name) {
         return !exists(name);
     }
 
     /**
      * 在类路径下读取json文件
+     *
      * @param fileName
      * @return
      */
-    public static <T> T readJsonFile(String fileName, Class<T> clazz){
+    public static <T> T readJsonFile(String fileName, Class<T> clazz) {
         InputStream inputStream = FileUtils.class.getClassLoader().getResourceAsStream(fileName);
         Reader reader = new InputStreamReader(inputStream);
         JSONReader jsonReader = new JSONReader(reader);
@@ -335,25 +339,8 @@ public class FileUtils {
         return map;
     }
 
-    public static <T> T readXml(String xmlStr, Class<T> clazz){
-        try {
-            Document document = DocumentHelper.parseText(xmlStr);
-            Element rootElement = document.getRootElement();
-            List<Element> elements = rootElement.elements();
-            T instance = clazz.newInstance();
-            elements.forEach(element ->{
-                BeanUtils.setProperty(instance,element.getName(),element.getStringValue());
-            });
 
-            return instance;
-        } catch (Exception e) {
-            logger.error("xml字符串{}，转化为对象{}失败",xmlStr,clazz.getName(), e);
-        }
-        return null;
-
-    }
-
-    public static <T> T convertXmlStrToObject(String xmlStr, Class<T> clazz){
+    public static <T> T convertXmlStrToObject(String xmlStr, Class<T> clazz) {
         T xmlObject = null;
         try {
             JAXBContext context = JAXBContext.newInstance(clazz);
@@ -362,7 +349,7 @@ public class FileUtils {
             StringReader sr = new StringReader(xmlStr);
             xmlObject = (T) unmarshaller.unmarshal(sr);
         } catch (JAXBException e) {
-            logger.error("xml字符串{}，转化为对象{}失败",xmlStr,clazz.getName(), e);
+            logger.error("xml字符串{}，转化为对象{}失败", xmlStr, clazz.getName(), e);
         }
         return xmlObject;
     }
@@ -381,23 +368,59 @@ public class FileUtils {
             // 将对象转换成输出流形式的xml
             marshaller.marshal(obj, sw);
         } catch (JAXBException e) {
-            logger.error("对象{}转化xml失败",obj.getClass().getName(), e);
+            logger.error("对象{}转化xml失败", obj.getClass().getName(), e);
         }
         return sw.toString();
     }
 
 
-    public static void main(String[] args) {
-        SubscribeMsgInfo subscribeMsgInfo = convertXmlStrToObject("<xml><ToUserName><![CDATA[gh_e46a5a4fc246]]></ToUserName>\n" +
-                "<FromUserName><![CDATA[o9tSfjg9jM_JuvU8gv1dbpmNNAdo]]></FromUserName>\n" +
-                "<CreateTime>1577934196</CreateTime>\n" +
-                "<MsgType><![CDATA[text]]></MsgType>\n" +
-                "<Content><![CDATA[你好]]></Content>\n" +
-                "<MsgId>22590585821471954</MsgId>\n" +
-                "</xml>\n", SubscribeMsgInfo.class);
-        subscribeMsgInfo.setMsgId(null);
-        System.out.println(convertToXml(subscribeMsgInfo));
+
+    public static String readImage(String uri, String appCode, String type, String fileName) {
+        //请根据线上文档修改configure字段
+        JSONObject configObj = new JSONObject();
+        configObj.put("format", type);
+        configObj.put("finance", false);
+        configObj.put("dir_assure", false);
+        String configStr = configObj.toString();
+        Map<String, String> headers = new HashMap<>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appCode);
+
+        // 对图像进行base64编码
+        String imgBase64 = getImageBase64(fileName);
+
+        // 拼装请求body的json字符串
+        JSONObject requestObj = new JSONObject();
+        requestObj.put("image", imgBase64);
+        requestObj.put("configure", configStr);
+
+
+        String bodys = requestObj.toString();
+
+        Map map = HttpUtils.doPost(uri, headers, bodys);
+
+        return map.get("tables").toString();
+
+
     }
+
+    public static String getImageBase64(String fileName) {
+        // 对图像进行base64编码
+        String imgBase64 = null;
+        try {
+            File file = new File(fileName);
+            byte[] content = new byte[(int) file.length()];
+            FileInputStream finputstream = new FileInputStream(file);
+            finputstream.read(content);
+            finputstream.close();
+            imgBase64 = new String(Base64.encodeBase64(content));
+        } catch (IOException e) {
+            logger.error("图片{}转base64编码失败", fileName, e);
+        }
+        return imgBase64;
+    }
+
+
 
 
 }

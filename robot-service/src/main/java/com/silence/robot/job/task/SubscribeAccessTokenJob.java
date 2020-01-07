@@ -17,6 +17,7 @@ import com.silence.robot.job.RobotQuartzTask;
 import com.silence.robot.mapper.TSubscribeConfigInfoMapper;
 import com.silence.robot.model.TSubscribeConfigInfo;
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.HttpUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -67,7 +68,7 @@ public class SubscribeAccessTokenJob implements RobotQuartzTask {
         StringBuilder uri = new StringBuilder();
         uri.append(api).append("?").append("grant_type=").append(grantType).append("&appid=").append(appId).append("&secret=").append(secret);
         HttpGet request = new HttpGet(uri.toString());
-        Map map = CommonUtils.httpClientExecute(request);
+        Map map = HttpUtils.httpClientExecute(request);
         TSubscribeConfigInfo accessToken = subscribeConfigInfoMapper.selectByConfigName("access_token");
         if(accessToken == null){
             throw new BusinessException(ExceptionCode.NO_EXIST);

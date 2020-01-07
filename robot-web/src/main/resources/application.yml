@@ -3,6 +3,10 @@ silence:
     cors: true
   subscribe:
     token: ENC(z/adb94Kn/PADnCarciDoFyDO1kQAcBn)
+  aliyun:
+    ocr:
+      uri: http://form.market.alicloudapi.com/api/predict/ocr_table_parse
+      appCode: 8cf623998ddf4f07b9ea67749eeb8ce8
   interceptor:
     paths:
       - /

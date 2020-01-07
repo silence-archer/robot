@@ -150,33 +150,9 @@ public class CommonUtils {
 
     }
 
-    public static Map httpClientExecute(HttpRequestBase request){
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-        CloseableHttpResponse httpResponse = null;
-        HttpEntity responseEntity = null;
-        Map map = null;
-        try {
-            httpResponse = httpClient.execute(request);
 
-            responseEntity = httpResponse.getEntity();
-            InputStream content = responseEntity.getContent();
-            map = FileUtils.getJsonMap(content);
-        } catch (IOException e) {
-            logger.error("使用流失败",e);
-        }finally {
-            try {
-                if(httpClient != null){
-                    httpClient.close();
-                }
-                if(httpResponse != null){
-                    httpResponse.close();
-                }
-            } catch (IOException e) {
-                logger.error("关闭流失败",e);
-            }
-        }
-        return map;
-    }
+
+
 
     public static void main(String[] args){
         List<String> list = Arrays.asList("p67845251", "1577156609", "705061741");

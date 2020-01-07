@@ -26,6 +26,7 @@ public enum ExceptionCode {
     SCHEDULER_STOP_ERROR(100021,"定时任务停止失败"),
     SCHEDULER_RESTART_ERROR(100022,"定时任务重启失败"),
     SUBSCRIBE_TOKEN_ERROR(100023,"获取微信公众号凭证失败"),
+    HTTP_REQUEST_ERROR(100024,"http请求失败"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private int code;

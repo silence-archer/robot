@@ -33,9 +33,17 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
         <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>dom4j</groupId>-->
+            <!--<artifactId>dom4j</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>net.sourceforge.tess4j</groupId>-->
+            <!--<artifactId>tess4j</artifactId>-->
+        <!--</dependency>-->
     </dependencies>
 
 </project>
