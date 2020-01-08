@@ -248,10 +248,16 @@ public class FileUtils {
         }
     }
 
-    public static void writeFile(String fileName, String content) {
+    public static void writeFile(String fileName, String content, boolean isDefaultLocalUrl) {
         BufferedWriter bufferedWriter = null;
         try {
-            Path path = Paths.get(getDefaultLocalUrl(fileName));
+            Path path;
+            if(isDefaultLocalUrl){
+                path = Paths.get(getDefaultLocalUrl(fileName));
+            }else{
+                path = Paths.get(fileName);
+            }
+
             if (Files.notExists(path)) {
                 Files.createFile(path);
             }
@@ -269,8 +275,13 @@ public class FileUtils {
         }
     }
 
+    public static void writeFile(String fileName, String content) {
+        writeFile(fileName, content, true);
+    }
+
     public static String getDefaultLocalUrl(String fileName) {
         String s = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "/robot/";
+        logger.info("写文件默认路径为{}",s);
         Path path = Paths.get(s);
         if (Files.notExists(path)) {
             try {

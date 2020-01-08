@@ -10,6 +10,7 @@
  */
 package com.silence.robot.io;
 
+import com.silence.robot.utils.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,12 +28,15 @@ public class CmdOperateRunnable implements Runnable {
 
     private String cmd;
 
+    private String[] cmdStrs;
+
     private boolean isWait;
 
     private Process process;
 
-    public CmdOperateRunnable(String cmd, boolean isWait){
-        this.cmd = cmd;
+
+    public CmdOperateRunnable(String[] cmd, boolean isWait){
+        this.cmdStrs = cmd;
         this.isWait = isWait;
     }
 
@@ -43,7 +47,12 @@ public class CmdOperateRunnable implements Runnable {
     @Override
     public void run() {
         try{
-            process = Runtime.getRuntime().exec(cmd);
+            if(CommonUtils.isEmpty(cmd)){
+                process = Runtime.getRuntime().exec(cmdStrs);
+            }else {
+                process = Runtime.getRuntime().exec(cmd);
+            }
+
             Thread t1 = new Thread(new InputStreamRunnable(process.getErrorStream(),"error"),"ErrorStream");
             t1.start();
             Thread t2 = new Thread(new InputStreamRunnable(process.getInputStream(),"normal"),"InputStream");

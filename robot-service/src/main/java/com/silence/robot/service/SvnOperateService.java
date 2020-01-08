@@ -129,7 +129,18 @@ public class SvnOperateService {
      * @param cmd
      * @param isWait
      */
-    private void cmdOperate(String cmd, boolean isWait) {
+    public void cmdOperate(String cmd, boolean isWait) {
+        String[] cmdStrs = {cmd};
+        cmdOperate(cmdStrs, isWait);
+    }
+
+    /**
+     * 执行cmd命令
+     *
+     * @param cmd
+     * @param isWait
+     */
+    public void cmdOperate(String[] cmd, boolean isWait) {
         cmdOperateRunnable = new CmdOperateRunnable(cmd, isWait);
         Thread thread = new Thread(cmdOperateRunnable, "CmdOperate");
         thread.start();

@@ -16,13 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.annotation.Resource;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈图片试别〉
  *
  * @author silence
@@ -40,40 +37,22 @@ public class ImageOcrService {
     @Value("${silence.aliyun.ocr.appCode}")
     private String appCode;
 
-    public void generateXlsx(String fileName){
+    @Resource
+    private SvnOperateService svnOperateService;
+
+    public void generateXlsx(String fileName) {
         String xlsxStr = FileUtils.readImage(uri, appCode, "xlsx", fileName);
-        String name = FileUtils.convertFileName(fileName);
-        File tmp_base64file = new File(name);
-        if(!tmp_base64file.exists()){
-            tmp_base64file.getParentFile().mkdirs();
-        }
-        try{
-            tmp_base64file.createNewFile();
+        String tmpFileName = FileUtils.convertFileName(fileName);
+        FileUtils.writeFile(tmpFileName, xlsxStr, false);
 
-            // write
-            FileWriter fw = new FileWriter(tmp_base64file, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(xlsxStr);
-            bw.flush();
-            bw.close();
-            fw.close();
+        String excelFilePath = FileUtils.convertFileName(fileName, "xlsx");
+        String cmd = "touch " + excelFilePath;
+        svnOperateService.cmdOperate(cmd, true);
+        cmd = "sed -i -e 's/\\\\n/\\n/g' " + tmpFileName;
+        svnOperateService.cmdOperate(cmd, true);
 
-            String exelFilePath = FileUtils.convertFileName(fileName, "xlsx");
-            Runtime.getRuntime().exec("touch "+exelFilePath).destroy();
-            Process exec = Runtime.getRuntime().exec("sed -i -e 's/\\\\n/\\n/g' " + name);
-            exec.waitFor();
-            exec.destroy();
-
-            Process exec1 = null;
-            String[] cmd = { "/bin/sh", "-c", "base64 -d " + name + " > " + exelFilePath };
-            exec1 = Runtime.getRuntime().exec(cmd);
-            exec1.waitFor();
-            exec1.destroy();
-        }catch (IOException e){
-            logger.error("图片{}转excel失败", fileName, e);
-        } catch (InterruptedException e) {
-            logger.error("图片{}转excel失败", fileName, e);
-        }
+        String[] cmdStr = {"/bin/sh", "-c", "base64 -d " + tmpFileName + " > " + excelFilePath};
+        svnOperateService.cmdOperate(cmdStr, true);
 
 
     }
