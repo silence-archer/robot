@@ -26,9 +26,8 @@ public class CmdOperateRunnable implements Runnable {
 
     private final Logger logger = LoggerFactory.getLogger(CmdOperateRunnable.class);
 
-    private String cmd;
 
-    private String[] cmdStrs;
+    private String[] cmd;
 
     private boolean isWait;
 
@@ -36,7 +35,7 @@ public class CmdOperateRunnable implements Runnable {
 
 
     public CmdOperateRunnable(String[] cmd, boolean isWait){
-        this.cmdStrs = cmd;
+        this.cmd = cmd;
         this.isWait = isWait;
     }
 
@@ -47,8 +46,8 @@ public class CmdOperateRunnable implements Runnable {
     @Override
     public void run() {
         try{
-            if(CommonUtils.isEmpty(cmd)){
-                process = Runtime.getRuntime().exec(cmdStrs);
+            if(cmd.length == 1){
+                process = Runtime.getRuntime().exec(cmd[0]);
             }else {
                 process = Runtime.getRuntime().exec(cmd);
             }
