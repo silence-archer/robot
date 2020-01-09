@@ -47,8 +47,10 @@ public class CmdOperateRunnable implements Runnable {
     public void run() {
         try{
             if(cmd.length == 1){
+                logger.info("待执行的命令为{}",cmd[0]);
                 process = Runtime.getRuntime().exec(cmd[0]);
             }else {
+                logger.info("待执行的命令为{}",CommonUtils.arrayToString(cmd));
                 process = Runtime.getRuntime().exec(cmd);
             }
 

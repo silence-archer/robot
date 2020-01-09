@@ -150,6 +150,15 @@ public class CommonUtils {
 
     }
 
+    public static String arrayToString(String[] args){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < args.length; i++) {
+            sb.append(args[0]).append("|");
+        }
+
+        return sb.toString();
+    }
+
 
 
 

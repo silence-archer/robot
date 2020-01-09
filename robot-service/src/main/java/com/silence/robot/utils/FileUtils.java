@@ -52,6 +52,8 @@ public class FileUtils {
 
     public static final ThreadPoolExecutor FILE_READ_POOL = new ThreadPoolExecutor(8, 16, 3, TimeUnit.SECONDS, new LinkedBlockingDeque<>(32));
 
+    public static final String DEFAULT_CMD_LOG_URL = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "/robot/";
+
     public static FileDto readLine(long pos, int lineNum, String fileName) {
         File file = new File(fileName);
         int count = 0;//定义行数
@@ -280,17 +282,16 @@ public class FileUtils {
     }
 
     public static String getDefaultLocalUrl(String fileName) {
-        String s = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "/robot/";
-        logger.info("写文件默认路径为{}",s);
-        Path path = Paths.get(s);
+        Path path = Paths.get(DEFAULT_CMD_LOG_URL);
         if (Files.notExists(path)) {
             try {
                 Files.createDirectory(path);
+                logger.info("写文件默认路径为{}",DEFAULT_CMD_LOG_URL);
             } catch (IOException e) {
                 logger.error("文件创建失败", e);
             }
         }
-        return s + fileName;
+        return DEFAULT_CMD_LOG_URL + fileName;
     }
 
     public static List<String> readAllLines(String fileName) {

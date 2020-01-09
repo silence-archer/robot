@@ -9,8 +9,6 @@ silence:
       appCode: 8cf623998ddf4f07b9ea67749eeb8ce8
   interceptor:
     paths:
-      - /
-      - /error
       - /login
       - /getUser
       - /verifyCode
