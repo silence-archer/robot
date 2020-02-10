@@ -33,7 +33,6 @@ public class ImageOcrController {
 
     @GetMapping("/generateXlsx")
     public DataResponse<?> generateXlsx(@RequestParam String fileName){
-        fileName = "/var/lib/jenkins/robot-logs/"+fileName;
         imageOcrService.generateXlsx(fileName);
 
         return new DataResponse<>();

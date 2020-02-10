@@ -59,6 +59,7 @@ public class RobotQuartzJob extends MethodInvokingJobDetailFactoryBean.StatefulM
         try {
             quartzTask.execute();
             cronTaskProcLog.setProcStatus("SUCCESS");
+            cronTaskProcLog.setErrorMsg("");
         }catch (Exception e){
             logger.error("定时任务{}，执行出现异常",jobDetail.getKey(),e);
             TimerJobSchedule timerJobSchedule = SpringContextHelper.getBean(TimerJobSchedule.class);

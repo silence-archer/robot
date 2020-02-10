@@ -16,6 +16,7 @@
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     <!--
       WARNING - @mbg.generated
@@ -54,6 +55,7 @@
       UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated

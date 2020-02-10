@@ -10,6 +10,8 @@
  */
 package com.silence.robot.encryptor;
 
+import com.silence.robot.mapper.TUserMapper;
+import com.silence.robot.model.TUser;
 import com.silence.robot.utils.SpringContextHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,10 +39,12 @@ import javax.annotation.Resource;
 public class SchedulerJobTest {
 
     @Resource
-    private Scheduler scheduler;
+    private TUserMapper userMapper;
 
     @Test
-    public void schedulerTest() throws Exception {
+    public void schedulerTest() {
 
+        TUser user = userMapper.selectByUsername("admin");
+        System.out.println(user);
     }
 }

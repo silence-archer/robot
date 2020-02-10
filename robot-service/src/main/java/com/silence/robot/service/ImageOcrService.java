@@ -10,6 +10,7 @@
  */
 package com.silence.robot.service;
 
+import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,17 +42,17 @@ public class ImageOcrService {
     private SvnOperateService svnOperateService;
 
     public void generateXlsx(String fileName) {
-        String xlsxStr = FileUtils.readImage(uri, appCode, "xlsx", fileName);
+        String xlsxStr = FileUtils.readImage(uri, appCode, "xlsx", FileUtils.getDefaultLocalUrl(fileName));
         String tmpFileName = FileUtils.convertFileName(fileName);
-        FileUtils.writeFile(tmpFileName, xlsxStr, false);
+        FileUtils.writeFile(tmpFileName, xlsxStr);
 
-        String excelFilePath = FileUtils.convertFileName(fileName, "xlsx");
-        String cmd = "touch " + excelFilePath;
+        String excelFileName = FileUtils.convertFileName(fileName, "xlsx");
+        String cmd = "touch " + FileUtils.getDefaultLocalUrl(excelFileName);
         svnOperateService.cmdOperate(cmd, true);
         cmd = "sed -i -e 's/\\\\n/\\n/g' " + tmpFileName;
         svnOperateService.cmdOperate(cmd, true);
 
-        String[] cmdStr = {"/bin/sh", "-c", "base64 -d " + tmpFileName + " > " + excelFilePath};
+        String[] cmdStr = {"/bin/sh", "-c", "base64 -d " + FileUtils.getDefaultLocalUrl(tmpFileName) + " > " + FileUtils.getDefaultLocalUrl(excelFileName)};
         svnOperateService.cmdOperate(cmdStr, true);
 
 
