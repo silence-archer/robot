@@ -11,9 +11,12 @@
 package com.silence.robot.controller.subscribe;
 
 import com.silence.robot.domain.subscribe.SubscribeMsgInfo;
+import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
+import com.silence.robot.mapper.TSubscribeConfigInfoMapper;
 import com.silence.robot.service.HelloService;
+import com.silence.robot.service.SubscribeConfigInfoService;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.FileUtils;
 import org.slf4j.Logger;
@@ -47,6 +50,11 @@ public class SubscribeController {
     @Resource
     private HelloService helloService;
 
+    @Resource
+    private SubscribeConfigInfoService subscribeConfigInfoService;
+
+
+
     @GetMapping("/checkSignature")
     public String checkSignature(@RequestParam String signature,@RequestParam String timestamp,@RequestParam String nonce,@RequestParam String echostr){
         logger.info("请求的signature为{},timestamp为{},nonce为{},echostr为{},token为{}",signature,timestamp,nonce,echostr,token);
@@ -65,7 +73,12 @@ public class SubscribeController {
     public String getMessage(@RequestBody String xmlMsg){
         logger.info("接收到用户发送的消息为{}",xmlMsg);
         SubscribeMsgInfo subscribeMsgInfo = FileUtils.convertXmlStrToObject(xmlMsg, SubscribeMsgInfo.class);
-        String txt = helloService.hello(subscribeMsgInfo.getContent());
+        String txt;
+        if(subscribeMsgInfo.getContent().equals("今天吃什么")){
+            txt = subscribeConfigInfoService.getConfigValue(ConfigEnum.DELICACY_ENUM);
+        }else{
+            txt = helloService.hello(subscribeMsgInfo.getContent());
+        }
         SubscribeMsgInfo msgInfo = new SubscribeMsgInfo();
         msgInfo.setToUserName(subscribeMsgInfo.getFromUserName());
         msgInfo.setFromUserName(subscribeMsgInfo.getToUserName());

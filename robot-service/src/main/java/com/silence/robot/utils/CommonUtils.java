@@ -159,6 +159,27 @@ public class CommonUtils {
         return sb.toString();
     }
 
+    public static Integer toInteger(Object o){
+        if(o != null){
+            return Integer.valueOf(o.toString());
+        }
+        return null;
+    }
+
+    public static Long toLong(Object o){
+        if(o != null){
+            return Long.valueOf(o.toString());
+        }
+        return null;
+    }
+
+    public static String toString(Object o){
+        if(o != null){
+            return o.toString();
+        }
+        return null;
+    }
+
 
 
 

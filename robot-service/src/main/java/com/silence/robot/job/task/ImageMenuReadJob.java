@@ -10,11 +10,13 @@
  */
 package com.silence.robot.job.task;
 
+import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.job.RobotQuartzTask;
 import com.silence.robot.mapper.TSubscribeConfigInfoMapper;
 import com.silence.robot.model.TSubscribeConfigInfo;
+import com.silence.robot.service.SubscribeConfigInfoService;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.Excelutils;
 import com.silence.robot.utils.FileUtils;
@@ -40,15 +42,11 @@ import java.util.Date;
 public class ImageMenuReadJob implements RobotQuartzTask {
 
     @Resource
-    private TSubscribeConfigInfoMapper subscribeConfigInfoMapper;
+    private SubscribeConfigInfoService subscribeConfigInfoService;
 
     @Override
     public void execute() {
         int nowHour = LocalTime.now().getHour();
-        TSubscribeConfigInfo subscribeConfigInfo = subscribeConfigInfoMapper.selectByConfigName("delicacy");
-        if(subscribeConfigInfo == null){
-            throw new BusinessException(ExceptionCode.NO_EXIST);
-        }
         int week = LocalDate.now().getDayOfWeek().getValue();
         String fileName = FileUtils.getDefaultLocalUrl("1.xlsx");
         Workbook workbook = Excelutils.getWorkbook(fileName);
@@ -73,9 +71,7 @@ public class ImageMenuReadJob implements RobotQuartzTask {
                 s = "周末好好休息，慰劳自己吧";
                 break;
         }
-        subscribeConfigInfo.setConfigValue(s);
-        subscribeConfigInfo.setUpdateTime(new Date());
-        subscribeConfigInfoMapper.updateByPrimaryKey(subscribeConfigInfo);
+        subscribeConfigInfoService.setConfigValue(ConfigEnum.DELICACY_ENUM, s, null);
 
 
     }

@@ -10,12 +10,14 @@
  */
 package com.silence.robot.job.task;
 
+import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.job.RobotQuartzJob;
 import com.silence.robot.job.RobotQuartzTask;
 import com.silence.robot.mapper.TSubscribeConfigInfoMapper;
 import com.silence.robot.model.TSubscribeConfigInfo;
+import com.silence.robot.service.SubscribeConfigInfoService;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.HttpUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -61,7 +63,7 @@ public class SubscribeAccessTokenJob implements RobotQuartzTask {
     private String secret;
 
     @Resource
-    private TSubscribeConfigInfoMapper subscribeConfigInfoMapper;
+    private SubscribeConfigInfoService subscribeConfigInfoService;
 
     @Override
     public void execute() {
@@ -69,18 +71,11 @@ public class SubscribeAccessTokenJob implements RobotQuartzTask {
         uri.append(api).append("?").append("grant_type=").append(grantType).append("&appid=").append(appId).append("&secret=").append(secret);
         HttpGet request = new HttpGet(uri.toString());
         Map map = HttpUtils.httpClientExecute(request);
-        TSubscribeConfigInfo accessToken = subscribeConfigInfoMapper.selectByConfigName("access_token");
-        if(accessToken == null){
-            throw new BusinessException(ExceptionCode.NO_EXIST);
-        }
         if(CommonUtils.isEmpty(map.get("access_token"))){
             logger.error("返回的错误码为{}，错误信息为{}", map.get("errcode"), map.get("errmsg"));
             throw new BusinessException(ExceptionCode.SUBSCRIBE_TOKEN_ERROR);
         }
-        accessToken.setConfigValue((String) map.get("access_token"));
-        accessToken.setExpireTime(Integer.valueOf(map.get("expires_in").toString()));
-        accessToken.setUpdateTime(new Date());
-        subscribeConfigInfoMapper.updateByPrimaryKey(accessToken);
+        subscribeConfigInfoService.setConfigValue(ConfigEnum.ACCESS_TOKEN_ENUM, CommonUtils.toString(map.get("access_token")), CommonUtils.toInteger(map.get("expires_in")));
 
 
 
