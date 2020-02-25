@@ -11,24 +11,18 @@
 package com.silence.robot.job.task;
 
 import com.silence.robot.enumeration.ConfigEnum;
-import com.silence.robot.exception.BusinessException;
-import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.job.RobotQuartzTask;
-import com.silence.robot.mapper.TSubscribeConfigInfoMapper;
-import com.silence.robot.model.TSubscribeConfigInfo;
 import com.silence.robot.service.SubscribeConfigInfoService;
-import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.Excelutils;
 import com.silence.robot.utils.FileUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -41,6 +35,8 @@ import java.util.Date;
 @Component
 public class ImageMenuReadJob implements RobotQuartzTask {
 
+    private final Logger logger = LoggerFactory.getLogger(ImageMenuReadJob.class);
+
     @Resource
     private SubscribeConfigInfoService subscribeConfigInfoService;
 
@@ -48,6 +44,7 @@ public class ImageMenuReadJob implements RobotQuartzTask {
     public void execute() {
         int nowHour = LocalTime.now().getHour();
         int week = LocalDate.now().getDayOfWeek().getValue();
+        logger.info("现在是周{}，{}点", week, nowHour);
         String fileName = FileUtils.getDefaultLocalUrl("1.xlsx");
         Workbook workbook = Excelutils.getWorkbook(fileName);
         String s;
