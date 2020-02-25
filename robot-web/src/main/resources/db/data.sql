@@ -3,8 +3,8 @@
 -- ----------------------------
 -- Records of t_cron_task
 -- ----------------------------
-INSERT INTO `t_cron_task` VALUES ('e66377ba2c724627895ead05ebcbb925', 'SignatureAccessToken', '0 0 0/1 * * ?', '定时获取公众号的全局唯一接口调用凭据', 'subscribeAccessTokenJob', 'Y', null, '2019-12-27', null, '2019-12-30');
-INSERT INTO `t_cron_task` VALUES ('95c4c9a9fa964cb1b67eb12d0bdf8b5c', 'ImageMenuRead', '0 0/30 * * * ?', '图片菜单读取', 'imageMenuReadJob', 'Y', NULL, '2020-02-10', NULL, '2020-02-10');
+INSERT INTO `t_cron_task` VALUES ('e66377ba2c724627895ead05ebcbb925', 'SignatureAccessToken', '0 0 0/1 * * ?', '定时获取公众号的全局唯一接口调用凭据', 'subscribeAccessTokenJob', 'Y', null, '2019-10-10 05:04:47', null, '2019-10-10 05:04:47');
+INSERT INTO `t_cron_task` VALUES ('95c4c9a9fa964cb1b67eb12d0bdf8b5c', 'ImageMenuRead', '0 0/30 * * * ?', '图片菜单读取', 'imageMenuReadJob', 'Y', NULL, '2019-10-10 05:04:47', NULL, '2019-10-10 05:04:47');
 
 
 -- ----------------------------
@@ -67,7 +67,7 @@ INSERT INTO `t_sequence` VALUES ('8960fcf6bada440a806594f88962f5ef', 'RoleNo', '
 -- ----------------------------
 -- Records of t_subscribe_config_info
 -- ----------------------------
-INSERT INTO `t_subscribe_config_info` VALUES ('1', 'access_token', '1', '获取到的微信公众号凭证', null, '2019-12-30', 'admin', '2019-12-30', 'admin');
+INSERT INTO `t_subscribe_config_info` VALUES ('1', 'access_token', '1', '获取到的微信公众号凭证', null, '2019-10-10 05:04:47', 'admin', '2019-10-10 05:04:47', 'admin');
 
 
 -- ----------------------------

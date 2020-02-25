@@ -11,9 +11,9 @@ CREATE TABLE `t_cron_task` (
   `job_class` varchar(60) DEFAULT NULL COMMENT '任务执行类名',
   `effect_flag` varchar(1) NOT NULL COMMENT '生效标志',
   `create_user` varchar(20) DEFAULT NULL COMMENT '创建人',
-  `create_time` date NOT NULL COMMENT '创建时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_user` varchar(20) DEFAULT NULL COMMENT '更新人',
-  `update_time` date NOT NULL COMMENT '更新时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `t_cron_task_job_name_uindex` (`job_name`)
 ) COMMENT='定时任务配置表';
@@ -28,9 +28,9 @@ CREATE TABLE `t_cron_task_proc_log` (
   `job_desc` varchar(256) DEFAULT NULL COMMENT '任务描述',
   `proc_status` varchar(10) DEFAULT NULL COMMENT '执行状态',
   `error_msg` varchar(256) DEFAULT NULL COMMENT '错误信息',
-  `create_time` date NOT NULL COMMENT '创建时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
   `create_user` varchar(64) DEFAULT NULL COMMENT '创建人',
-  `update_time` date NOT NULL COMMENT '更新时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
   `update_user` varchar(64) DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `t_cron_task_proc_log_job_name_uindex` (`job_name`)
@@ -91,12 +91,12 @@ DROP TABLE IF EXISTS `t_subscribe_config_info`;
 CREATE TABLE `t_subscribe_config_info` (
   `ID` varchar(64) NOT NULL COMMENT '物理主键',
   `config_name` varchar(64) NOT NULL COMMENT '配置名称',
-  `config_value` varchar(64) NOT NULL COMMENT '配置值',
+  `config_value` varchar(256) NOT NULL COMMENT '配置值',
   `config_desc` varchar(256) DEFAULT NULL COMMENT '配置描述',
   `expire_time` int(11) DEFAULT NULL COMMENT '超时时间',
-  `create_time` date NOT NULL COMMENT '创建时间',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
   `create_user` varchar(64) DEFAULT NULL COMMENT '创建人',
-  `update_time` date DEFAULT NULL COMMENT '更新时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `update_user` varchar(64) DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `t_subscribe_config_info_config_name_uindex` (`config_name`)
