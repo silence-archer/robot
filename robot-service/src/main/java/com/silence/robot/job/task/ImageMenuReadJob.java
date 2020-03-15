@@ -91,7 +91,7 @@ public class ImageMenuReadJob implements RobotQuartzTask {
             s = getDayContent(rowIndex,cellIndex, workbook,"今天的早饭是\n");
         }else if(nowHour >= 10 && nowHour < 14){
             s = getDayContent(rowIndex, cellIndex+2, workbook, "今天的中饭是\n");
-        }else if(nowHour > 14){
+        }else if(nowHour >= 14){
             s = getDayContent(rowIndex, cellIndex+4, workbook, "今天的晚饭是\n");
         }else{
             s = "读取错误";
