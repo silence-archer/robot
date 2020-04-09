@@ -86,6 +86,25 @@ public class HttpUtils {
         }
         return map;
     }
+    
+    /**
+     * @description: 获取当前session的信息
+     * @param:
+     * @return:
+     * @auther: oe_machaohui
+     * @date: 2020/4/7 18:39
+     */
+    public static String getLoginUserName(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+            if(userInfo != null){
+                return userInfo.getUsername();
+            }
+        }
+        return "admin";
+    }
 
 
 }
