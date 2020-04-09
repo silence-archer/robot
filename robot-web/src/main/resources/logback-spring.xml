@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="true">
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <property name="LOG_EXCEPTION_CONVERSION_WORD" value="%wEx" />
+    <property name="LOG_FILE_CLEAN_HISTORY_ON_START" value="false" />
+    <property name="LOG_PATH" value="${LOG_PATH:-logs}" />
+    <property name="LOG_FILE" value="server" />
+    <property name="ERROR_LOG_FILE" value="error" />
+    <property name="LOG_FILE_MAX_SIZE" value="1MB" />
+    <property name="LOG_FILE_MAX_HISTORY" value="7" />
+    <property name="LOG_FILE_TOTAL_SIZE_CAP" value="0" />
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="LOG_DATEFORMAT_PATTERN" value="yyyy-MM-dd HH:mm:ss.SSS" />
+    <property name="FILE_LOG_PATTERN" value="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : [line:%L] : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+    <property name="ROLLING_FILE_NAME_PATTERN" value="${LOG_PATH}/%d{yyyyMMdd}/${LOG_FILE}-%i.log" />
+    <property name="ROLLING_ERROR_FILE_NAME_PATTERN" value="${LOG_PATH}/%d{yyyyMMdd}/${ERROR_LOG_FILE}-%i.log" />
+
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
+    <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
+    <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"/>
+    <logger name="org.apache.sshd.common.util.SecurityUtils" level="WARN"/>
+    <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"/>
+    <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+    <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
+    <logger name="com.silence.robot.mapper" level="DEBUG"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_PATH}/${LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <cleanHistoryOnStart>${LOG_FILE_CLEAN_HISTORY_ON_START}</cleanHistoryOnStart>
+            <fileNamePattern>${ROLLING_FILE_NAME_PATTERN}</fileNamePattern>
+            <maxFileSize>${LOG_FILE_MAX_SIZE}</maxFileSize>
+            <maxHistory>${LOG_FILE_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${LOG_FILE_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <appender name="ERROR"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_PATH}/${ERROR_LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <cleanHistoryOnStart>${LOG_FILE_CLEAN_HISTORY_ON_START}</cleanHistoryOnStart>
+            <fileNamePattern>${ROLLING_ERROR_FILE_NAME_PATTERN}</fileNamePattern>
+            <maxFileSize>${LOG_FILE_MAX_SIZE}</maxFileSize>
+            <maxHistory>${LOG_FILE_MAX_HISTORY}</maxHistory>
+            <totalSizeCap>${LOG_FILE_TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <!--spring环境配置root信息放在最下面-->
+    <springProfile name="h2">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+            <appender-ref ref="ERROR" />
+        </root>
+    </springProfile>
+    <springProfile name="mysql">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+            <appender-ref ref="ERROR" />
+        </root>
+    </springProfile>
+</configuration>
