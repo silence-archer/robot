@@ -11,6 +11,7 @@
 package com.silence.robot.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.silence.robot.domain.UserInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import org.apache.http.HttpEntity;
@@ -24,7 +25,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;

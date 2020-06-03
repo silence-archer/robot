@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 
+/**
+ * @author silence
+ */
 @RestController
 public class LoanController {
 

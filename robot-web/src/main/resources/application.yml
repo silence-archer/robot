@@ -13,12 +13,19 @@ silence:
       - /getUser
       - /verifyCode
       - /signature/*
+      - /swagger-ui.html/**
+      - /swagger-ui.html
+      - /webjars/**
+      - /swagger-resources/**
+      - /v2/**
   wechat:
     subscribe:
       api: https://api.weixin.qq.com/cgi-bin/token
       grant_type: client_credential
       appid: wxbaa91f7312261743
       secret: 35245d830d87fd703eb79df651cdceb5
+  swagger:
+    enable: true
 robot:
   api:
     url: http://openapi.tuling123.com/openapi/api/v2

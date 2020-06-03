@@ -1,5 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://192.168.84.131:3306/robot
-    username: ENC(XcB5qY088lqkF1zIW/4ypg==)
-    password: ENC(NnkDNOxHTaEju3+FeK2YRw==)
+    write:
+      url: jdbc:mysql://192.168.84.129:3307/robot
+      username: ENC(wDr6mWeyMF4Xyl8nojBZmw==)
+      password: ENC(NnkDNOxHTaEju3+FeK2YRw==)
+    read:
+      url: jdbc:mysql://192.168.84.129:3308/robot
+      username: ENC(wDr6mWeyMF4Xyl8nojBZmw==)
+      password: ENC(NnkDNOxHTaEju3+FeK2YRw==)

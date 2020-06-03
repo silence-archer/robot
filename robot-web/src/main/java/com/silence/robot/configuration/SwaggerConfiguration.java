@@ -20,7 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author oe_machaohui
- * @description TODO
+ * swagger配置类
  * @date 2020/4/8 20:25
  */
 @EnableSwagger2
@@ -38,11 +38,8 @@ public class SwaggerConfiguration {
                 .build();
     }
     /**
-     * @description: 构建 api文档的详细信息函数,注意这里的注解引用的是哪个
-     * @param:
-     * @return:
-     * @auther: oe_machaohui
-     * @date: 2020/4/8 20:32
+     * 构建 api文档的详细信息函数,注意这里的注解引用的是哪个
+     * @date 2020/4/8 20:32
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()

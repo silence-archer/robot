@@ -67,3 +67,38 @@ keepAliveTime的计量单位
 #### DiscardOldestPolicy
 
 该策略下，抛弃进入队列最早的那个任务，然后尝试把这次拒绝的任务放入队列
+## 动态数据源切换
+
+### AbstractRoutingDataSource
+
+Spring boot提供了AbstractRoutingDataSource 根据用户定义的规则选择当前的数据源，这样我们可以在执行查询之前，设置使用的数据源。实现可动态路由的数据源，在每次数据库查询操作前执行。它的抽象方法 determineCurrentLookupKey() 决定使用哪个数据源。
+AbstractRoutingDataSource的getConnection() 方法根据查找 lookup key 键对不同目标数据源的调用，通常是通过(但不一定)某些线程绑定的事物上下文来实现。
+AbstractRoutingDataSource的多数据源动态切换的核心逻辑是：在程序运行时，把数据源数据源通过 AbstractRoutingDataSource 动态织入到程序中，灵活的进行数据源切换。
+基于AbstractRoutingDataSource的多数据源动态切换，可以实现读写分离，这么做缺点也很明显，无法动态的增加数据源。
+
+#### 实现逻辑
+
+定义DynamicDataSource类继承抽象类AbstractRoutingDataSource，并实现了determineCurrentLookupKey()方法。
+把配置的多个数据源会放在AbstractRoutingDataSource的 targetDataSources和defaultTargetDataSource中，然后通过afterPropertiesSet()方法将数据源分别进行复制到resolvedDataSources和resolvedDefaultDataSource中。
+调用AbstractRoutingDataSource的getConnection()的方法的时候，先调用determineTargetDataSource()方法返回DataSource在进行getConnection()。
+
+### 具体实现
+
+在配置文件 application.properties 中添加多个(我这里是两个)数据源的配置信息
+在configuration中将多个数据库信息声明为Bean
+创建自定义动态数据源切换对象继承AbstractRoutingDataSource
+调用AbstractRoutingDataSource的setDefaultTargetDataSource方法传递默认写数据源
+调用AbstractRoutingDataSource的setTargetDataSources方法传递所有数据源，类型为Map，key值为自定义序号，value为数据源
+重写determineCurrentLookupKey()方法该方法返回targetDataSource(Map)中的key，即决定当前使用哪个数据源
+
+### 线程局部变量配置
+
+创建ThreadLocal线程局部变量，泛型为读写数据库枚举类
+
+### mybatis拦截器配置
+
+在拦截到select语句时，将线程局部变量中的数据库类型置为读，在拦截后清除ThreadLocal中的值
+
+### AOP切面配置
+
+将动态数据源放入SqlSessionFactory和DataSourceTransactionManager对象中

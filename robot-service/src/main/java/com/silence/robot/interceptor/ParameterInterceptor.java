@@ -24,8 +24,8 @@ import java.util.Date;
 import java.util.Properties;
 
 /**
+ * mybatis 插入更新操作拦截器
  * @author oe_machaohui
- * @description mybatis 插入更新操作拦截器
  * @date 2020/3/26 18:20
  */
 @Intercepts({@Signature(type= Executor.class, method = "update", args = {MappedStatement.class, Object.class})})

@@ -56,7 +56,7 @@ public class StringEncryptorTest {
     @Test
     public void encry(){
 
-        String mzh = jasyptStringEncryptor.encrypt("mzh");
+        String mzh = jasyptStringEncryptor.encrypt("silence");
         System.out.println(mzh);
         System.out.println(username);
         System.out.println(password);
