@@ -33,7 +33,9 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
             Method[] methods = bean.getClass().getMethods();
 
             Method method = findMethodByName(methods, "set" + toUpperCaseFirstOne(name));
-            method.invoke(bean, value);
+            if (method != null) {
+                method.invoke(bean, value);
+            }
         } catch (Exception e) {
             logger.error("对象{}的属性{}，塞入属性值{}失败",bean.getClass().getName(), name, value, e);
         }

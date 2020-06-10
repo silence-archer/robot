@@ -11,13 +11,24 @@
 package com.silence.robot.aop;
 
 import com.silence.robot.config.DynamicDataSource;
+import com.silence.robot.interceptor.DynamicDataSourceInterceptor;
+import com.silence.robot.interceptor.ParameterInterceptor;
+import com.silence.robot.utils.SpringContextHelper;
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.ibatis.scripting.LanguageDriver;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.aspectj.lang.annotation.Aspect;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
+import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
+import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -29,11 +40,19 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+import javax.xml.crypto.Data;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -51,7 +70,7 @@ public class TransactionAdviceConfig {
     @Resource
     private PlatformTransactionManager platformTransactionManager;
 
-    @Bean
+    @Bean("writeDataSourceProperties")
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource.write")
     public DataSourceProperties getWriteDataSourceProperties(){
@@ -59,29 +78,70 @@ public class TransactionAdviceConfig {
     }
 
     @Bean("writeDataSource")
-    public DataSource getWriteDataSource(){
-        return getWriteDataSourceProperties().initializeDataSourceBuilder().build();
+    @Primary
+    public DataSource getWriteDataSource(@Qualifier("writeDataSourceProperties") DataSourceProperties dataSourceProperties){
+        return dataSourceProperties.initializeDataSourceBuilder().build();
     }
 
-    @Bean
+    @Bean("readDataSourceProperties")
     @ConfigurationProperties(prefix = "spring.datasource.read")
     public DataSourceProperties getReadDataSourceProperties(){
         return new DataSourceProperties();
     }
 
     @Bean("readDataSource")
-    public DataSource getReadDataSource(){
-        return getReadDataSourceProperties().initializeDataSourceBuilder().build();
+    public DataSource getReadDataSource(@Qualifier("readDataSourceProperties") DataSourceProperties dataSourceProperties){
+        return dataSourceProperties.initializeDataSourceBuilder().build();
     }
 
-    @Bean
-    @Primary
+    @Bean("dynamicDataSource")
     public DynamicDataSource getDynamicDataSource(@Qualifier("writeDataSource") DataSource writeDataSource, @Qualifier("readDataSource") DataSource readDataSource){
         List<DataSource> readDataSources = new ArrayList<>(2);
         readDataSources.add(readDataSource);
         readDataSources.add(readDataSource);
         DynamicDataSource dynamicDataSource = new DynamicDataSource(writeDataSource, readDataSources);
         return dynamicDataSource;
+    }
+
+    @Bean
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dynamicDataSource") DataSource dataSource, MybatisProperties properties) throws Exception {
+        SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+        factory.setPlugins(new DynamicDataSourceInterceptor(), new ParameterInterceptor());
+        factory.setDataSource(dataSource);
+        factory.setVfs(SpringBootVFS.class);
+        if (StringUtils.hasText(properties.getConfigLocation())) {
+            factory.setConfigLocation(SpringContextHelper.getResource(properties.getConfigLocation()));
+        }
+        org.apache.ibatis.session.Configuration configuration = properties.getConfiguration();
+        if (configuration == null && !StringUtils.hasText(properties.getConfigLocation())) {
+            configuration = new org.apache.ibatis.session.Configuration();
+        }
+        factory.setConfiguration(configuration);
+        if (properties.getConfigurationProperties() != null) {
+            factory.setConfigurationProperties(properties.getConfigurationProperties());
+        }
+        if (StringUtils.hasLength(properties.getTypeAliasesPackage())) {
+            factory.setTypeAliasesPackage(properties.getTypeAliasesPackage());
+        }
+        if (properties.getTypeAliasesSuperType() != null) {
+            factory.setTypeAliasesSuperType(properties.getTypeAliasesSuperType());
+        }
+        if (StringUtils.hasLength(properties.getTypeHandlersPackage())) {
+            factory.setTypeHandlersPackage(properties.getTypeHandlersPackage());
+        }
+        if (!ObjectUtils.isEmpty(properties.resolveMapperLocations())) {
+            factory.setMapperLocations(properties.resolveMapperLocations());
+        }
+        Set<String> factoryPropertyNames = Stream
+                .of(new BeanWrapperImpl(SqlSessionFactoryBean.class).getPropertyDescriptors()).map(PropertyDescriptor::getName)
+                .collect(Collectors.toSet());
+        Class<? extends LanguageDriver> defaultLanguageDriver = properties.getDefaultScriptingLanguageDriver();
+        if (factoryPropertyNames.contains("defaultScriptingLanguageDriver")) {
+            // Need to mybatis-spring 2.0.2+
+            factory.setDefaultScriptingLanguageDriver(defaultLanguageDriver);
+        }
+
+        return factory.getObject();
     }
 
     @Bean

@@ -42,6 +42,7 @@ public class DynamicDataSourceInterceptor implements Interceptor {
             default:
                 break;
         }
+        logger.info("当前执行的sql类型为[{}], ID为[{}]", mappedStatement.getSqlCommandType(), mappedStatement.getId());
         Object proceed = invocation.proceed();
         DataSourceContextHelper.clear();
         return proceed;

@@ -13,6 +13,7 @@ package com.silence.robot.utils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.io.Resource;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -40,5 +41,9 @@ public class SpringContextHelper implements ApplicationContextAware {
 
     public static Object getBean(String name){
         return context.getBean(name);
+    }
+
+    public static Resource getResource(String location) {
+        return context.getResource(location);
     }
 }
