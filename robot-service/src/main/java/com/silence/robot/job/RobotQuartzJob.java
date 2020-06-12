@@ -50,7 +50,6 @@ public class RobotQuartzJob extends MethodInvokingJobDetailFactoryBean.StatefulM
         TCronTaskProcLog cronTaskProcLog = cronTaskProcLogMapper.selectByJobName(jobDetail.getKey().getName());
         if(cronTaskProcLog == null){
             cronTaskProcLog = new TCronTaskProcLog();
-            cronTaskProcLog.setId(CommonUtils.getUuid());
             cronTaskProcLog.setJobName(jobDetail.getKey().getName());
             cronTaskProcLog.setJobDesc(jobDetail.getJobDataMap().getString("jobDesc"));
 
@@ -68,9 +67,7 @@ public class RobotQuartzJob extends MethodInvokingJobDetailFactoryBean.StatefulM
             String message = e.getMessage().length() > 200 ? e.getMessage().substring(0,200) : e.getMessage();
             cronTaskProcLog.setErrorMsg(message);
         }finally {
-            cronTaskProcLog.setUpdateTime(new Date());
             if(cronTaskProcLog.getCreateTime() == null){
-                cronTaskProcLog.setCreateTime(new Date());
                 cronTaskProcLogMapper.insert(cronTaskProcLog);
             }else {
                 cronTaskProcLogMapper.updateByPrimaryKey(cronTaskProcLog);

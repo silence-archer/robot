@@ -109,7 +109,6 @@ public class SvnOperateService {
         TSvnInfo info = tSvnInfoMapper.selectByUrl(svnInfo.getUrl());
         if (info == null) {
             TSvnInfo tSvnInfo = new TSvnInfo();
-            tSvnInfo.setId(CommonUtils.getUuid());
             tSvnInfo.setUrl(svnInfo.getUrl());
             tSvnInfo.setLocalUrl(svnInfo.getLocalUrl());
             tSvnInfo.setRemark(svnInfo.getSvnName());

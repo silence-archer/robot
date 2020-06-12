@@ -53,18 +53,14 @@ public class SubscribeConfigInfoService {
         TSubscribeConfigInfo subscribeConfigInfo = subscribeConfigInfoMapper.selectByConfigName(configEnum.getName());
         if(subscribeConfigInfo == null){
             subscribeConfigInfo = new TSubscribeConfigInfo();
-            subscribeConfigInfo.setId(CommonUtils.getUuid());
             subscribeConfigInfo.setConfigName(configEnum.getName());
             subscribeConfigInfo.setConfigDesc(configEnum.getDesc());
             subscribeConfigInfo.setConfigValue(configValue);
             subscribeConfigInfo.setExpireTime(expireTime);
-            subscribeConfigInfo.setUpdateTime(new Date());
-            subscribeConfigInfo.setCreateTime(new Date());
             subscribeConfigInfoMapper.insert(subscribeConfigInfo);
         }else{
             subscribeConfigInfo.setConfigValue(configValue);
             subscribeConfigInfo.setExpireTime(expireTime);
-            subscribeConfigInfo.setUpdateTime(new Date());
             subscribeConfigInfoMapper.updateByPrimaryKey(subscribeConfigInfo);
         }
 

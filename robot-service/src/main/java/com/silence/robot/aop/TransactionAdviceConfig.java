@@ -170,11 +170,10 @@ public class TransactionAdviceConfig {
     }
 
     @Bean
-    public Advisor txAdviceAdvisor(){
+    public Advisor txAdviceAdvisor() {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
         pointcut.setExpression(AOP_POINTCUT_EXPRESSION);
-        Advisor advisor = new DefaultPointcutAdvisor(pointcut,txAdvice());
-        return advisor;
+        return new DefaultPointcutAdvisor(pointcut,txAdvice());
     }
 
 }

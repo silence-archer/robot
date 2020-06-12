@@ -57,14 +57,11 @@ public class CronTaskService {
         if(task != null){
             throw new BusinessException(ExceptionCode.EXIST_ERROR);
         }
-        cronTask.setId(CommonUtils.getUuid());
         cronTask.setCronExpr(CommonUtils.checkCronExpr(cronTaskInfo.getCronExpr()));
         cronTask.setEffectFlag(cronTaskInfo.getEffectFlag());
         cronTask.setJobClass(cronTaskInfo.getJobClass());
         cronTask.setJobName(cronTaskInfo.getJobName());
         cronTask.setJobDesc(cronTaskInfo.getJobDesc());
-        cronTask.setCreateTime(new Date());
-        cronTask.setUpdateTime(new Date());
         cronTaskMapper.insert(cronTask);
         if("Y".equals(cronTaskInfo.getEffectFlag())){
             timerJobSchedule.start(cronTask.getJobName(), cronTask.getCronExpr(), cronTask.getJobClass(), cronTask.getJobDesc());
@@ -76,7 +73,6 @@ public class CronTaskService {
         if(task == null){
             throw new BusinessException(ExceptionCode.NO_EXIST);
         }
-        task.setUpdateTime(new Date());
         task.setJobDesc(cronTaskInfo.getJobDesc());
         task.setJobClass(cronTaskInfo.getJobClass());
         task.setEffectFlag(cronTaskInfo.getEffectFlag());

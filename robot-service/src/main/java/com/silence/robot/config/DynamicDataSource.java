@@ -46,8 +46,8 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     @Override
     protected Object determineCurrentLookupKey() {
-        String dataSourceKey = "";
-        if(DataSourceTypeEnum.WRITE.getName().equals(DataSourceContextHelper.get())) {
+        String dataSourceKey;
+        if(DataSourceTypeEnum.WRITE == DataSourceContextHelper.get()) {
             dataSourceKey = "write";
         }else {
             int i = count.getAndIncrement() % 2;

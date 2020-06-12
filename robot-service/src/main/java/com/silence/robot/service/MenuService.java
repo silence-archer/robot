@@ -51,9 +51,6 @@ public class MenuService {
 
     public void addMenu(MenuData menuData){
         TMenu menu = new TMenu();
-        menu.setId(CommonUtils.getUuid());
-        menu.setCreateTime(new Date());
-        menu.setUpdateTime(new Date());
         menu.setMenuName("未命名");
         if(menuData.getId().equals("1")){
             menu.setMenuLevel(1);
@@ -70,7 +67,6 @@ public class MenuService {
     public void updateMenu(MenuData menuData){
         TMenu menu = menuMapper.selectByMenuNo(menuData.getId());
         if(menu != null){
-            menu.setUpdateTime(new Date());
             menu.setMenuPath(menuData.getField());
             menu.setMenuName(menuData.getTitle());
             menuMapper.updateByPrimaryKey(menu);

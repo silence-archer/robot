@@ -80,9 +80,6 @@ public class UserService {
             throw new BusinessException(ExceptionCode.EXIST_ERROR);
         }
         user.setPassword(CommonUtils.strToMD5(user.getUsername()));
-        user.setCreateTime(new Date());
-        user.setId(CommonUtils.getUuid());
-        user.setUpdateTime(new Date());
         userMapper.insert(user);
         //添加到聊天面板
         instantMessagingService.registerUser(userInfo);
@@ -96,7 +93,6 @@ public class UserService {
         }
         user.setNickname(userInfo.getNickname());
         user.setRoleNo(userInfo.getRoleNo());
-        user.setUpdateTime(new Date());
         userMapper.updateByPrimaryKey(user);
         TUserTalkInfo userTalkInfo = userTalkInfoMapper.selectByPrimaryKey(userInfo.getUsername());
         userTalkInfo.setSign(userInfo.getSign());

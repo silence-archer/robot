@@ -35,7 +35,6 @@ public class SequenceService {
         TSequence sequence = sequenceMapper.selectBySeqName(seqName);
         if(sequence == null){
             sequence = new TSequence();
-            sequence.setId(CommonUtils.getUuid());
             sequence.setSeqName(seqName);
             sequence.setSeqValue(1);
             sequenceMapper.insert(sequence);

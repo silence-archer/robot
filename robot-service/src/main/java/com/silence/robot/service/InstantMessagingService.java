@@ -176,14 +176,12 @@ public class InstantMessagingService {
         userTalkInfoMapper.insert(userTalkInfo);
         //注册成功后直接添加聊天机器人
         TUserTalkFriend userTalkFriend = new TUserTalkFriend();
-        userTalkFriend.setId(CommonUtils.getUuid());
         userTalkFriend.setMineId(userTalkInfo.getId());
         userTalkFriend.setFriendId("admin");
         userTalkFriend.setGroupId(0);
         userTalkFriendMapper.insert(userTalkFriend);
         //添加分组信息
         TUserTalkFriendGroup userTalkFriendGroup = new TUserTalkFriendGroup();
-        userTalkFriendGroup.setId(CommonUtils.getUuid());
         userTalkFriendGroup.setGroupId(0);
         userTalkFriendGroup.setGroupname("机器人组");
         userTalkFriendGroup.setMineId(userTalkInfo.getId());
@@ -194,7 +192,6 @@ public class InstantMessagingService {
         userTalkGroup.setGroupId("0");
         userTalkGroup.setGroupname("大家庭");
         userTalkGroup.setMineId(userTalkInfo.getId());
-        userTalkGroup.setId(CommonUtils.getUuid());
         userTalkGroupMapper.insert(userTalkGroup);
 
     }

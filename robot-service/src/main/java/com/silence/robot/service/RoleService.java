@@ -113,12 +113,9 @@ public class RoleService {
     private void addRoleMenuInfo(String roleNo, String roleName, List<MenuData> menuDataList) {
         menuDataList.forEach(menuData -> {
             TRole role = new TRole();
-            role.setId(CommonUtils.getUuid());
             role.setRoleNo(roleNo);
             role.setMenuNo(menuData.getId());
             role.setRoleName(roleName);
-            role.setCreateTime(new Date());
-            role.setUpdateTime(new Date());
             roleMapper.insert(role);
             if (!menuData.getChildren().isEmpty()) {
                 addRoleMenuInfo(roleNo, roleName, menuData.getChildren());

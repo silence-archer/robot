@@ -39,7 +39,10 @@ public class ParameterInterceptor implements Interceptor {
         Object[] args = invocation.getArgs();
         MappedStatement mappedStatement = (MappedStatement) args[0];
         if(SqlCommandType.INSERT.equals(mappedStatement.getSqlCommandType())) {
-            BeanUtils.setProperty(args[1], "id", CommonUtils.getUuid());
+            Object id = BeanUtils.getProperty(args[1], "id");
+            if (id == null) {
+                BeanUtils.setProperty(args[1], "id", CommonUtils.getUuid());
+            }
             BeanUtils.setProperty(args[1], "createTime", new Date());
             BeanUtils.setProperty(args[1], "createUser", HttpUtils.getLoginUserName());
             BeanUtils.setProperty(args[1], "updateTime", new Date());
@@ -48,8 +51,7 @@ public class ParameterInterceptor implements Interceptor {
             BeanUtils.setProperty(args[1], "updateTime", new Date());
             BeanUtils.setProperty(args[1], "updateUser", HttpUtils.getLoginUserName());
         }
-        Object proceed = invocation.proceed();
-        return proceed;
+        return invocation.proceed();
     }
 
     @Override

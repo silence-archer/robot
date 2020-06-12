@@ -41,6 +41,20 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
         }
     }
 
+    public static Object getProperty(Object bean, String name) {
+        try {
+            Method[] methods = bean.getClass().getMethods();
+
+            Method method = findMethodByName(methods, "get" + toUpperCaseFirstOne(name));
+            if (method != null) {
+                return method.invoke(bean);
+            }
+        } catch (Exception e) {
+            logger.error("对象{}的属性{}，获取属性值失败",bean.getClass().getName(), name, e);
+        }
+        return null;
+    }
+
     private static String toUpperCaseFirstOne(String str){
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
