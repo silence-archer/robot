@@ -45,10 +45,10 @@ public class StringEncryptorTest {
     @Resource
     private UserService userService;
 
-    @Value("${spring.datasource.username}")
+    @Value("${spring.datasource.username:mzh}")
     private String username;
 
-    @Value("${spring.datasource.password}")
+    @Value("${spring.datasource.password:19930927}")
     private String password;
     @Value("${silence.subscribe.token}")
     private String token;
