@@ -33,7 +33,7 @@ import java.time.LocalTime;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("mysql")
+@ActiveProfiles("h2")
 public class TransactionTest {
 
     @Resource
@@ -45,7 +45,7 @@ public class TransactionTest {
         userInfo.setRoleNo("1111");
         userInfo.setSign("321");
         StringBuilder stringBuilder = new StringBuilder(1000);
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10; i++) {
             stringBuilder.append(123);
         }
         userInfo.setAvatar(stringBuilder.toString());
