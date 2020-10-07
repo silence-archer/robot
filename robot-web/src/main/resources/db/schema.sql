@@ -194,3 +194,21 @@ CREATE TABLE `t_user_talk_members` (
   `member_id` varchar(64) DEFAULT NULL COMMENT '成员Id',
   PRIMARY KEY (`id`)
 )  COMMENT='用户即时聊天群组成员信息表';
+
+-- ----------------------------
+-- Table structure for t_mock_info
+-- ----------------------------
+DROP TABLE IF EXISTS `t_mock_info`;
+CREATE TABLE `t_mock_info`  (
+    `ID` varchar(64)  NOT NULL COMMENT '物理主键',
+    `MOCK_URL` varchar(64)  DEFAULT NULL COMMENT '挡板url',
+    `MOCK_NAME` varchar(255)  DEFAULT NULL COMMENT '挡板名称',
+    `MOCK_MODULE` varchar(20)  DEFAULT NULL COMMENT '挡板模块',
+    `MOCK_INPUT` varchar(4000)  DEFAULT NULL COMMENT '挡板入参',
+    `MOCK_OUTPUT` varchar(4000) DEFAULT NULL COMMENT '挡板出参',
+    `CREATE_TIME` datetime NOT NULL COMMENT '创建时间',
+    `CREATE_USER` varchar(32) DEFAULT NULL COMMENT '创建人',
+    `UPDATE_TIME` datetime NOT NULL COMMENT '修改时间',
+    `UPDATE_USER` varchar(32) DEFAULT NULL COMMENT '修改人',
+    PRIMARY KEY (`ID`)
+)  COMMENT = '挡板信息' ;

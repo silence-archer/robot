@@ -89,26 +89,7 @@ public class CommonUtils {
         }
     }
 
-    public static <O, T> List<T> copyList(Class<T> destClazz, List<O> sourceObjList) {
-        List<T> list = new ArrayList<>();
-        if(isEmpty(sourceObjList)){
-            return list;
-        }
-        sourceObjList.forEach(source->{
 
-            T target = null;
-            try {
-                target = destClazz.newInstance();
-            } catch (InstantiationException e) {
-                throw new BusinessException("创建对象失败",e);
-            } catch (IllegalAccessException e) {
-                throw new BusinessException("创建对象失败",e);
-            }
-            BeanUtils.copyProperties(source, target);
-            list.add(target);
-        });
-        return list;
-    }
 
     public static String getStringDate(Date date){
         return DATE_FORMAT.format(date);

@@ -19,6 +19,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.time.LocalTime;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -30,7 +33,7 @@ import javax.annotation.Resource;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("h2")
+@ActiveProfiles("mysql")
 public class TransactionTest {
 
     @Resource
@@ -39,18 +42,43 @@ public class TransactionTest {
     @Test
     public void test() {
         UserInfo userInfo = new UserInfo();
-        userInfo.setRoleNo("123");
+        userInfo.setRoleNo("1111");
         userInfo.setSign("321");
-        userInfo.setAvatar("321");
-        userInfo.setCreateTime("321");
-        userInfo.setId("321");
-        userInfo.setImageCode("321");
+        StringBuilder stringBuilder = new StringBuilder(1000);
+        for (int i = 0; i < 1000; i++) {
+            stringBuilder.append(123);
+        }
+        userInfo.setAvatar(stringBuilder.toString());
         userInfo.setUsername("321");
         userInfo.setPassword("321");
         userInfo.setNickname("321");
-        userInfo.setImageWithVerifyCode("321");
         userInfo.setRoleName("321");
 
         userService.addUser(userInfo);
+    }
+
+    public static void main(String[] args) throws AWTException {
+        Robot robot = new Robot();
+        robot.delay(5000);
+        long start = System.currentTimeMillis();
+        while (true) {
+            robot.keyPress(KeyEvent.VK_F11);
+            robot.keyRelease(KeyEvent.VK_F11);
+            robot.delay(100);
+            robot.keyPress(KeyEvent.VK_F1);
+            robot.keyRelease(KeyEvent.VK_F1);
+            robot.delay(100);
+            long end = System.currentTimeMillis();
+            if (end - start > 1000*60*15) {
+                robot.keyPress(KeyEvent.VK_F2);
+                robot.keyRelease(KeyEvent.VK_F2);
+                robot.delay(100);
+                robot.keyPress(KeyEvent.VK_F3);
+                robot.keyRelease(KeyEvent.VK_F3);
+                robot.delay(100);
+                start = end;
+            }
+
+        }
     }
 }

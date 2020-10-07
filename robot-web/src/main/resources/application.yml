@@ -12,6 +12,7 @@ silence:
       - /login
       - /getUser
       - /verifyCode
+      - /mock
       - /signature/*
       - /swagger-ui.html/**
       - /swagger-ui.html
@@ -32,10 +33,10 @@ robot:
     userId: 508353
     key: db102bba955342ee8e32c2e3f317704e
 server:
-  port: 8081
+  port: 18002
 spring:
   profiles:
-    active: mysql
+    active: sqlite
 logging:
   level:
     root: info

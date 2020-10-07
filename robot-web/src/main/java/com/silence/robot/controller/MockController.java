@@ -1,0 +1,52 @@
+package com.silence.robot.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.silence.robot.domain.MockInfo;
+import com.silence.robot.domain.MockRequestInfo;
+import com.silence.robot.dto.DataResponse;
+import com.silence.robot.service.MockService;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+/**
+ * 挡板管理
+ *
+ * @author silence
+ * @date 2020/10/7
+ */
+@RestController
+public class MockController {
+
+    @Resource
+    private MockService mockService;
+
+    @GetMapping("/getMockInfo")
+    public DataResponse<List<MockInfo>> getMockInfo(@RequestParam Integer page, @RequestParam Integer limit) {
+        return new DataResponse<>(mockService.getMockInfo());
+    }
+
+    @PostMapping("/addMock")
+    public DataResponse<?> addMock(@RequestBody MockInfo mockInfo){
+        mockService.addMock(mockInfo);
+        return new DataResponse<>();
+    }
+
+    @PostMapping("/updateMock")
+    public DataResponse<?> updateMock(@RequestBody MockInfo mockInfo){
+        mockService.updateMock(mockInfo);
+        return new DataResponse<>();
+    }
+
+    @GetMapping("/deleteMock")
+    public DataResponse<?> deleteMock(@RequestParam String id){
+        mockService.deleteMock(id);
+        return new DataResponse<>();
+    }
+
+    @PostMapping("/mock")
+    public JSONObject mock(@RequestBody MockRequestInfo mockRequestInfo){
+        return mockService.mock(mockRequestInfo);
+    }
+}

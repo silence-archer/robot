@@ -25,6 +25,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -823,7 +824,7 @@ public class FileUtils {
                     byte tmp = readBuff[i];
                     // 碰到换行符
                     if (tmp == '\n' || tmp == '\r') {
-                        String line = new String(bos.toByteArray(), "UTF-8");
+                        String line = new String(bos.toByteArray(), StandardCharsets.UTF_8);
                         if (CommonUtils.isNotEmpty(line)) {
                             list.add(line);
                         }
@@ -834,7 +835,7 @@ public class FileUtils {
                 }
             }
             if (bos.size() > 0) {
-                String line = new String(bos.toByteArray(), "UTF-8");
+                String line = new String(bos.toByteArray(), StandardCharsets.UTF_8);
                 if (CommonUtils.isNotEmpty(line)) {
                     list.add(line);
                 }

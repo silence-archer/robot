@@ -26,6 +26,8 @@ INSERT INTO `t_menu` VALUES ('a794aac8714f40c9bf60e38770d885c1', 'Menu10051010',
 INSERT INTO `t_menu` VALUES ('be2691052d8f4414b5d495f9f7f33163', 'Menu1007', '批处理', null, null, '1', null, '2019-10-21 20:29:07', null, '2019-10-21 20:29:37', null);
 INSERT INTO `t_menu` VALUES ('c230a07336014ec0bab157dc73cdebc8', 'Menu1008', '定时任务', null, null, '1', null, '2019-12-27 06:20:36', null, '2019-12-27 06:21:10', null);
 INSERT INTO `t_menu` VALUES ('f9f59fc4ec9d47608f140372559eae83', 'Menu10011002', '权限管理', '/role', 'Menu1001', '2', null, '2019-10-10 03:06:58', null, '2019-12-06 03:28:48', null);
+INSERT INTO `t_menu` VALUES ('10b2b0d3bb2c4f16bc30671257a55416', 'Menu10091021', '挡板列表', '/mock', 'Menu1009', 2, NULL, '2020-10-07 12:16:04', 'admin', '2020-10-07 12:16:19', 'admin');
+INSERT INTO `t_menu` VALUES ('e0deff6e41be4ac199051e78e8dc9c37', 'Menu1009', '挡板管理', '', NULL, 1, NULL, '2020-10-07 12:15:27', 'admin', '2020-10-07 12:15:48', 'admin');
 
 
 -- ----------------------------

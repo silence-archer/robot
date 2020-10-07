@@ -136,6 +136,11 @@
                 <artifactId>robot-web</artifactId>
                 <version>${robot.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.xerial</groupId>
+                <artifactId>sqlite-jdbc</artifactId>
+                <version>3.25.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>

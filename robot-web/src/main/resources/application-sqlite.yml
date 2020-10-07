@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    write:
+      url: jdbc:sqlite:D:\JetBrains\IntelliJ IDEA 2020.1\bin\identifier.sqlite?date_string_format=yyyy-MM-dd HH:mm:ss
+    read:
+      url: jdbc:sqlite:D:\JetBrains\IntelliJ IDEA 2020.1\bin\identifier.sqlite?date_string_format=yyyy-MM-dd HH:mm:ss

@@ -16,6 +16,7 @@ import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TRoleMapper;
 import com.silence.robot.model.TRole;
+import com.silence.robot.utils.BeanUtils;
 import com.silence.robot.utils.CommonUtils;
 import org.springframework.stereotype.Service;
 
@@ -103,7 +104,7 @@ public class RoleService {
             });
             return list;
         }else{
-            List<RoleInfo> list = CommonUtils.copyList(RoleInfo.class, collect);
+            List<RoleInfo> list = BeanUtils.copyList(RoleInfo.class, collect);
             return list;
         }
 

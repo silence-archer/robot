@@ -30,19 +30,24 @@ public class DynamicDataSourceInterceptor implements Interceptor {
         MappedStatement mappedStatement = (MappedStatement) args[0];
         //获取是否存在事务
         boolean synchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        switch (mappedStatement.getSqlCommandType()) {
-            case SELECT:
-                DataSourceContextHelper.read();
-                break;
-            case DELETE:
-            case INSERT:
-            case UPDATE:
-                DataSourceContextHelper.write();
-                break;
-            default:
-                break;
+        if (synchronizationActive) {
+            //存在事务,则直接置为写库
+            DataSourceContextHelper.write();
+        } else {
+            switch (mappedStatement.getSqlCommandType()) {
+                case SELECT:
+                    DataSourceContextHelper.read();
+                    break;
+                case DELETE:
+                case INSERT:
+                case UPDATE:
+                    DataSourceContextHelper.write();
+                    break;
+                default:
+                    break;
+            }
         }
-        logger.info("当前执行的sql类型为[{}], ID为[{}]", mappedStatement.getSqlCommandType(), mappedStatement.getId());
+        logger.info("当前使用事务标志为[{}]执行的sql类型为[{}], 使用的数据库为{}, ID为[{}]", synchronizationActive, mappedStatement.getSqlCommandType(), DataSourceContextHelper.get().getDesc(), mappedStatement.getId());
         Object proceed = invocation.proceed();
         DataSourceContextHelper.clear();
         return proceed;
@@ -50,7 +55,11 @@ public class DynamicDataSourceInterceptor implements Interceptor {
 
     @Override
     public Object plugin(Object target) {
-        return Plugin.wrap(target, this);
+        if (target instanceof Executor) {
+            return Plugin.wrap(target, this);
+        } else {
+            return target;
+        }
     }
 
     @Override

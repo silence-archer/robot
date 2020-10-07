@@ -16,6 +16,7 @@ import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TCronTaskMapper;
 import com.silence.robot.model.TCronTask;
 import com.silence.robot.schedule.TimerJobSchedule;
+import com.silence.robot.utils.BeanUtils;
 import com.silence.robot.utils.CommonUtils;
 import org.quartz.CronExpression;
 import org.quartz.Scheduler;
@@ -99,7 +100,7 @@ public class CronTaskService {
 
     public List<CronTaskInfo> queryCronTask(){
         List<TCronTask> cronTasks = cronTaskMapper.selectAll();
-        List<CronTaskInfo> taskInfos = CommonUtils.copyList(CronTaskInfo.class, cronTasks);
+        List<CronTaskInfo> taskInfos = BeanUtils.copyList(CronTaskInfo.class, cronTasks);
         return taskInfos;
     }
 }

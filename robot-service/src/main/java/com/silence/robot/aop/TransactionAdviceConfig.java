@@ -149,7 +149,7 @@ public class TransactionAdviceConfig {
         DefaultTransactionAttribute txAttrRequired = new DefaultTransactionAttribute();
         DefaultTransactionAttribute txAttrReadOnly = new DefaultTransactionAttribute();
         txAttrRequired.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        txAttrReadOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        txAttrReadOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
         txAttrReadOnly.setReadOnly(true);
         NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
         source.addTransactionalMethod("add*",txAttrRequired);
@@ -158,14 +158,14 @@ public class TransactionAdviceConfig {
         source.addTransactionalMethod("insert*",txAttrRequired);
         source.addTransactionalMethod("modify*",txAttrRequired);
         source.addTransactionalMethod("reset*",txAttrRequired);
+        source.addTransactionalMethod("register*",txAttrRequired);
 
         source.addTransactionalMethod("select*",txAttrReadOnly);
         source.addTransactionalMethod("find*",txAttrReadOnly);
         source.addTransactionalMethod("get*",txAttrReadOnly);
         source.addTransactionalMethod("query*",txAttrReadOnly);
 
-        TransactionInterceptor transactionInterceptor = new TransactionInterceptor(platformTransactionManager, source);
-        return transactionInterceptor;
+        return new TransactionInterceptor(platformTransactionManager, source);
 
     }
 

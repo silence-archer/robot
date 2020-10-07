@@ -79,4 +79,11 @@
             <appender-ref ref="ERROR" />
         </root>
     </springProfile>
+    <springProfile name="sqlite">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+            <appender-ref ref="ERROR" />
+        </root>
+    </springProfile>
 </configuration>
