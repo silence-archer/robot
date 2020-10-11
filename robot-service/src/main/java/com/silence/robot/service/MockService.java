@@ -6,6 +6,8 @@ import com.silence.robot.domain.MockRequestInfo;
 import com.silence.robot.mapper.TMockInfoMapper;
 import com.silence.robot.model.TMockInfo;
 import com.silence.robot.utils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +22,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Service
 public class MockService {
+
+    private Logger logger = LoggerFactory.getLogger(MockService.class);
 
     @Resource
     private TMockInfoMapper mockInfoMapper;
@@ -42,7 +46,9 @@ public class MockService {
 
     public JSONObject mock(MockRequestInfo mockRequestInfo) {
         String uri = mockRequestInfo.getUri();
-        List<TMockInfo> tMockInfos = mockInfoMapper.selectByMockUrl(uri);
+        String module = mockRequestInfo.getModule();
+        logger.info("本次挡板请求的uri为[{}],模块为[{}]", uri, module);
+        List<TMockInfo> tMockInfos = mockInfoMapper.selectByMockUrlAndModule(uri, module);
         AtomicReference<JSONObject> output = new AtomicReference<>(new JSONObject());
         tMockInfos.forEach(tMockInfo -> {
             JSONObject jsonObject = JSONObject.parseObject(tMockInfo.getMockInput());

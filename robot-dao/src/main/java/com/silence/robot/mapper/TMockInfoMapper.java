@@ -12,7 +12,7 @@ public interface TMockInfoMapper {
     int insert(TMockInfo record);
 
     TMockInfo selectByPrimaryKey(String id);
-    List<TMockInfo> selectByMockUrl(String mockUrl);
+    List<TMockInfo> selectByMockUrlAndModule(String mockUrl, String mockModule);
 
     List<TMockInfo> selectAll();
 

@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class MockRequestInfo {
     private String uri;
+    private String module;
 
     private JSONObject request;
 
@@ -27,5 +28,22 @@ public class MockRequestInfo {
 
     public void setRequest(JSONObject request) {
         this.request = request;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    @Override
+    public String toString() {
+        return "MockRequestInfo{" +
+                "uri='" + uri + '\'' +
+                ", module='" + module + '\'' +
+                ", request=" + request +
+                '}';
     }
 }

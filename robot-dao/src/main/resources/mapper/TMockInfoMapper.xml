@@ -77,11 +77,11 @@
     UPDATE_USER
     from t_mock_info
   </select>
-  <select id="selectByMockUrl" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByMockUrlAndModule" resultMap="BaseResultMap">
     select ID, MOCK_URL, MOCK_NAME, MOCK_MODULE, MOCK_INPUT, MOCK_OUTPUT, CREATE_TIME, CREATE_USER, UPDATE_TIME,
            UPDATE_USER
     from t_mock_info
-    where MOCK_URL = #{mockUrl,jdbcType=VARCHAR}
+    where MOCK_URL = #{mockUrl,jdbcType=VARCHAR} AND MOCK_MODULE = #{mockModule,jdbcType=VARCHAR}
   </select>
 
 
