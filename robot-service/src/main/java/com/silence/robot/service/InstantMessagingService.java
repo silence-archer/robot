@@ -144,7 +144,14 @@ public class InstantMessagingService {
         InstantMsgTalkOutJsonDto instantMsgTalkOutJsonDto = new InstantMsgTalkOutJsonDto();
         instantMsgTalkOutJsonDto.setType("chatMessage");
         instantMsgTalkOutJsonDto.setData(out);
-        if(to.getId().equals("100000") || to.getId().equals("100001")){
+        if(to.getId().equals("admin")){
+            TulingRequestInfo requestInfo = new TulingRequestInfo();
+            requestInfo.setTxt(mine.getContent());
+            TulingResponseInfo hello = helloService.hello(requestInfo);
+            out.setContent(hello.getText());
+            String s = JSONObject.toJSONString(instantMsgTalkOutJsonDto);
+            return s;
+        }else{
             out.setContent(mine.getContent());
             out.setUsername(mine.getUsername());
             out.setAvatar(mine.getAvatar());
@@ -154,13 +161,7 @@ public class InstantMessagingService {
             //将消息发送给对方
             WebSocketServer.sendInfo(s, to.getId());
             return null;
-        }else{
-            TulingRequestInfo requestInfo = new TulingRequestInfo();
-            requestInfo.setTxt(mine.getContent());
-            TulingResponseInfo hello = helloService.hello(requestInfo);
-            out.setContent(hello.getText());
-            String s = JSONObject.toJSONString(instantMsgTalkOutJsonDto);
-            return s;
+
 
         }
 

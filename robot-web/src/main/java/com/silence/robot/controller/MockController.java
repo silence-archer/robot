@@ -1,8 +1,11 @@
 package com.silence.robot.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.silence.robot.domain.MockInfo;
 import com.silence.robot.domain.MockRequestInfo;
+import com.silence.robot.domain.RobotPage;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.MockService;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +27,12 @@ public class MockController {
 
     @GetMapping("/getMockInfo")
     public DataResponse<List<MockInfo>> getMockInfo(@RequestParam Integer page, @RequestParam Integer limit) {
-        return new DataResponse<>(mockService.getMockInfo());
+
+        RobotPage<MockInfo> mockInfoByPage = mockService.getMockInfoByPage(page, limit);
+
+        DataResponse<List<MockInfo>> dataResponse = new DataResponse<>(mockInfoByPage.getList());
+        dataResponse.setCount(mockInfoByPage.getTotal());
+        return dataResponse;
     }
 
     @PostMapping("/addMock")

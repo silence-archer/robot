@@ -10,6 +10,10 @@
  */
 package com.silence.robot.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.silence.robot.domain.MockInfo;
+import com.silence.robot.domain.RobotPage;
 import com.silence.robot.domain.UserInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
@@ -17,6 +21,7 @@ import com.silence.robot.mapper.TUserMapper;
 import com.silence.robot.mapper.TUserTalkFriendMapper;
 import com.silence.robot.mapper.TUserTalkInfoMapper;
 import com.silence.robot.mapper.TUserTalkMembersMapper;
+import com.silence.robot.model.TMockInfo;
 import com.silence.robot.model.TUser;
 import com.silence.robot.model.TUserTalkInfo;
 import com.silence.robot.utils.CommonUtils;
@@ -62,6 +67,16 @@ public class UserService {
         List<TUser> userList = userMapper.selectAll();
 
         return appendUserInfo(userList);
+
+    }
+
+    public RobotPage<UserInfo> getUserInfoByPage(Integer page, Integer limit){
+        PageHelper.startPage(page, limit);
+        List<TUser> userList = userMapper.selectAll();
+        PageInfo<TUser> pageInfo = new PageInfo<>(userList);
+        List<UserInfo> userInfos = appendUserInfo(userList);
+
+        return new RobotPage<>(pageInfo.getTotal(), userInfos);
 
     }
 

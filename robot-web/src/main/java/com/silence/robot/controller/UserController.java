@@ -1,5 +1,9 @@
 package com.silence.robot.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.silence.robot.domain.MockInfo;
+import com.silence.robot.domain.RobotPage;
 import com.silence.robot.domain.UserInfo;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
@@ -37,10 +41,10 @@ public class UserController {
     @GetMapping("/getUserInfo")
     public DataResponse<List<UserInfo>> getUserInfo(@RequestParam Integer page, @RequestParam Integer limit){
         //分页
-        List<UserInfo> userInfos = userService.getUserInfo();
+        RobotPage<UserInfo> userInfoByPage = userService.getUserInfoByPage(page, limit);
 
-        DataResponse<List<UserInfo>> dataResponse = new DataResponse<>(userInfos);
-        dataResponse.setCount(userInfos.size());
+        DataResponse<List<UserInfo>> dataResponse = new DataResponse<>(userInfoByPage.getList());
+        dataResponse.setCount(userInfoByPage.getTotal());
         return dataResponse;
     }
 

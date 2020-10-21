@@ -22,15 +22,15 @@ public class DataResponse<T> {
 
     private String type;
 
-    private Integer count;
+    private Long count;
 
     private T data;
 
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 
