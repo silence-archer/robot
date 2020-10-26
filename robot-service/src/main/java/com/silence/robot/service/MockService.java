@@ -46,6 +46,16 @@ public class MockService {
         return new RobotPage<>(pageInfo.getTotal(), mockInfos);
     }
 
+    public RobotPage<MockInfo> getMockInfoByCondition(String mockName, String mockUrl, String mockModule, Integer page, Integer limit) {
+
+        PageHelper.startPage(page, limit);
+        List<TMockInfo> tMockInfos = mockInfoMapper.selectByCondition(mockName, mockUrl, mockModule);
+        PageInfo<TMockInfo> pageInfo = new PageInfo<>(tMockInfos);
+        List<MockInfo> mockInfos = BeanUtils.copyList(MockInfo.class, tMockInfos);
+
+        return new RobotPage<>(pageInfo.getTotal(), mockInfos);
+    }
+
     public void addMock(MockInfo mockInfo) {
         TMockInfo tMockInfo = BeanUtils.copy(TMockInfo.class, mockInfo);
         mockInfoMapper.insert(tMockInfo);

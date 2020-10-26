@@ -83,6 +83,22 @@
     from t_mock_info
     where MOCK_URL = #{mockUrl,jdbcType=VARCHAR} AND MOCK_MODULE = #{mockModule,jdbcType=VARCHAR}
   </select>
+  <select id="selectByCondition" resultMap="BaseResultMap">
+      select ID, MOCK_URL, MOCK_NAME, MOCK_MODULE, MOCK_INPUT, MOCK_OUTPUT, CREATE_TIME, CREATE_USER, UPDATE_TIME,
+             UPDATE_USER
+      from t_mock_info
+      <where>
+        <if test="mockModule != null and mockModule != '' ">
+          AND MOCK_MODULE = #{mockModule,jdbcType=VARCHAR}
+        </if>
+        <if test="mockUrl != null and mockUrl != '' ">
+          AND MOCK_URL = #{mockUrl,jdbcType=VARCHAR}
+        </if>
+        <if test="mockName != null and mockName != '' ">
+          AND MOCK_NAME like '%' || #{mockName,jdbcType=VARCHAR} || '%'
+        </if>
+      </where>
+  </select>
 
 
 </mapper>
