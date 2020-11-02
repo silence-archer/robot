@@ -75,9 +75,10 @@ public class MockService {
         List<TMockInfo> tMockInfos = mockInfoMapper.selectByMockUrlAndModule(uri, module);
         AtomicReference<JSONObject> output = new AtomicReference<>(new JSONObject());
         tMockInfos.forEach(tMockInfo -> {
+            logger.info("查询该url-[{}]的挡板入参为[{}]", uri, tMockInfo.getMockInput());
             JSONObject jsonObject = JSONObject.parseObject(tMockInfo.getMockInput());
             if (jsonObject.equals(mockRequestInfo.getRequest())) {
-                logger.info("该url-[{}]的挡板返回值为[{}]", uri, jsonObject);
+                logger.info("匹配成功-该url-[{}]的挡板返回值为[{}]", uri, jsonObject);
                 output.set(JSONObject.parseObject(tMockInfo.getMockOutput()));
             }
         });
