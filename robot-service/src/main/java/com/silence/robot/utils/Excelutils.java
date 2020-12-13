@@ -18,7 +18,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -46,18 +48,30 @@ public class Excelutils {
 
     public static Workbook getWorkbook(String fileName) {
         try {
-            Workbook workbook = new XSSFWorkbook(fileName);
-            return workbook;
+            return new XSSFWorkbook(fileName);
         } catch (IOException e) {
             logger.error("读取excel文件{}失败", fileName, e);
             return null;
         }
     }
 
-    public static void main(String[] args){
-        Workbook workbook = getWorkbook("D:\\test\\1.xlsx");
-        String s = readExcel(workbook, 0, 2, 2);
-        System.out.println("value: "+s);
+    public static Workbook createExcel(String sheetName, List<String> list) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet(sheetName);
+        for (int i = 0; i < list.size(); i++) {
+            Row row = sheet.createRow(i);
+            Cell cell = row.createCell(0);
+            cell.setCellValue(list.get(i));
+        }
+
+
+
+        return workbook;
+
+
+    }
+
+    public static void main(String[] args) throws IOException {
     }
 
 }

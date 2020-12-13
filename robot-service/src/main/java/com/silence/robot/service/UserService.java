@@ -108,6 +108,7 @@ public class UserService {
         }
         user.setNickname(userInfo.getNickname());
         user.setRoleNo(userInfo.getRoleNo());
+        user.setIpAddr(userInfo.getIpAddr());
         userMapper.updateByPrimaryKey(user);
         TUserTalkInfo userTalkInfo = userTalkInfoMapper.selectByPrimaryKey(userInfo.getUsername());
         userTalkInfo.setSign(userInfo.getSign());
@@ -168,6 +169,7 @@ public class UserService {
             userInfo.setSign(userTalkInfo.getSign());
             userInfo.setAvatar(userTalkInfo.getAvatar());
             userInfo.setRoleNo(user.getRoleNo());
+            userInfo.setIpAddr(user.getIpAddr());
             String roleName = roleService.getRoleName(user.getRoleNo());
             userInfo.setRoleName(roleName);
             list.add(userInfo);

@@ -16,6 +16,7 @@ import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.ContentType;
@@ -59,7 +60,11 @@ public class HttpUtils {
 
 
     public static Map httpClientExecute(HttpRequestBase request) {
-        Map map = null;
+        InputStream content = httpClientExecuteByStream(request);
+        return FileUtils.getJsonMap(content);
+    }
+
+    public static InputStream httpClientExecuteByStream(HttpRequestBase request) {
         InputStream content = null;
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse httpResponse = null;
@@ -75,20 +80,11 @@ public class HttpUtils {
             }
             HttpEntity responseEntity = httpResponse.getEntity();
             content = responseEntity.getContent();
-            map = FileUtils.getJsonMap(content);
         } catch (IOException e) {
             logger.error("使用流失败", e);
 
-        } finally {
-            try {
-                content.close();
-                httpResponse.close();
-                httpClient.close();
-            } catch (IOException e) {
-                logger.error("关闭流失败", e);
-            }
         }
-        return map;
+        return content;
     }
     
     /**
@@ -108,6 +104,12 @@ public class HttpUtils {
             }
         }
         return "admin";
+    }
+
+    public static InputStream getStreamByHttp(String uri) {
+        HttpGet request = new HttpGet(uri);
+        return httpClientExecuteByStream(request);
+
     }
 
 

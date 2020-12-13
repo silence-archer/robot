@@ -16,7 +16,7 @@ public interface TMockInfoMapper {
     List<TMockInfo> selectByMockUrlAndModule(String mockUrl, String mockModule);
 
     List<TMockInfo> selectAll();
-    List<TMockInfo> selectByCondition(@Param("mockName") String mockName, @Param("mockUrl") String mockUrl, @Param("mockModule") String mockModule);
+    List<TMockInfo> selectByCondition(@Param("mockName") String mockName, @Param("mockInput") String mockInput, @Param("mockUrl") String mockUrl, @Param("mockModule") String mockModule);
 
     int updateByPrimaryKey(TMockInfo record);
 

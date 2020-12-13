@@ -126,6 +126,7 @@ CREATE TABLE `t_user` (
   `NICKNAME` varchar(64) DEFAULT NULL COMMENT '昵称',
   `PASSWORD` varchar(60) DEFAULT NULL COMMENT '密码',
   `ROLE_NO` varchar(32) DEFAULT NULL COMMENT '角色编号',
+  `IP_ADDR` varchar(32) DEFAULT NULL COMMENT 'ip地址',
   `CREATE_TIME` datetime NOT NULL COMMENT '创建时间',
   `CREATE_USER` varchar(32) DEFAULT NULL COMMENT '创建人',
   `UPDATE_TIME` datetime NOT NULL COMMENT '修改时间',

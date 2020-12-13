@@ -91,6 +91,9 @@
         <if test="mockModule != null and mockModule != '' ">
           AND MOCK_MODULE = #{mockModule,jdbcType=VARCHAR}
         </if>
+        <if test="mockInput != null and mockInput != '' ">
+          AND MOCK_INPUT like '%' || #{mockInput,jdbcType=VARCHAR} || '%'
+        </if>
         <if test="mockUrl != null and mockUrl != '' ">
           AND MOCK_URL = #{mockUrl,jdbcType=VARCHAR}
         </if>

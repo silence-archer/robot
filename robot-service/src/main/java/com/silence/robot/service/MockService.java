@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class MockService {
 
-    private Logger logger = LoggerFactory.getLogger(MockService.class);
+    private final Logger logger = LoggerFactory.getLogger(MockService.class);
 
     @Resource
     private TMockInfoMapper mockInfoMapper;
@@ -46,10 +46,10 @@ public class MockService {
         return new RobotPage<>(pageInfo.getTotal(), mockInfos);
     }
 
-    public RobotPage<MockInfo> getMockInfoByCondition(String mockName, String mockUrl, String mockModule, Integer page, Integer limit) {
+    public RobotPage<MockInfo> getMockInfoByCondition(String mockName, String mockInput, String mockUrl, String mockModule, Integer page, Integer limit) {
 
         PageHelper.startPage(page, limit);
-        List<TMockInfo> tMockInfos = mockInfoMapper.selectByCondition(mockName, mockUrl, mockModule);
+        List<TMockInfo> tMockInfos = mockInfoMapper.selectByCondition(mockName, mockInput, mockUrl, mockModule);
         PageInfo<TMockInfo> pageInfo = new PageInfo<>(tMockInfos);
         List<MockInfo> mockInfos = BeanUtils.copyList(MockInfo.class, tMockInfos);
 

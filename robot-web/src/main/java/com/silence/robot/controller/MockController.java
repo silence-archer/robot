@@ -36,9 +36,9 @@ public class MockController {
     }
 
     @GetMapping("/getMockInfoByCondition")
-    public DataResponse<List<MockInfo>> getMockInfoByCondition(@RequestParam(required = false) String mockName, @RequestParam(required = false) String mockUrl, @RequestParam(required = false) String mockModule, @RequestParam Integer page, @RequestParam Integer limit) {
+    public DataResponse<List<MockInfo>> getMockInfoByCondition(@RequestParam(required = false) String mockName, @RequestParam(required = false) String mockInput, @RequestParam(required = false) String mockUrl, @RequestParam(required = false) String mockModule, @RequestParam Integer page, @RequestParam Integer limit) {
 
-        RobotPage<MockInfo> mockInfoByPage = mockService.getMockInfoByCondition(mockName, mockUrl, mockModule, page, limit);
+        RobotPage<MockInfo> mockInfoByPage = mockService.getMockInfoByCondition(mockName, mockInput, mockUrl, mockModule, page, limit);
 
         DataResponse<List<MockInfo>> dataResponse = new DataResponse<>(mockInfoByPage.getList());
         dataResponse.setCount(mockInfoByPage.getTotal());

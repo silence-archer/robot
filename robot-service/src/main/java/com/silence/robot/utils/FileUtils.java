@@ -436,8 +436,7 @@ public class FileUtils {
     public static Map getJsonMap(InputStream inputStream) {
         Reader reader = new InputStreamReader(inputStream);
         JSONReader jsonReader = new JSONReader(reader);
-        Map map = jsonReader.readObject(Map.class);
-        return map;
+        return jsonReader.readObject(Map.class);
     }
 
     /**
@@ -457,6 +456,27 @@ public class FileUtils {
             xmlObject = (T) unmarshaller.unmarshal(sr);
         } catch (JAXBException e) {
             logger.error("xml字符串{}，转化为对象{}失败", xmlStr, clazz.getName(), e);
+        }
+        return xmlObject;
+    }
+
+    /**
+     * 将xml转化为对象
+     * @param inputStream
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T convertXmlStrToObject(InputStream inputStream, Class<T> clazz) {
+        T xmlObject = null;
+        try {
+            JAXBContext context = JAXBContext.newInstance(clazz);
+            // 进行将Xml转成对象的核心接口
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            InputStreamReader reader = new InputStreamReader(inputStream);
+            xmlObject = (T) unmarshaller.unmarshal(reader);
+        } catch (JAXBException e) {
+            logger.error("xml，转化为对象{}失败", clazz.getName(), e);
         }
         return xmlObject;
     }

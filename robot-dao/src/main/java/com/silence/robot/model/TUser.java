@@ -47,6 +47,9 @@ public class TUser {
      * @mbg.generated
      */
     private String roleNo;
+    private String ipAddr;
+
+
 
     /**
      *
@@ -299,4 +302,13 @@ public class TUser {
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser == null ? null : updateUser.trim();
     }
+
+    public String getIpAddr() {
+        return ipAddr;
+    }
+
+    public void setIpAddr(String ipAddr) {
+        this.ipAddr = ipAddr;
+    }
+
 }

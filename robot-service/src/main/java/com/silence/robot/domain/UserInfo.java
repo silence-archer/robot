@@ -36,6 +36,11 @@ public class UserInfo {
     private String roleName;
 
     /**
+     * IP地址
+     */
+    private String ipAddr;
+
+    /**
      * 验证码生成的图片信息
      */
     private String imageWithVerifyCode;
@@ -149,6 +154,14 @@ public class UserInfo {
         this.roleName = roleName;
     }
 
+    public String getIpAddr() {
+        return ipAddr;
+    }
+
+    public void setIpAddr(String ipAddr) {
+        this.ipAddr = ipAddr;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -158,6 +171,7 @@ public class UserInfo {
                 ", nickname='" + nickname + '\'' +
                 ", roleNo='" + roleNo + '\'' +
                 ", roleName='" + roleName + '\'' +
+                ", ipAddr='" + ipAddr + '\'' +
                 ", imageWithVerifyCode='" + imageWithVerifyCode + '\'' +
                 ", id='" + id + '\'' +
                 ", createTime='" + createTime + '\'' +
