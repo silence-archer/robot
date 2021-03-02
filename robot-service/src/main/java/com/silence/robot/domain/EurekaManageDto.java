@@ -13,6 +13,10 @@ public class EurekaManageDto {
     private String hostName;
     private String status;
     private String owner;
+    private Integer port;
+    private String homePageUrl;
+
+
 
     public String getName() {
         return name;
@@ -62,6 +66,22 @@ public class EurekaManageDto {
         this.owner = owner;
     }
 
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public String getHomePageUrl() {
+        return homePageUrl;
+    }
+
+    public void setHomePageUrl(String homePageUrl) {
+        this.homePageUrl = homePageUrl;
+    }
+
     @Override
     public String toString() {
         return "EurekaManageDto{" +
@@ -71,6 +91,8 @@ public class EurekaManageDto {
                 ", hostName='" + hostName + '\'' +
                 ", status='" + status + '\'' +
                 ", owner='" + owner + '\'' +
+                ", port='" + port + '\'' +
+                ", homePageUrl='" + homePageUrl + '\'' +
                 '}';
     }
 }

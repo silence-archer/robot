@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silence.robot.mapper.TFileConfigMapper">
+  <resultMap id="BaseResultMap" type="com.silence.robot.model.TFileConfig">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
+    <result column="file_desc" jdbcType="VARCHAR" property="fileDesc" />
+    <result column="remote_filepath" jdbcType="VARCHAR" property="remoteFilepath" />
+    <result column="local_filepath" jdbcType="VARCHAR" property="localFilepath" />
+    <result column="remote_ip" jdbcType="VARCHAR" property="remoteIp" />
+    <result column="remote_port" jdbcType="INTEGER" property="remotePort" />
+    <result column="remote_username" jdbcType="VARCHAR" property="remoteUsername" />
+    <result column="remote_password" jdbcType="VARCHAR" property="remotePassword" />
+    <result column="remote_secret_key" jdbcType="VARCHAR" property="remoteSecretKey" />
+    <result column="transfer_type" jdbcType="VARCHAR" property="transferType" />
+    <result column="business_type" jdbcType="VARCHAR" property="businessType" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, filename, file_desc, remote_filepath, local_filepath, remote_ip, remote_port, 
+    remote_username, remote_password, remote_secret_key, transfer_type, business_type, 
+    create_user, create_time, update_user, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_file_config
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_file_config
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.silence.robot.model.TFileConfig" useGeneratedKeys="true">
+    insert into t_file_config (filename, file_desc, remote_filepath, 
+      local_filepath, remote_ip, remote_port, 
+      remote_username, remote_password, remote_secret_key, 
+      transfer_type, business_type, create_user, 
+      create_time, update_user, update_time
+      )
+    values (#{filename,jdbcType=VARCHAR}, #{fileDesc,jdbcType=VARCHAR}, #{remoteFilepath,jdbcType=VARCHAR}, 
+      #{localFilepath,jdbcType=VARCHAR}, #{remoteIp,jdbcType=VARCHAR}, #{remotePort,jdbcType=INTEGER}, 
+      #{remoteUsername,jdbcType=VARCHAR}, #{remotePassword,jdbcType=VARCHAR}, #{remoteSecretKey,jdbcType=VARCHAR}, 
+      #{transferType,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.silence.robot.model.TFileConfig" useGeneratedKeys="true">
+    insert into t_file_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="filename != null">
+        filename,
+      </if>
+      <if test="fileDesc != null">
+        file_desc,
+      </if>
+      <if test="remoteFilepath != null">
+        remote_filepath,
+      </if>
+      <if test="localFilepath != null">
+        local_filepath,
+      </if>
+      <if test="remoteIp != null">
+        remote_ip,
+      </if>
+      <if test="remotePort != null">
+        remote_port,
+      </if>
+      <if test="remoteUsername != null">
+        remote_username,
+      </if>
+      <if test="remotePassword != null">
+        remote_password,
+      </if>
+      <if test="remoteSecretKey != null">
+        remote_secret_key,
+      </if>
+      <if test="transferType != null">
+        transfer_type,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="filename != null">
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileDesc != null">
+        #{fileDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteFilepath != null">
+        #{remoteFilepath,jdbcType=VARCHAR},
+      </if>
+      <if test="localFilepath != null">
+        #{localFilepath,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteIp != null">
+        #{remoteIp,jdbcType=VARCHAR},
+      </if>
+      <if test="remotePort != null">
+        #{remotePort,jdbcType=INTEGER},
+      </if>
+      <if test="remoteUsername != null">
+        #{remoteUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="remotePassword != null">
+        #{remotePassword,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteSecretKey != null">
+        #{remoteSecretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="transferType != null">
+        #{transferType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.silence.robot.model.TFileConfig">
+    update t_file_config
+    <set>
+      <if test="filename != null">
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileDesc != null">
+        file_desc = #{fileDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteFilepath != null">
+        remote_filepath = #{remoteFilepath,jdbcType=VARCHAR},
+      </if>
+      <if test="localFilepath != null">
+        local_filepath = #{localFilepath,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteIp != null">
+        remote_ip = #{remoteIp,jdbcType=VARCHAR},
+      </if>
+      <if test="remotePort != null">
+        remote_port = #{remotePort,jdbcType=INTEGER},
+      </if>
+      <if test="remoteUsername != null">
+        remote_username = #{remoteUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="remotePassword != null">
+        remote_password = #{remotePassword,jdbcType=VARCHAR},
+      </if>
+      <if test="remoteSecretKey != null">
+        remote_secret_key = #{remoteSecretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="transferType != null">
+        transfer_type = #{transferType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        business_type = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.silence.robot.model.TFileConfig">
+    update t_file_config
+    set filename = #{filename,jdbcType=VARCHAR},
+      file_desc = #{fileDesc,jdbcType=VARCHAR},
+      remote_filepath = #{remoteFilepath,jdbcType=VARCHAR},
+      local_filepath = #{localFilepath,jdbcType=VARCHAR},
+      remote_ip = #{remoteIp,jdbcType=VARCHAR},
+      remote_port = #{remotePort,jdbcType=INTEGER},
+      remote_username = #{remoteUsername,jdbcType=VARCHAR},
+      remote_password = #{remotePassword,jdbcType=VARCHAR},
+      remote_secret_key = #{remoteSecretKey,jdbcType=VARCHAR},
+      transfer_type = #{transferType,jdbcType=VARCHAR},
+      business_type = #{businessType,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

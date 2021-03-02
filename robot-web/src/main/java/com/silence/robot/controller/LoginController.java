@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.concurrent.TimeUnit;
 
+/**
+ * @author silence
+ */
 @RestController
 public class LoginController {
 
@@ -26,7 +28,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public DataResponse<?> login(@RequestBody UserInfo userInfo, HttpSession httpSession) {
-        if (userInfo.getImageCode().equals(httpSession.getAttribute("imageCode"))) {
+        if (userInfo.getImageCode().equalsIgnoreCase((String) httpSession.getAttribute("imageCode"))) {
             //TODO 验证码过期 及时刷新
             httpSession.removeAttribute("imageCode");
         } else {

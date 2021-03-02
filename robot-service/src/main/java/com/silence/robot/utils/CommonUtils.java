@@ -12,23 +12,18 @@ package com.silence.robot.utils;
 
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.quartz.CronExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.apache.commons.codec.digest.DigestUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -49,6 +44,8 @@ public class CommonUtils {
     private static final String slat = "&%5123***&&%%$$#@";
 
     public static final String JOB_PACKAGE_NAME = "com.silence.robot.job.";
+
+    public static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(4, 8, 2, TimeUnit.MINUTES, new ArrayBlockingQueue<>(300));
 
     public static String getUuid(){
         return UUID.randomUUID().toString().replaceAll("-","");

@@ -82,13 +82,13 @@ INSERT INTO `t_svn_info` VALUES ('b17a679da9a94cf7b7881bc6287e7d82', 'https://52
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('100000', 'admin', '管理员', '8715a4f66d9eeddba20b5453edc41bd7', 'roleNo0001', '2019-10-08 15:19:24', 'admin', '2019-12-17 01:18:51', 'admin');
-INSERT INTO `t_user` VALUES ('43e938be87ff4dcd9ae2df7fed6ce132', 'ironman', '钢铁侠', 'f03f5bdcc405581f127502a48e4a8643', 'roleNo0009', '2019-12-17 01:27:40', null, '2019-12-17 01:28:53', null);
-INSERT INTO `t_user` VALUES ('6dc34aba2fc9451ca3de56b870f76b77', 'saber', '剑士', 'd5c0f750fd263103f55c14cfd9a427bf', 'roleNo0002', '2019-11-22 01:32:09', null, '2019-12-17 01:24:16', null);
-INSERT INTO `t_user` VALUES ('89cb1a600e004ef9bd3087d5c4e05d6b', 'archer', '弓兵', 'd7afe71568da8f9e78cac5afecd7cb78', 'roleNo0001', '2019-11-22 01:33:59', null, '2019-11-22 01:33:59', null);
-INSERT INTO `t_user` VALUES ('a1b1412efd6144c5815c391b89d5b54c', 'lancer', '枪兵', '4195b8334e611bbf87a1362d3d61673a', 'roleNo0001', '2019-11-22 01:33:09', null, '2019-12-04 20:20:12', null);
-INSERT INTO `t_user` VALUES ('a429f00579824aa490085deac52a3b8f', 'batman', '蝙蝠侠', '6b1f54d8c9d383ec2a4340bd9dc993ec', 'roleNo0001', '2019-12-04 20:26:02', null, '2019-12-17 01:14:49', null);
-INSERT INTO `t_user` VALUES ('cf88ad9aa8fe44e4b535cc48aaa44539', 'silence', '我是谁', 'b1a46eeb63f51695aca3556c767ea34e', 'roleNo0001', '2019-11-22 01:30:31', null, '2019-11-22 01:30:31', null);
+INSERT INTO `t_user` VALUES ('100000', 'admin', '管理员', '8715a4f66d9eeddba20b5453edc41bd7', 'roleNo0001', null, '2019-10-08 15:19:24', 'admin', '2019-12-17 01:18:51', 'admin');
+INSERT INTO `t_user` VALUES ('43e938be87ff4dcd9ae2df7fed6ce132', 'ironman', '钢铁侠', 'f03f5bdcc405581f127502a48e4a8643', 'roleNo0009', null, '2019-12-17 01:27:40', null, '2019-12-17 01:28:53', null);
+INSERT INTO `t_user` VALUES ('6dc34aba2fc9451ca3de56b870f76b77', 'saber', '剑士', 'd5c0f750fd263103f55c14cfd9a427bf', 'roleNo0002', null, '2019-11-22 01:32:09', null, '2019-12-17 01:24:16', null);
+INSERT INTO `t_user` VALUES ('89cb1a600e004ef9bd3087d5c4e05d6b', 'archer', '弓兵', 'd7afe71568da8f9e78cac5afecd7cb78', 'roleNo0001', null, '2019-11-22 01:33:59', null, '2019-11-22 01:33:59', null);
+INSERT INTO `t_user` VALUES ('a1b1412efd6144c5815c391b89d5b54c', 'lancer', '枪兵', '4195b8334e611bbf87a1362d3d61673a', 'roleNo0001', null, '2019-11-22 01:33:09', null, '2019-12-04 20:20:12', null);
+INSERT INTO `t_user` VALUES ('a429f00579824aa490085deac52a3b8f', 'batman', '蝙蝠侠', '6b1f54d8c9d383ec2a4340bd9dc993ec', 'roleNo0001', null, '2019-12-04 20:26:02', null, '2019-12-17 01:14:49', null);
+INSERT INTO `t_user` VALUES ('cf88ad9aa8fe44e4b535cc48aaa44539', 'silence', '我是谁', 'b1a46eeb63f51695aca3556c767ea34e', 'roleNo0001', null, '2019-11-22 01:30:31', null, '2019-11-22 01:30:31', null);
 
 
 -- ----------------------------

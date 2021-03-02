@@ -1,17 +1,21 @@
 package com.silence.robot.controller;
 
-import com.silence.robot.dto.DataResponse;
 import com.silence.robot.utils.Excelutils;
-import org.apache.http.HttpHeaders;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.FillPatternType;
+import com.silence.robot.utils.HttpUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -27,7 +31,48 @@ import java.util.Arrays;
 @RestController
 public class FileController {
 
+    private final Logger logger = LoggerFactory.getLogger(FileController.class);
+
+    @Value("${robot.outside.url}")
+    private String outsideUri;
+
     @PostMapping("/terr/interface/exportAll/excel")
+    public void exportExcelByUri(HttpServletRequest request, HttpServletResponse response) {
+        HttpPost httpPost = new HttpPost(outsideUri);
+        StringBuilder data = new StringBuilder();
+
+        try {
+            BufferedReader reader = request.getReader();
+            String line;
+            while((line = reader.readLine()) != null) {
+                data.append(line);
+            }
+        } catch (IOException e) {
+            logger.error("获取post请求入参失败", e);
+        }
+        HttpEntity httpEntity = new StringEntity(data.toString(), ContentType.APPLICATION_JSON);
+        httpPost.setEntity(httpEntity);
+        CloseableHttpResponse httpResponse = HttpUtils.httpClientExecuteByStream(httpPost);
+
+        InputStream inputStream;
+        try {
+            inputStream = httpResponse.getEntity().getContent();
+            Header[] allHeaders = httpResponse.getAllHeaders();
+            for (Header header : allHeaders) {
+                response.setHeader(header.getName(), header.getValue());
+            }
+            ServletOutputStream outputStream = response.getOutputStream();
+            int ch;
+            while ((ch = inputStream.read()) != -1) {
+                outputStream.write(ch);
+            }
+            outputStream.flush();
+        } catch (IOException e) {
+            logger.error("使用流失败",e);
+        }
+
+    }
+    @PostMapping("/getExcel")
     public void getExcel(HttpServletRequest request, HttpServletResponse response) {
 
         Workbook workbook = Excelutils.createExcel("测试1", Arrays.asList("测试2", "测试3", "测试4"));
@@ -49,7 +94,8 @@ public class FileController {
             }
 
             response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");// 设置contentType为excel格式
+            // 设置contentType为excel格式
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
             response.setHeader("Content-Disposition", "Attachment;Filename="+ fileName+".xls");
             workbook.write(fos);
             fos.close();

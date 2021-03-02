@@ -28,8 +28,8 @@ silence:
   swagger:
     enable: true
 robot:
-  eureka:
-    url: http://127.0.0.1:8761/eureka/apps
+  outside:
+    url: http://127.0.0.1:18002/getExcel
   api:
     url: http://openapi.tuling123.com/openapi/api/v2
     userId: 508353

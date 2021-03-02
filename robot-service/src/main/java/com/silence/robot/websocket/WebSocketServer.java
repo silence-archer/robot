@@ -127,12 +127,12 @@ public class WebSocketServer {
      * @param message
      * @param sid
      */
-    public static void sendInfo(String message, @PathParam("sid") String sid){
+    public static void sendInfo(String message, @PathParam("sid") String sid, String mineId){
         logger.info("推送消息到窗口{}，推送内容:{}",sid,message);
 
         webSocketServerConcurrentHashMap.forEach((str,webSocketServer) -> {
             //这里可以设定只推送给这个sid的，为null则全部推送
-            if(str == null){
+            if("0".equals(sid) && !str.equals(mineId)){
                 webSocketServer.sendMessage(message);
             }else if(str.equals(sid)){
                 webSocketServer.sendMessage(message);

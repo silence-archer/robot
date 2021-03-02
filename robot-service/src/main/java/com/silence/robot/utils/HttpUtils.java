@@ -60,11 +60,16 @@ public class HttpUtils {
 
 
     public static Map httpClientExecute(HttpRequestBase request) {
-        InputStream content = httpClientExecuteByStream(request);
+        InputStream content = null;
+        try {
+            content = httpClientExecuteByStream(request).getEntity().getContent();
+        } catch (IOException e) {
+            logger.error("使用流失败",e);
+        }
         return FileUtils.getJsonMap(content);
     }
 
-    public static InputStream httpClientExecuteByStream(HttpRequestBase request) {
+    public static CloseableHttpResponse httpClientExecuteByStream(HttpRequestBase request) {
         InputStream content = null;
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse httpResponse = null;
@@ -78,13 +83,11 @@ public class HttpUtils {
                 logger.error("Http body error msg: {}", EntityUtils.toString(httpResponse.getEntity()));
                 throw new BusinessException(ExceptionCode.HTTP_REQUEST_ERROR);
             }
-            HttpEntity responseEntity = httpResponse.getEntity();
-            content = responseEntity.getContent();
         } catch (IOException e) {
             logger.error("使用流失败", e);
 
         }
-        return content;
+        return httpResponse;
     }
     
     /**
@@ -108,7 +111,12 @@ public class HttpUtils {
 
     public static InputStream getStreamByHttp(String uri) {
         HttpGet request = new HttpGet(uri);
-        return httpClientExecuteByStream(request);
+        try {
+            return httpClientExecuteByStream(request).getEntity().getContent();
+        } catch (IOException e) {
+            logger.error("使用流失败", e);
+        }
+        return null;
 
     }
 

@@ -10,6 +10,8 @@
  */
 package com.silence.robot.domain;
 
+import java.util.Date;
+
 /**
  * 〈一句话功能简述〉<br> 
  * 〈〉
@@ -31,6 +33,17 @@ public class CronTaskInfo {
     private String jobClass;
 
     private String effectFlag;
+
+    private Date createTime;
+
+
+    private String createUser;
+
+
+    private Date updateTime;
+
+
+    private String updateUser;
 
     public String getId() {
         return id;
@@ -80,6 +93,38 @@ public class CronTaskInfo {
         this.effectFlag = effectFlag;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
+    }
+
     @Override
     public String toString() {
         return "CronTaskInfo{" +
@@ -89,6 +134,10 @@ public class CronTaskInfo {
                 ", jobDesc='" + jobDesc + '\'' +
                 ", jobClass='" + jobClass + '\'' +
                 ", effectFlag='" + effectFlag + '\'' +
+                ", createTime=" + createTime +
+                ", createUser='" + createUser + '\'' +
+                ", updateTime=" + updateTime +
+                ", updateUser='" + updateUser + '\'' +
                 '}';
     }
 }

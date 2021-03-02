@@ -155,11 +155,11 @@ public class InstantMessagingService {
             out.setContent(mine.getContent());
             out.setUsername(mine.getUsername());
             out.setAvatar(mine.getAvatar());
-            out.setId(mine.getId());
-            out.setType(mine.getType());
+//            out.setId(mine.getId());
+//            out.setType(mine.getType());
             String s = JSONObject.toJSONString(instantMsgTalkOutJsonDto);
             //将消息发送给对方
-            WebSocketServer.sendInfo(s, to.getId());
+            WebSocketServer.sendInfo(s, to.getId(), mine.getId());
             return null;
 
 
@@ -194,6 +194,11 @@ public class InstantMessagingService {
         userTalkGroup.setGroupname("大家庭");
         userTalkGroup.setMineId(userTalkInfo.getId());
         userTalkGroupMapper.insert(userTalkGroup);
+        //添加到群成员
+        TUserTalkMembers userTalkMembers = new TUserTalkMembers();
+        userTalkMembers.setGroupId("0");
+        userTalkMembers.setMemberId(userTalkInfo.getId());
+        userTalkMembersMapper.insert(userTalkMembers);
 
     }
 

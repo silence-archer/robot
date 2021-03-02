@@ -31,15 +31,12 @@ public class EurekaManageService {
 
     private final Logger logger = LoggerFactory.getLogger(EurekaManageService.class);
 
-    @Value("${robot.eureka.url}")
-    private String uri;
-
     @Resource
     private UserService userService;
 
-    public List<EurekaManageDto> getEurekaInstanceList() {
-        logger.info("当前eureka地址为{}", uri);
-        InputStream in = HttpUtils.getStreamByHttp(uri);
+    public List<EurekaManageDto> getEurekaInstanceList(String eurekaUrl) {
+        logger.info("当前eureka地址为{}", eurekaUrl);
+        InputStream in = HttpUtils.getStreamByHttp(eurekaUrl);
         JSONObject jsonObject = XML.toJSONObject(new InputStreamReader(in));
         logger.info("当前注册在eureka上的信息为{}", jsonObject);
         JSONObject applications = jsonObject.getJSONObject("applications");
@@ -73,18 +70,37 @@ public class EurekaManageService {
 
     private void getInstanceInfo(List<EurekaManageDto> instanceList, JSONObject application) {
         String appName = application.getString("name");
-        JSONObject instance = application.getJSONObject("instance");
+        Object instanceObj = application.get("instance");
+        if(instanceObj instanceof JSONArray){
+            JSONArray instances = application.getJSONArray("instance");
+            for (int i = 0; i < instances.length(); i++) {
+                JSONObject instance = (JSONObject) instances.get(i);
+                getServerInfo(instanceList, appName, instance);
+            }
+        }else{
+            JSONObject instance = (JSONObject) instanceObj;
+            getServerInfo(instanceList, appName, instance);
+        }
 
+    }
+
+    private void getServerInfo(List<EurekaManageDto> instanceList, String appName, JSONObject instance) throws JSONException {
         String ipAddr = instance.getString("ipAddr");
         String instanceId = instance.getString("instanceId");
         String hostName = instance.getString("hostName");
         String status = instance.getString("status");
+        JSONObject portObj = instance.getJSONObject("port");
+        int port = portObj.getInt("content");
+        String homePageUrl = instance.getString("homePageUrl");
+
         EurekaManageDto eurekaManageDto = new EurekaManageDto();
         eurekaManageDto.setName(appName);
         eurekaManageDto.setIpAddr(ipAddr);
         eurekaManageDto.setInstanceId(instanceId);
         eurekaManageDto.setHostName(hostName);
         eurekaManageDto.setStatus(status);
+        eurekaManageDto.setPort(port);
+        eurekaManageDto.setHomePageUrl(homePageUrl);
         UserInfo userInfo = new UserInfo();
         userInfo.setIpAddr(ipAddr);
         List<UserInfo> userInfos = userService.getUserInfoByCondition(userInfo);

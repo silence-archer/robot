@@ -844,7 +844,7 @@ public class FileUtils {
                     byte tmp = readBuff[i];
                     // 碰到换行符
                     if (tmp == '\n' || tmp == '\r') {
-                        String line = new String(bos.toByteArray(), StandardCharsets.UTF_8);
+                        String line = bos.toString(String.valueOf(StandardCharsets.UTF_8));
                         if (CommonUtils.isNotEmpty(line)) {
                             list.add(line);
                         }
@@ -855,7 +855,7 @@ public class FileUtils {
                 }
             }
             if (bos.size() > 0) {
-                String line = new String(bos.toByteArray(), StandardCharsets.UTF_8);
+                String line = bos.toString(String.valueOf(StandardCharsets.UTF_8));
                 if (CommonUtils.isNotEmpty(line)) {
                     list.add(line);
                 }
@@ -864,6 +864,14 @@ public class FileUtils {
             logger.error("文件读取失败", e);
         }
         return list;
+    }
+
+    public static void main(String[] args) throws IOException {
+        List<String> list = Files.readAllLines(Paths.get("D:\\study\\robot\\logs\\server.log"));
+        list.forEach(s -> {
+            System.out.println(s);
+            System.out.println("===============================");
+        });
     }
 
 
