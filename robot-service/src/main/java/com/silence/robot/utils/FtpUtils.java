@@ -353,7 +353,9 @@ public class FtpUtils {
             if (ftpClient == null) {
                 throw new RuntimeException("登录ftp服务器失败");
             }
+            FileUtils.createFile(localPath, localFile);
             File file = new File(localPath + File.separator + localFile);
+
             out = new FileOutputStream(file);
             if (!ftpClient.changeWorkingDirectory(remotePath)) {
                 throw new IllegalStateException("切换ftp远程路径失败");

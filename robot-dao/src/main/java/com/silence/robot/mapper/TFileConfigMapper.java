@@ -2,6 +2,8 @@ package com.silence.robot.mapper;
 
 import com.silence.robot.model.TFileConfig;
 
+import java.util.List;
+
 public interface TFileConfigMapper {
     int deleteByPrimaryKey(String id);
 
@@ -10,6 +12,7 @@ public interface TFileConfigMapper {
     int insertSelective(TFileConfig record);
 
     TFileConfig selectByPrimaryKey(String id);
+    List<TFileConfig> selectAll();
 
     int updateByPrimaryKeySelective(TFileConfig record);
 

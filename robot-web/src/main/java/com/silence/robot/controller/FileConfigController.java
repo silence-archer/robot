@@ -19,13 +19,13 @@ public class FileConfigController {
     @Resource
     private FileConfigService fileConfigService;
 
-    @PostMapping("/addFileConfig")
+    @PostMapping("/addLogConfig")
     public DataResponse<?> addFileConfig(@RequestBody FileConfigDto fileConfigDto) {
         fileConfigService.addFileConfig(fileConfigDto);
         return new DataResponse<>();
     }
 
-    @PostMapping("/updateFileConfig")
+    @PostMapping("/updateLogConfig")
     public DataResponse<?> updateFileConfig(@RequestBody FileConfigDto fileConfigDto){
         fileConfigService.updateFileConfig(fileConfigDto);
         return new DataResponse<>();
@@ -37,14 +37,14 @@ public class FileConfigController {
         return new DataResponse<>();
     }
 
-    @GetMapping("queryAllFileConfig")
-    public DataResponse<List<FileConfigDto>> queryAllFileConfig() {
+    @GetMapping("getLogConfigInfo")
+    public DataResponse<List<FileConfigDto>> getLogConfigInfo(@RequestParam Integer page, @RequestParam Integer limit) {
         List<FileConfigDto> fileConfigDtos = fileConfigService.queryAllFileConfig();
         return new DataResponse<>(fileConfigDtos);
     }
 
-    @GetMapping("/queryFileConfigById")
-    public DataResponse<FileConfigDto> queryFileConfigById(@RequestParam String id) {
+    @GetMapping("/getLogConfigInfoByCondition")
+    public DataResponse<FileConfigDto> getLogConfigInfoByCondition(@RequestParam String id) {
         FileConfigDto fileConfigDto = fileConfigService.queryFileConfigById(id);
         return new DataResponse<>(fileConfigDto);
     }

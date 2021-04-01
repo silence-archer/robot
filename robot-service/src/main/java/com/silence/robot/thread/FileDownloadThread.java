@@ -2,7 +2,9 @@ package com.silence.robot.thread;
 
 import com.silence.robot.config.FtpConfig;
 import com.silence.robot.domain.FileConfigDto;
+import com.silence.robot.service.SequenceService;
 import com.silence.robot.utils.FtpUtils;
+import com.silence.robot.utils.SpringContextHelper;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -14,13 +16,16 @@ import java.util.concurrent.CountDownLatch;
  */
 public class FileDownloadThread implements Runnable{
 
-    private CountDownLatch countDownLatch;
+    private final CountDownLatch countDownLatch;
 
-    private FileConfigDto fileConfigDto;
+    private final FileConfigDto fileConfigDto;
+
+    private final SequenceService sequenceService;
 
     public FileDownloadThread(CountDownLatch countDownLatch, FileConfigDto fileConfigDto) {
         this.countDownLatch = countDownLatch;
         this.fileConfigDto = fileConfigDto;
+        this.sequenceService = SpringContextHelper.getBean(SequenceService.class);
     }
 
     @Override
@@ -32,8 +37,8 @@ public class FileDownloadThread implements Runnable{
         ftpConfig.setUsername(fileConfigDto.getRemoteUsername());
         ftpConfig.setPassword(fileConfigDto.getRemotePassword());
         ftpConfig.setSecretKey(fileConfigDto.getRemoteSecretKey());
-
-        FtpUtils.download(ftpConfig, fileConfigDto.getRemoteFilepath(), fileConfigDto.getFilename(), fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename());
+        int fileSeq = sequenceService.getSequence("FILE_SEQ");
+        FtpUtils.download(ftpConfig, fileConfigDto.getRemoteFilepath(), fileConfigDto.getFilename(), fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename()+fileSeq);
         countDownLatch.countDown();
     }
 }

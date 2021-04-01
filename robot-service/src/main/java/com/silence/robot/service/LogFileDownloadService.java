@@ -3,12 +3,14 @@ package com.silence.robot.service;
 import com.silence.robot.domain.FileConfigDto;
 import com.silence.robot.thread.FileDownloadThread;
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 日志下载服务
@@ -25,10 +27,14 @@ public class LogFileDownloadService {
         CountDownLatch countDownLatch = new CountDownLatch(fileConfigDtos.size());
         fileConfigDtos.forEach(fileConfigDto -> CommonUtils.THREAD_POOL_EXECUTOR.execute(new FileDownloadThread(countDownLatch, fileConfigDto)));
         try {
-            countDownLatch.await();
+            boolean await = countDownLatch.await(30, TimeUnit.MINUTES);
+            if (!await) {
+                throw new IllegalStateException("日志下载失败");
+            }
         } catch (InterruptedException e) {
             logger.error("线程执行失败", e);
         }
+        FileUtils.mergeFilesByOrder(fileConfigDtos.get(0).getLocalFilepath(), fileConfigDtos.get(0).getFilename(), fileConfigDtos.size());
 
     }
 }

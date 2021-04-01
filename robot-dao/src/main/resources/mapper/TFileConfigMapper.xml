@@ -20,7 +20,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, filename, file_desc, remote_filepath, local_filepath, remote_ip, remote_port, 
+    id, filename, file_desc, remote_filepath, local_filepath, remote_ip, remote_port,
     remote_username, remote_password, remote_secret_key, transfer_type, business_type, 
     create_user, create_time, update_user, update_time
   </sql>
@@ -30,18 +30,23 @@
     from t_file_config
     where id = #{id,jdbcType=VARCHAR}
   </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_file_config
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from t_file_config
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.silence.robot.model.TFileConfig" useGeneratedKeys="true">
-    insert into t_file_config (filename, file_desc, remote_filepath, 
+  <insert id="insert" parameterType="com.silence.robot.model.TFileConfig" >
+    insert into t_file_config (id, filename, file_desc, remote_filepath,
       local_filepath, remote_ip, remote_port, 
       remote_username, remote_password, remote_secret_key, 
       transfer_type, business_type, create_user, 
       create_time, update_user, update_time
       )
-    values (#{filename,jdbcType=VARCHAR}, #{fileDesc,jdbcType=VARCHAR}, #{remoteFilepath,jdbcType=VARCHAR}, 
+    values (#{id}, #{filename,jdbcType=VARCHAR}, #{fileDesc,jdbcType=VARCHAR}, #{remoteFilepath,jdbcType=VARCHAR},
       #{localFilepath,jdbcType=VARCHAR}, #{remoteIp,jdbcType=VARCHAR}, #{remotePort,jdbcType=INTEGER}, 
       #{remoteUsername,jdbcType=VARCHAR}, #{remotePassword,jdbcType=VARCHAR}, #{remoteSecretKey,jdbcType=VARCHAR}, 
       #{transferType,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 

@@ -12,7 +12,6 @@ package com.silence.robot.service;
 
 import com.silence.robot.mapper.TSequenceMapper;
 import com.silence.robot.model.TSequence;
-import com.silence.robot.utils.CommonUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,7 +30,7 @@ public class SequenceService {
     @Resource
     private TSequenceMapper sequenceMapper;
 
-    public int getSequence(String seqName){
+    public synchronized int getSequence(String seqName){
         TSequence sequence = sequenceMapper.selectBySeqName(seqName);
         if(sequence == null){
             sequence = new TSequence();

@@ -866,17 +866,13 @@ public class FileUtils {
         return list;
     }
 
-    public static void main(String[] args) throws IOException {
-        List<String> list = Files.readAllLines(Paths.get("D:\\study\\robot\\logs\\server.log"));
-        list.forEach(s -> {
-            System.out.println(s);
-            System.out.println("===============================");
-        });
+    public static void createFile(String filePath, String fileName) {
+        try {
+            Files.createDirectories(Paths.get(filePath));
+            Files.createFile(Paths.get(filePath + File.separator + fileName));
+        } catch (IOException e) {
+            logger.error("{}文件{}创建失败", filePath, fileName, e);
+        }
     }
-
-
-
-
-
 
 }
