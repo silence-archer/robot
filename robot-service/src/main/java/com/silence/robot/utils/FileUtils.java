@@ -141,6 +141,7 @@ public class FileUtils {
             logger.error("文件读取失败", e);
         } finally {
             try {
+                assert fileRead != null;
                 fileRead.close();
             } catch (IOException e) {
                 logger.error("文件读取失败", e);
@@ -148,6 +149,8 @@ public class FileUtils {
         }
         return list;
     }
+
+
 
     /**
      * 根据文件名读取文件全部内容
@@ -378,6 +381,25 @@ public class FileUtils {
     }
 
     /**
+     * 按行读取文件，文件路径默认
+     * @param fileName
+     * @return
+     */
+    public static List<String> readAllLines(String filePath, String fileName) {
+        List<String> list = new ArrayList<>();
+        Path path = Paths.get(filePath + File.separator + fileName);
+        if (Files.exists(path)) {
+            try {
+                list = Files.readAllLines(path);
+            } catch (IOException e) {
+                logger.error("文件读取失败", e);
+            }
+        }
+
+        return list;
+    }
+
+    /**
      * 读取文件全部内容，文件路径默认
      * @param fileName
      * @return
@@ -404,6 +426,15 @@ public class FileUtils {
     public static boolean exists(String name) {
         String fileName = FileUtils.getDefaultLocalUrl(name);
         return Files.exists(Paths.get(fileName));
+    }
+
+    /**
+     * 判断文件是否存在，路径默认
+     * @param name
+     * @return
+     */
+    public static boolean exists(String path, String name) {
+        return Files.exists(Paths.get(path + File.separator + name));
     }
 
     /**

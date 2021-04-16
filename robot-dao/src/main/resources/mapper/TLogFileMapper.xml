@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silence.robot.mapper.TLogFileMapper">
+  <resultMap id="BaseResultMap" type="com.silence.robot.model.TLogFile">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="date_time" jdbcType="TIMESTAMP" property="dateTime" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="trace_id" jdbcType="VARCHAR" property="traceId" />
+    <result column="tran_code" jdbcType="VARCHAR" property="tranCode" />
+    <result column="thread_name" jdbcType="VARCHAR" property="threadName" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="line_num" jdbcType="INTEGER" property="lineNum" />
+    <result column="context" jdbcType="VARCHAR" property="context" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, date_time, service_name, trace_id, tran_code, thread_name, `level`, class_name, 
+    line_num, context
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_log_file
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_log_file
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.silence.robot.model.TLogFile" >
+    insert into t_log_file (id, date_time, service_name, trace_id,
+      tran_code, thread_name, `level`, 
+      class_name, line_num, context
+      )
+    values (#{id,jdbcType=VARCHAR}, #{dateTime,jdbcType=TIMESTAMP}, #{serviceName,jdbcType=VARCHAR}, #{traceId,jdbcType=VARCHAR},
+      #{tranCode,jdbcType=VARCHAR}, #{threadName,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
+      #{className,jdbcType=VARCHAR}, #{lineNum,jdbcType=INTEGER}, #{context,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertAndBatch" parameterType="java.util.List" >
+    INSERT INTO    t_log_file
+    (id, date_time, service_name, trace_id,
+    tran_code, thread_name, `level`,
+    class_name, line_num, context
+    )
+    VALUES
+    <foreach collection="records"  item="item" separator="," index="index">
+      (#{item.id,jdbcType=VARCHAR}, #{item.dateTime,jdbcType=TIMESTAMP}, #{item.serviceName,jdbcType=VARCHAR}, #{item.traceId,jdbcType=VARCHAR},
+      #{item.tranCode,jdbcType=VARCHAR}, #{item.threadName,jdbcType=VARCHAR}, #{item.level,jdbcType=VARCHAR},
+      #{item.className,jdbcType=VARCHAR}, #{item.lineNum,jdbcType=INTEGER}, #{item.context,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.silence.robot.model.TLogFile" useGeneratedKeys="true">
+    insert into t_log_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dateTime != null">
+        date_time,
+      </if>
+      <if test="serviceName != null">
+        service_name,
+      </if>
+      <if test="traceId != null">
+        trace_id,
+      </if>
+      <if test="tranCode != null">
+        tran_code,
+      </if>
+      <if test="threadName != null">
+        thread_name,
+      </if>
+      <if test="level != null">
+        `level`,
+      </if>
+      <if test="className != null">
+        class_name,
+      </if>
+      <if test="lineNum != null">
+        line_num,
+      </if>
+      <if test="context != null">
+        context,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dateTime != null">
+        #{dateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceName != null">
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="traceId != null">
+        #{traceId,jdbcType=VARCHAR},
+      </if>
+      <if test="tranCode != null">
+        #{tranCode,jdbcType=VARCHAR},
+      </if>
+      <if test="threadName != null">
+        #{threadName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="lineNum != null">
+        #{lineNum,jdbcType=INTEGER},
+      </if>
+      <if test="context != null">
+        #{context,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.silence.robot.model.TLogFile">
+    update t_log_file
+    <set>
+      <if test="dateTime != null">
+        date_time = #{dateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceName != null">
+        service_name = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="traceId != null">
+        trace_id = #{traceId,jdbcType=VARCHAR},
+      </if>
+      <if test="tranCode != null">
+        tran_code = #{tranCode,jdbcType=VARCHAR},
+      </if>
+      <if test="threadName != null">
+        thread_name = #{threadName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        `level` = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="lineNum != null">
+        line_num = #{lineNum,jdbcType=INTEGER},
+      </if>
+      <if test="context != null">
+        context = #{context,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.silence.robot.model.TLogFile">
+    update t_log_file
+    set date_time = #{dateTime,jdbcType=TIMESTAMP},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      trace_id = #{traceId,jdbcType=VARCHAR},
+      tran_code = #{tranCode,jdbcType=VARCHAR},
+      thread_name = #{threadName,jdbcType=VARCHAR},
+      `level` = #{level,jdbcType=VARCHAR},
+      class_name = #{className,jdbcType=VARCHAR},
+      line_num = #{lineNum,jdbcType=INTEGER},
+      context = #{context,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

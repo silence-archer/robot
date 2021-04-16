@@ -20,11 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.nio.CharBuffer;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -277,6 +275,10 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
     }
 
     public static <O, T> List<T> copyList(Class<T> destClazz, List<O> sourceObjList) {
+        return copyList(destClazz, sourceObjList, null);
+    }
+
+    public static <O, T> List<T> copyList(Class<T> destClazz, List<O> sourceObjList, String key) {
         List<T> list = new ArrayList<>();
         if(CommonUtils.isEmpty(sourceObjList)){
             return list;
@@ -290,6 +292,9 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
                 throw new BusinessException("创建对象失败",e);
             }
             org.springframework.beans.BeanUtils.copyProperties(source, target);
+            if (CommonUtils.isNotEmpty(key)) {
+                BeanUtils.setProperty(target, key, CommonUtils.getUuid());
+            }
             list.add(target);
         });
         return list;

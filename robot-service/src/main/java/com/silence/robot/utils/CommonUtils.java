@@ -53,9 +53,9 @@ public class CommonUtils {
 
     public static boolean isEmpty(Object o){
         if(o instanceof String){
-            return o == null || ((String) o).isEmpty();
+            return ((String) o).isEmpty();
         }else if(o instanceof List){
-            return o == null || ((List) o).size() == 0;
+            return ((List) o).size() == 0;
         }else{
             return o == null;
         }
@@ -79,7 +79,7 @@ public class CommonUtils {
     }
 
     public static String getCmdCharset(){
-        if(getOsName().equals("windows")){
+        if("windows".equals(getOsName())){
             return "GBK";
         }else{
             return "UTF-8";

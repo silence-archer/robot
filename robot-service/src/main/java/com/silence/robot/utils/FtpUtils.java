@@ -80,6 +80,32 @@ public class FtpUtils {
     }
 
     /**
+     * 获取远程文件大小
+     *
+     * @param ftpConfig  ftp配置信息
+     * @param remoteFile 远程文件名
+     * @param remotePath 远程路径
+     * @auther mazhaohui
+     * @date 2020/6/13 15:07
+     */
+    public static long getFileSize(FtpConfig ftpConfig, String remotePath, String remoteFile) {
+        long fileSize = 0;
+        switch (FtpTypeEnum.valueOf(ftpConfig.getFtpType())) {
+            case FTP:
+                fileSize = getFileSizeForFtp(ftpConfig, remotePath, remoteFile);
+                break;
+            case SFTP:
+                fileSize = getFileSizeForSftp(ftpConfig, remotePath, remoteFile);
+                break;
+            default:
+                break;
+        }
+        return fileSize;
+    }
+
+
+
+    /**
      * 下载远程路径下的所有文件
      *
      * @param ftpConfig  ftp配置信息
@@ -372,6 +398,33 @@ public class FtpUtils {
     }
 
     /**
+     * 获取ftp文件大小
+     *
+     * @param ftpConfig  ftp配置信息
+     * @param remoteFile 远程文件名
+     * @param remotePath 远程路径
+     * @author ZHANGHAORAN
+     * @date 2019年8月24日 下午1:52:48
+     */
+    private static long getFileSizeForFtp(FtpConfig ftpConfig, String remotePath, String remoteFile) {
+        FileOutputStream out = null;
+        FTPClient ftpClient = null;
+        log.info("根据ip-{}端口-{}用户名-{}密码-{}远程文件路径{}远程文件名{}>>>>>>>", ftpConfig.getHost(), ftpConfig.getPort(), ftpConfig.getUsername(), ftpConfig.getPassword(), remotePath, remoteFile);
+        try {
+            ftpClient = getFTPClient(ftpConfig);
+            if (ftpClient == null) {
+                throw new RuntimeException("登录ftp服务器失败");
+            }
+            FTPFile ftpFile = ftpClient.mlistFile(remotePath + File.separator + remoteFile);
+            return ftpFile.getSize();
+        } catch (IOException e) {
+            throw new IllegalStateException("从ftp下载文件失败", e);
+        } finally {
+            close(null, out, ftpClient);
+        }
+    }
+
+    /**
      * sftp下载文件
      *
      * @param ftpConfig  ftp配置信息
@@ -394,6 +447,38 @@ public class FtpUtils {
                 channelSftp.cd(remotePath);
             }
             channelSftp.get(remoteFile, localPath + File.separator + localFile);
+
+        } catch (Exception e) {
+            throw new IllegalStateException("从sftp下载文件失败", e);
+        } finally {
+            close(session, channelSftp);
+        }
+
+
+    }
+
+    /**
+     * sftp下载文件
+     *
+     * @param ftpConfig  ftp配置信息
+     * @param remoteFile 远程文件名
+     * @param remotePath 远程路径
+     * @author mazhaohui
+     * @date 2019年8月24日 下午1:52:48
+     */
+    private static long getFileSizeForSftp(FtpConfig ftpConfig, String remotePath, String remoteFile) {
+        Session session = null;
+        ChannelSftp channelSftp = null;
+        log.info("根据ip-{}端口-{}私钥-{}用户名-{}密码-{}远程文件路径{}远程文件名{}>>>>>>>>", ftpConfig.getHost(), ftpConfig.getPort(), ftpConfig.getSecretKey(), ftpConfig.getUsername(), ftpConfig.getPassword(), remotePath, remoteFile);
+        try {
+            session = getSftpSession(ftpConfig);
+            channelSftp = (ChannelSftp) session.openChannel(FtpTypeEnum.SFTP.getCode());
+            channelSftp.connect();
+            if (CommonUtils.isNotEmpty(remotePath)) {
+                channelSftp.cd(remotePath);
+            }
+            SftpATTRS lstat = channelSftp.lstat(remoteFile);
+            return lstat.getSize();
 
         } catch (Exception e) {
             throw new IllegalStateException("从sftp下载文件失败", e);

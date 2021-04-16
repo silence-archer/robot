@@ -3,7 +3,6 @@ package com.silence.robot.service;
 import com.silence.robot.domain.FileConfigDto;
 import com.silence.robot.thread.FileDownloadThread;
 import com.silence.robot.utils.CommonUtils;
-import com.silence.robot.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,5 @@ public class LogFileDownloadService {
         } catch (InterruptedException e) {
             logger.error("线程执行失败", e);
         }
-        FileUtils.mergeFilesByOrder(fileConfigDtos.get(0).getLocalFilepath(), fileConfigDtos.get(0).getFilename(), fileConfigDtos.size());
-
     }
 }
