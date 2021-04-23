@@ -1,7 +1,7 @@
 package com.silence.robot.domain;
 
 /**
- * TODO
+ * eureka注册中心Dto
  *
  * @author silence
  * @date 2020/12/12

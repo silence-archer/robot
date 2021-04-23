@@ -119,6 +119,9 @@ public class FileUtils {
      * @return
      */
     public static List<String> splitReadFile(long startPos, long endPos, File file) {
+        if (startPos == 0 && file.length() == endPos) {
+            return readAllLines(file.getParent(), file.getName());
+        }
         List<String> list = new ArrayList<>();
         RandomAccessFile fileRead = null;
         try {
@@ -132,7 +135,7 @@ public class FileUtils {
                     if (readLine == null) {
                         readLine = "";
                     }
-                    String line = new String(readLine.getBytes("ISO-8859-1"), "UTF-8");
+                    String line = new String(readLine.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                     list.add(line);
 
                 }

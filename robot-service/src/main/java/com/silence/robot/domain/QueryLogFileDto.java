@@ -1,18 +1,20 @@
 package com.silence.robot.domain;
 
-import java.util.Date;
-
 /**
- * 文件配置DTO
+ * 查询日志条件DTO
  *
  * @author silence
  * @date 2021/2/4
  */
-public class LogFileDto {
+public class QueryLogFileDto {
     /**
-     * 日志时间
+     * 起始日期
      */
-    private Date dateTime;
+    private String startDate;
+    /**
+     * 终止日期
+     */
+    private String endDate;
 
     /**
      * 系统名称
@@ -23,6 +25,11 @@ public class LogFileDto {
      * 流水号
      */
     private String traceId;
+
+    /**
+     * 子流水号
+     */
+    private String subTraceId;
 
     /**
      * 交易码
@@ -53,38 +60,23 @@ public class LogFileDto {
      * 日志内容
      */
     private String content;
+    private Integer page;
+    private Integer limit;
 
-    /**
-     * 子流水号
-     */
-    private String subTraceId;
-    /**
-     * 业务类型
-     */
-    private String businessType;
-
-    public String getBusinessType() {
-        return businessType;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setBusinessType(String businessType) {
-        this.businessType = businessType;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
-    public String getSubTraceId() {
-        return subTraceId;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setSubTraceId(String subTraceId) {
-        this.subTraceId = subTraceId;
-    }
-
-    public Date getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getServiceName() {
@@ -101,6 +93,14 @@ public class LogFileDto {
 
     public void setTraceId(String traceId) {
         this.traceId = traceId;
+    }
+
+    public String getSubTraceId() {
+        return subTraceId;
+    }
+
+    public void setSubTraceId(String subTraceId) {
+        this.subTraceId = subTraceId;
     }
 
     public String getTranCode() {
@@ -151,18 +151,19 @@ public class LogFileDto {
         this.content = content;
     }
 
-    @Override
-    public String toString() {
-        return "LogFileDto{" +
-                "dateTime=" + dateTime +
-                ", serviceName='" + serviceName + '\'' +
-                ", traceId='" + traceId + '\'' +
-                ", tranCode='" + tranCode + '\'' +
-                ", threadName='" + threadName + '\'' +
-                ", level='" + level + '\'' +
-                ", className='" + className + '\'' +
-                ", lineNum=" + lineNum +
-                ", content='" + content + '\'' +
-                '}';
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 }

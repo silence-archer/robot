@@ -274,6 +274,24 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
         }
     }
 
+    public static Map<String, Object> beanToMap(Object bean) {
+        List<Field> fieldList = new ArrayList<>();
+        for(Class<?> tempClass = bean.getClass(); tempClass != null && !"java.lang.Object".equals(tempClass.getName()); tempClass = tempClass.getSuperclass()) {
+            fieldList.addAll(Arrays.asList(tempClass.getDeclaredFields()));
+        }
+        Map<String, Object> map = new HashMap<>();
+        for (Field field : fieldList) {
+            field.setAccessible(true);
+            try {
+                Object o = field.get(bean);
+                map.put(field.getName(), field.get(bean));
+            } catch (IllegalAccessException e) {
+                logger.error("对象{}的属性名{}赋默认值失败", bean.getClass().getName(), field.getName(), e);
+            }
+        }
+        return map;
+    }
+
     public static <O, T> List<T> copyList(Class<T> destClazz, List<O> sourceObjList) {
         return copyList(destClazz, sourceObjList, null);
     }

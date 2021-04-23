@@ -446,6 +446,7 @@ public class FtpUtils {
             if (CommonUtils.isNotEmpty(remotePath)) {
                 channelSftp.cd(remotePath);
             }
+            FileUtils.createFile(localPath, localFile);
             channelSftp.get(remoteFile, localPath + File.separator + localFile);
 
         } catch (Exception e) {

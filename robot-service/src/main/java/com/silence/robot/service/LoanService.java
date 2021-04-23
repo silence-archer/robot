@@ -40,11 +40,11 @@ public class LoanService {
 
     private BigDecimal countTotalAmt(BigDecimal princp, BigDecimal intRate, int prids){
 
-        BigDecimal totalAmt = princp.multiply(intRate).
-                multiply(intRate.add(new BigDecimal("1")).pow(prids)).
-                divide(intRate.add(new BigDecimal("1")).pow(prids).
-                        subtract(new BigDecimal("1")),MathContext.DECIMAL128);
-        return totalAmt;
+        BigDecimal pow = intRate.add(BigDecimal.ONE).pow(prids);
+        return princp.multiply(intRate).
+                multiply(pow).
+                divide(pow.
+                        subtract(BigDecimal.ONE),MathContext.DECIMAL128);
     }
 
     private BigDecimal convertYearIntRate(int intRate, int points){

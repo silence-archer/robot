@@ -3,7 +3,6 @@ package com.silence.robot.thread;
 import com.silence.robot.config.FtpConfig;
 import com.silence.robot.domain.FileConfigDto;
 import com.silence.robot.service.LogFileReadService;
-import com.silence.robot.service.SequenceService;
 import com.silence.robot.utils.FileUtils;
 import com.silence.robot.utils.FtpUtils;
 import com.silence.robot.utils.SpringContextHelper;
@@ -23,14 +22,11 @@ public class FileDownloadThread implements Runnable{
 
     private final FileConfigDto fileConfigDto;
 
-    private final SequenceService sequenceService;
-
     private final LogFileReadService logFileReadService;
 
     public FileDownloadThread(CountDownLatch countDownLatch, FileConfigDto fileConfigDto) {
         this.countDownLatch = countDownLatch;
         this.fileConfigDto = fileConfigDto;
-        this.sequenceService = SpringContextHelper.getBean(SequenceService.class);
         this.logFileReadService = SpringContextHelper.getBean(LogFileReadService.class);
     }
 
@@ -52,14 +48,14 @@ public class FileDownloadThread implements Runnable{
                 return;
             } else if (remoteFileSize > localFileSize) {
                 FtpUtils.download(ftpConfig, fileConfigDto.getRemoteFilepath(), fileConfigDto.getFilename(), fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename());
-                logFileReadService.read(fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename(), localFileSize, remoteFileSize);
+                logFileReadService.read(fileConfigDto.getBusinessType(), fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename(), localFileSize, remoteFileSize);
             } else {
                 FtpUtils.download(ftpConfig, fileConfigDto.getRemoteFilepath(), fileConfigDto.getFilename(), fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename());
-                logFileReadService.read(fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename());
+                logFileReadService.read(fileConfigDto.getBusinessType(), fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename());
             }
         } else {
             FtpUtils.download(ftpConfig, fileConfigDto.getRemoteFilepath(), fileConfigDto.getFilename(), fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename());
-            logFileReadService.read(fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename());
+            logFileReadService.read(fileConfigDto.getBusinessType(), fileConfigDto.getLocalFilepath(), fileConfigDto.getFilename());
         }
         countDownLatch.countDown();
     }
