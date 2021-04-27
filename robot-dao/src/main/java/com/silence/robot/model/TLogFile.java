@@ -63,6 +63,11 @@ public class TLogFile implements Serializable {
      */
     private String subTraceId;
 
+    /**
+     * 业务类型
+     */
+    private String businessType;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -153,6 +158,14 @@ public class TLogFile implements Serializable {
         this.subTraceId = subTraceId;
     }
 
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -175,7 +188,8 @@ public class TLogFile implements Serializable {
             && (this.getClassName() == null ? other.getClassName() == null : this.getClassName().equals(other.getClassName()))
             && (this.getLineNum() == null ? other.getLineNum() == null : this.getLineNum().equals(other.getLineNum()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
-            && (this.getSubTraceId() == null ? other.getSubTraceId() == null : this.getSubTraceId().equals(other.getSubTraceId()));
+            && (this.getSubTraceId() == null ? other.getSubTraceId() == null : this.getSubTraceId().equals(other.getSubTraceId()))
+            && (this.getBusinessType() == null ? other.getBusinessType() == null : this.getBusinessType().equals(other.getBusinessType()));
     }
 
     @Override
@@ -193,6 +207,7 @@ public class TLogFile implements Serializable {
         result = prime * result + ((getLineNum() == null) ? 0 : getLineNum().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getSubTraceId() == null) ? 0 : getSubTraceId().hashCode());
+        result = prime * result + ((getBusinessType() == null) ? 0 : getBusinessType().hashCode());
         return result;
     }
 
@@ -213,6 +228,7 @@ public class TLogFile implements Serializable {
         sb.append(", lineNum=").append(lineNum);
         sb.append(", content=").append(content);
         sb.append(", subTraceId=").append(subTraceId);
+        sb.append(", businessType=").append(businessType);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

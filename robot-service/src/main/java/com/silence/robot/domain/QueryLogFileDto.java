@@ -60,8 +60,21 @@ public class QueryLogFileDto {
      * 日志内容
      */
     private String content;
+
+    /**
+     * 业务类型
+     */
+    private String businessType;
     private Integer page;
     private Integer limit;
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
 
     public String getStartDate() {
         return startDate;

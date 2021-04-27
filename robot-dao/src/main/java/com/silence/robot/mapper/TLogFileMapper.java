@@ -7,19 +7,20 @@ import java.util.Map;
 
 public interface TLogFileMapper {
     int deleteByPrimaryKey(String id);
-    int deleteByCondition(Map<String, Object> param);
 
     int insert(TLogFile record);
+
+    int deleteByCondition(Map<String, Object> param);
+
+    int insertAndBatch(List<TLogFile> records);
 
     int insertSelective(TLogFile record);
 
     TLogFile selectByPrimaryKey(String id);
 
+    List<TLogFile> selectByCondition(Map<String, Object> param);
+
     int updateByPrimaryKeySelective(TLogFile record);
 
     int updateByPrimaryKey(TLogFile record);
-
-    void insertAndBatch(List<TLogFile> records);
-
-    List<TLogFile> selectByCondition(Map<String, Object> param);
 }

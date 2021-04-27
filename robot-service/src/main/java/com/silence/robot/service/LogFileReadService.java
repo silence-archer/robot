@@ -56,7 +56,6 @@ public class LogFileReadService {
         StringBuilder content = new StringBuilder();
         List<LogFileDto> list = new ArrayList<>();
         for (String line : lines) {
-            logger.info(line);
             if(CommonUtils.isEmpty(line)) {
                 continue;
             }

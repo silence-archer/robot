@@ -12,6 +12,7 @@ package com.silence.robot.utils;
 
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
+import com.silence.robot.thread.HandlerThreadFactory;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.quartz.CronExpression;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class CommonUtils {
 
     public static final String JOB_PACKAGE_NAME = "com.silence.robot.job.";
 
-    public static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(4, 8, 2, TimeUnit.MINUTES, new ArrayBlockingQueue<>(300));
+    public static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(4, 8, 2, TimeUnit.MINUTES, new ArrayBlockingQueue<>(300), new HandlerThreadFactory());
 
     public static String getUuid(){
         return UUID.randomUUID().toString().replaceAll("-","");
