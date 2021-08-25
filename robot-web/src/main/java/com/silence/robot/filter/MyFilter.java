@@ -4,8 +4,6 @@ import com.silence.robot.utils.TraceUtils;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +28,8 @@ public class MyFilter implements Filter {
         //用来指定本次预检请求的有效期，单位为秒，在此期间不用发出另一条预检请求
         response.setHeader("Access-Control-Max-Age", "3600");
         //请求包含的字段内容，如有多个可用哪个逗号分隔如下
-        response.setHeader("Access-Control-Allow-Headers", "content-type,x-requested-with,Authorization, x-ui-request,lang");
+        response.setHeader("Access-Control-Allow-Headers", "content-type,x-requested-with,Authorization, x-ui-request,lang,Content-Length");
+        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         //访问控制允许凭据，true为允许 可以公用一个session
         response.setHeader("Access-Control-Allow-Credentials", "true");
         // 浏览器是会先发一次options请求，如果请求通过，则继续发送正式的post请求

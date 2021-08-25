@@ -13,6 +13,7 @@ silence:
       - /getUser
       - /verifyCode
       - /mock
+      - /upload/**
       - /signature/*
       - /swagger-ui.html/**
       - /swagger-ui.html

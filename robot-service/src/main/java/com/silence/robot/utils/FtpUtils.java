@@ -295,7 +295,7 @@ public class FtpUtils {
      * @param ftpConfig  ftp配置信息
      * @param localPath  本地路径
      * @param remotePath 远程路径
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:52:48
      */
     private static void downloadAllForFtp(FtpConfig ftpConfig, String remotePath, String localPath) {
@@ -331,7 +331,7 @@ public class FtpUtils {
      * @param ftpConfig  ftp配置信息
      * @param localPath  本地路径
      * @param remotePath 远程路径
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:52:48
      */
     private static void downloadAllForSftp(FtpConfig ftpConfig, String remotePath, String localPath) {
@@ -367,7 +367,7 @@ public class FtpUtils {
      * @param localFile  本地文件名
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:52:48
      */
     private static void downloadForFtp(FtpConfig ftpConfig, String remotePath, String remoteFile, String localPath, String localFile) {
@@ -403,7 +403,7 @@ public class FtpUtils {
      * @param ftpConfig  ftp配置信息
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:52:48
      */
     private static long getFileSizeForFtp(FtpConfig ftpConfig, String remotePath, String remoteFile) {
@@ -432,7 +432,7 @@ public class FtpUtils {
      * @param localFile  本地文件名
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:52:48
      */
     private static void downloadForSftp(FtpConfig ftpConfig, String remotePath, String remoteFile, String localPath, String localFile) {
@@ -564,7 +564,7 @@ public class FtpUtils {
      * @param ftpClient  ftp操作类
      * @param remotePath 远程路径-从ftp的根路径开始以/开头
      * @return 远程路径下的文件名
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:53:02
      */
     private static List<String> getFileList(FTPClient ftpClient, String remotePath) throws IOException {
@@ -588,7 +588,7 @@ public class FtpUtils {
      * @param channelSftp sftp操作类
      * @param remotePath  远程路径
      * @return 远程路径下的文件名
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:53:02
      */
     private static List<String> getFileList(ChannelSftp channelSftp, String remotePath) throws SftpException {
@@ -607,7 +607,7 @@ public class FtpUtils {
      *
      * @param ftpConfig ftp配置信息
      * @return ftp操作类
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:49:27
      */
     private static FTPClient getFTPClient(FtpConfig ftpConfig) throws IOException {
@@ -641,7 +641,7 @@ public class FtpUtils {
      * @param in        输入流
      * @param out       输出流
      * @param ftpClient ftp操作类
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:49:50
      */
     private static void close(InputStream in, OutputStream out, FTPClient ftpClient) {
@@ -675,7 +675,7 @@ public class FtpUtils {
      *
      * @param session     SFTP连接会话
      * @param channelSftp SFTP连接管道
-     * @author ZHANGHAORAN
+     * @author silence
      * @date 2019年8月24日 下午1:49:50
      */
     private static void close(Session session, ChannelSftp channelSftp) {

@@ -10,7 +10,6 @@
  */
 package com.silence.robot.utils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.domain.UserInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
@@ -32,6 +31,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -56,6 +56,10 @@ public class HttpUtils {
         return map;
     }
 
+    public static Map doPost(String uri, String bodys) {
+        return doPost(uri, new HashMap<>(0), bodys);
+    }
+
 
 
 
@@ -63,8 +67,9 @@ public class HttpUtils {
         InputStream content = null;
         try {
             content = httpClientExecuteByStream(request).getEntity().getContent();
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("使用流失败",e);
+            throw new BusinessException(ExceptionCode.HTTP_REQUEST_ERROR);
         }
         return FileUtils.getJsonMap(content);
     }

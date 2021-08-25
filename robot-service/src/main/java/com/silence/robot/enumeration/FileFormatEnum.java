@@ -8,17 +8,21 @@ package com.silence.robot.enumeration;
  */
 public enum FileFormatEnum {
 
-    JSON("access_token","获取到的微信公众号凭证"),
-    SIGH_MARK("access_token","获取到的微信公众号凭证"),
-    VERTICAL_SEPARATOR_SKIP("delicacy","每日菜单");
+    //
+    JSON("json","json格式字符串","json"),
+    VERTICAL_SEPARATOR_SKIP("|","竖线分隔字符串","\\|"),
+    ASCII_SEPARATOR("0x01","竖线分隔字符串", new String(new byte[]{0x01})),
+    VERTICAL_SEPARATOR(",","逗号分隔", ",");
 
-    private String name;
+    private final String name;
 
-    private String desc;
+    private final String desc;
+    private final String value;
 
-    FileFormatEnum(String name, String desc){
+    FileFormatEnum(String name, String desc, String value){
         this.name = name;
         this.desc = desc;
+        this.value = value;
     }
 
     public String getName(){
@@ -27,5 +31,18 @@ public enum FileFormatEnum {
 
     public String getDesc(){
         return desc;
+    }
+
+    public String getValue(){
+        return value;
+    }
+
+    public static FileFormatEnum getEnumByName(String name) {
+        for (FileFormatEnum fileFormatEnum : values()) {
+            if (fileFormatEnum.getName().equals(name)) {
+                return fileFormatEnum;
+            }
+        }
+        return null;
     }
 }

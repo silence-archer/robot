@@ -10,6 +10,9 @@
  */
 package com.silence.robot.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.silence.robot.constants.RobotConstants;
+import com.silence.robot.domain.RobotPage;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.thread.HandlerThreadFactory;
@@ -18,6 +21,10 @@ import org.quartz.CronExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -38,11 +45,11 @@ import java.util.function.Predicate;
  */
 public class CommonUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(CommonUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-    private static final String slat = "&%5123***&&%%$$#@";
+    private static final String SLAT = "&%5123***&&%%$$#@";
 
     public static final String JOB_PACKAGE_NAME = "com.silence.robot.job.";
 
@@ -60,6 +67,28 @@ public class CommonUtils {
         }else{
             return o == null;
         }
+    }
+
+    public static boolean isAllEmpty(Object... objects) {
+        if(objects != null) {
+            for (Object object : objects) {
+                if(isNotEmpty(object)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean existEmpty(Object... objects) {
+        if(objects != null) {
+            for (Object object : objects) {
+                if(isEmpty(object)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean isNotEmpty(Object o){
@@ -94,7 +123,7 @@ public class CommonUtils {
     }
 
     public static String strToMD5(String str){
-        str = str+"/"+slat;
+        str = str+"/"+SLAT;
         return DigestUtils.md5Hex(str.getBytes());
     }
 
@@ -159,17 +188,78 @@ public class CommonUtils {
         return null;
     }
 
+    public static List<JSONObject> getResultSetByDataBase(String type, String sql, String url, String user, String password) {
+        List<JSONObject> list = new ArrayList<>();
+        try {
+            String databaseUrl = "";
+            if (RobotConstants.DATABASE_TYPE_ORACLE.equals(type)) {
+                databaseUrl = "jdbc:oracle:thin:@"+url;
+                Class.forName("oracle.jdbc.driver.OracleDriver");
+            } else if (RobotConstants.DATABASE_TYPE_MYSQL.equals(type)) {
+                databaseUrl = "jdbc:mysql://"+url;
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } else if (RobotConstants.DATABASE_TYPE_SQLITE.equals(type)) {
+                databaseUrl = "jdbc:sqlite://"+url;
+                Class.forName("org.sqlite.JDBC");
+            }
 
+            logger.debug("开始执行自定义sql>>>>>>>[{}]", sql);
+            Connection conn = DriverManager.getConnection(databaseUrl, user, password);
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.execute();
+            ResultSet resultSet = preparedStatement.getResultSet();
+            while (resultSet.next()) {
+                int columnCount = resultSet.getMetaData().getColumnCount();
+                JSONObject jsonObject = new JSONObject();
+                for (int i = 0; i < columnCount; i++) {
+                    String columnName = resultSet.getMetaData().getColumnName(i+1);
+                    String columnValue = resultSet.getString(columnName);
+                    if (CommonUtils.isNotEmpty(columnValue)) {
+                        jsonObject.put(columnName, columnValue);
+                    }
+                }
+                list.add(jsonObject);
+            }
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+        } catch (Exception e) {
+            throw new BusinessException("数据库连接失败", e);
+        }
+        logger.debug("sql语句执行结果>>>>>>>[{}]", list);
+        return list;
+    }
 
+    public static String getPkQuerySql(String type, String tableName, String owner) {
+        String pkQuerySql = "";
+        if (RobotConstants.DATABASE_TYPE_ORACLE.equals(type)) {
+            tableName = "and a.table_name = '"+ tableName+"'";
+            owner = "and a.owner = '"+ owner+"'";
+            pkQuerySql = "select a.* from dba_cons_columns a left join dba_constraints b on a.constraint_name = b.constraint_name and a.owner = b.owner where b.constraint_type = 'P'"+tableName+owner;
 
+        } else if (RobotConstants.DATABASE_TYPE_MYSQL.equals(type)) {
+            pkQuerySql = "SELECT column_name FROM INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` WHERE table_name='"+tableName+"' AND constraint_name='PRIMARY'";
+        }
+        return pkQuerySql;
+    }
 
-    public static void main(String[] args){
-        List<String> list = Arrays.asList("p67845251", "1577156609", "705061741");
-
-        //对三个入参进行字典序排序
-        Collections.sort(list);
-        String s = sha1(list.get(0) + list.get(1) + list.get(2));
-        System.out.println(s.equals("237c18c4c48641bfc84ab38eb29533c2a069af05"));
+    public static <T> RobotPage<T> getSubList(List<T> list, Integer page, Integer limit) {
+        if (isEmpty(list)) {
+            return new RobotPage<>(0L, new ArrayList<>(0));
+        }
+        if (existEmpty(page, limit)) {
+            return new RobotPage<>((long)list.size(), list);
+        }
+        int fromIndex = (page - 1) * limit;
+        int toIndex = fromIndex + limit;
+        if (list.size() < fromIndex) {
+            return new RobotPage<>(0L, new ArrayList<>(0));
+        }
+        if (list.size() < toIndex) {
+            toIndex = list.size();
+        }
+        List<T> subList = list.subList(fromIndex, toIndex);
+        return new RobotPage<>((long)list.size(), subList);
     }
 
 

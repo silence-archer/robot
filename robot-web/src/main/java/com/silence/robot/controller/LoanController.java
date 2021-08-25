@@ -1,5 +1,6 @@
 package com.silence.robot.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.dto.DataRequest;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.dto.LoanDto;
@@ -20,12 +21,19 @@ public class LoanController {
     @Resource
     private LoanService loanService;
 
-    @PostMapping("/loan")
-    public DataResponse<BigDecimal> loanService(@RequestBody DataRequest<LoanDto> request){
+    @PostMapping("/loanTry")
+    public DataResponse<BigDecimal> loanTryService(@RequestBody DataRequest<LoanDto> request){
         LoanDto loanDto = request.getData();
         BigDecimal intRate = loanService.countMinIntRate(loanDto.getPrincipal(), loanDto.getTotalAmt(), loanDto.getPeriods(), loanDto.getPrecision());
         DataResponse<BigDecimal> dataResponse = new DataResponse<>();
         dataResponse.setData(intRate);
         return dataResponse;
+    }
+
+    @PostMapping("/loan")
+    public DataResponse<JSONObject> loanService(@RequestBody DataRequest<JSONObject> request){
+        JSONObject data = request.getData();
+        JSONObject body = loanService.executeLoan(data);
+        return new DataResponse<>(body);
     }
 }

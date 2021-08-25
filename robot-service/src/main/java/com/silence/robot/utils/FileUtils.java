@@ -13,6 +13,7 @@ package com.silence.robot.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONReader;
 import com.silence.robot.domain.FileDto;
+import com.silence.robot.io.BufferedRandomAccessFile;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +27,7 @@ import java.io.*;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,9 +67,9 @@ public class FileUtils {
         if (!file.exists() || file.isDirectory() || !file.canRead()) {
             return new FileDto();
         }
-        RandomAccessFile fileRead = null;
+        BufferedRandomAccessFile fileRead = null;
         try {
-            fileRead = new RandomAccessFile(file, "r");
+            fileRead = new BufferedRandomAccessFile(file, "r");
             long length = fileRead.length();
             for (long i = pos; i < length; i++) {
                 //开始读取
@@ -82,7 +80,7 @@ public class FileUtils {
                     if (readLine == null) {
                         readLine = "";
                     }
-                    String line = new String(readLine.getBytes("ISO-8859-1"), "UTF-8");
+                    String line = new String(readLine.getBytes(StandardCharsets.ISO_8859_1), "UTF-8");
                     content = content + line + "<br/>";
                     count++;
                     if (count == lineNum) {
@@ -123,9 +121,9 @@ public class FileUtils {
             return readAllLines(file.getParent(), file.getName());
         }
         List<String> list = new ArrayList<>();
-        RandomAccessFile fileRead = null;
+        BufferedRandomAccessFile fileRead = null;
         try {
-            fileRead = new RandomAccessFile(file, "r");
+            fileRead = new BufferedRandomAccessFile(file, "r");
             for (long i = startPos; i < endPos; i++) {
                 //开始读取
                 fileRead.seek(i);
@@ -257,7 +255,7 @@ public class FileUtils {
      */
     public static String convertFileName(String path, String type) {
         String regex = "/";
-        if (CommonUtils.getOsName().equals("windows")) {
+        if ("windows".equals(CommonUtils.getOsName())) {
             regex = "\\\\";
         }
         String[] split = path.split(regex);
@@ -283,10 +281,14 @@ public class FileUtils {
      * @param fileName
      * @param content
      */
-    public static void writeFileAppend(String fileName, String content) {
+    public static void writeFileAppend(String filePath, String fileName, String content) {
+        String localUrl = filePath + File.separator + fileName;
+        if (CommonUtils.isEmpty(filePath)) {
+            localUrl = getDefaultLocalUrl(fileName);
+        }
         BufferedWriter bufferedWriter = null;
         try {
-            Path path = Paths.get(getDefaultLocalUrl(fileName));
+            Path path = Paths.get(localUrl);
             if (Files.notExists(path)) {
                 Files.createFile(path);
             }
@@ -297,11 +299,21 @@ public class FileUtils {
             logger.error("文件写入失败", e);
         } finally {
             try {
+                assert bufferedWriter != null;
                 bufferedWriter.close();
             } catch (IOException e) {
                 logger.error("文件流关闭失败", e);
             }
         }
+    }
+
+    /**
+     * 根据文件名和文件内容写文件（追加写）
+     * @param fileName
+     * @param content
+     */
+    public static void writeFileAppend(String fileName, String content) {
+        writeFileAppend(null, fileName, content);
     }
 
     /**
@@ -366,12 +378,11 @@ public class FileUtils {
 
     /**
      * 按行读取文件，文件路径默认
-     * @param fileName
+     * @param path
      * @return
      */
-    public static List<String> readAllLines(String fileName) {
+    public static List<String> readAllLines(Path path) {
         List<String> list = new ArrayList<>();
-        Path path = Paths.get(getDefaultLocalUrl(fileName));
         if (Files.exists(path)) {
             try {
                 list = Files.readAllLines(path);
@@ -388,18 +399,21 @@ public class FileUtils {
      * @param fileName
      * @return
      */
-    public static List<String> readAllLines(String filePath, String fileName) {
-        List<String> list = new ArrayList<>();
-        Path path = Paths.get(filePath + File.separator + fileName);
-        if (Files.exists(path)) {
-            try {
-                list = Files.readAllLines(path);
-            } catch (IOException e) {
-                logger.error("文件读取失败", e);
-            }
-        }
+    public static List<String> readAllLines(String fileName) {
+        Path path = Paths.get(getDefaultLocalUrl(fileName));
 
-        return list;
+        return readAllLines(path);
+    }
+
+    /**
+     * 按行读取文件，文件路径默认
+     * @param fileName
+     * @return
+     */
+    public static List<String> readAllLines(String filePath, String fileName) {
+        Path path = Paths.get(filePath + File.separator + fileName);
+
+        return readAllLines(path);
     }
 
     /**
@@ -408,8 +422,19 @@ public class FileUtils {
      * @return
      */
     public static String readAllContents(String fileName) {
-        String content = "";
         Path path = Paths.get(getDefaultLocalUrl(fileName));
+
+
+        return readAllContents(path);
+    }
+
+    /**
+     * 读取文件全部内容，文件路径默认
+     * @param path
+     * @return
+     */
+    public static String readAllContents(Path path) {
+        String content = "";
         if (Files.exists(path)) {
             try {
                 content = new String(Files.readAllBytes(path));
@@ -419,6 +444,18 @@ public class FileUtils {
         }
 
         return content;
+    }
+
+    /**
+     * 读取文件全部内容，文件路径默认
+     * @param fileName
+     * @return
+     */
+    public static String readAllContents(String filePath, String fileName) {
+        Path path = Paths.get(filePath+File.separator+fileName);
+
+
+        return readAllContents(path);
     }
 
     /**
@@ -471,6 +508,30 @@ public class FileUtils {
         Reader reader = new InputStreamReader(inputStream);
         JSONReader jsonReader = new JSONReader(reader);
         return jsonReader.readObject(Map.class);
+    }
+
+    /**
+     * 根据输入流获取json map
+     * @param inputStream
+     * @return
+     */
+    public static String readAllContents(InputStream inputStream) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        String s = null;
+        try {
+            while ((length = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, length);
+            }
+            s = byteArrayOutputStream.toString(StandardCharsets.UTF_8.name());
+        }catch (IOException e) {
+            logger.error("流解析失败", e);
+        }
+
+        return s;
+
+
     }
 
     /**
@@ -753,12 +814,12 @@ public class FileUtils {
      * @param fileName
      * @return
      */
-    public static RandomAccessFile getAccessFile(String filePath, String fileName) {
+    public static BufferedRandomAccessFile getAccessFile(String filePath, String fileName) {
         File file = new File(filePath + File.separator + fileName);
-        RandomAccessFile accessFile = null;
+        BufferedRandomAccessFile accessFile = null;
         try {
-            accessFile = new RandomAccessFile(file, "r");
-        } catch (FileNotFoundException e) {
+            accessFile = new BufferedRandomAccessFile(file, "r");
+        } catch (IOException e) {
             logger.error("[{}]目录下[{}]文件不存在", filePath, fileName, e);
         }
         return accessFile;
@@ -775,7 +836,7 @@ public class FileUtils {
      * @param maxSize
      * @return
      */
-    public static List<Map<String, Long>> splitFile(RandomAccessFile accessFile, long index, long maxSize) {
+    public static List<Map<String, Long>> splitFile(BufferedRandomAccessFile accessFile, long index, long maxSize) {
         List<Map<String, Long>> list = new ArrayList<>();
         long startPos = index;
         long endPos = 0;
@@ -821,7 +882,7 @@ public class FileUtils {
         return list;
     }
 
-    public static Map<String, Object> readFileFirstLine(RandomAccessFile accessFile) {
+    public static Map<String, Object> readFileFirstLine(BufferedRandomAccessFile accessFile) {
         long i = 0;
         Map<String, Object> map = new HashMap<>(2);
         try {
@@ -855,7 +916,7 @@ public class FileUtils {
      * @param endPos
      * @return
      */
-    public static List<String> getFileContentByPos(RandomAccessFile accessFile, long startPos, long endPos) {
+    public static List<String> getFileContentByPos(BufferedRandomAccessFile accessFile, long startPos, long endPos) {
         List<String> list = new ArrayList<>();
         try {
             long sliceSize = endPos - startPos + 1;
@@ -904,6 +965,7 @@ public class FileUtils {
         try {
             Files.createDirectories(Paths.get(filePath));
             Files.createFile(Paths.get(filePath + File.separator + fileName));
+        } catch (FileAlreadyExistsException ignored) {
         } catch (IOException e) {
             logger.error("{}文件{}创建失败", filePath, fileName, e);
         }

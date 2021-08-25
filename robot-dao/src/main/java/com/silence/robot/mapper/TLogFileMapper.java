@@ -19,8 +19,11 @@ public interface TLogFileMapper {
     TLogFile selectByPrimaryKey(String id);
 
     List<TLogFile> selectByCondition(Map<String, Object> param);
+    List<TLogFile> selectByBusinessType(String businessType);
 
     int updateByPrimaryKeySelective(TLogFile record);
 
     int updateByPrimaryKey(TLogFile record);
+
+    void deleteAndBatch(List<String> ids);
 }

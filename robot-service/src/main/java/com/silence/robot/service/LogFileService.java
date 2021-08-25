@@ -44,4 +44,35 @@ public class LogFileService {
         param.put("endDate", DateUtils.parseDateByString2(logFileDto.getEndDate()));
         logFileMapper.deleteByCondition(param);
     }
+
+    public void insertAndBatch(List<LogFileDto> list) {
+        logFileMapper.insertAndBatch(BeanUtils.copyList(TLogFile.class, list, "id"));
+    }
+
+    public void insert(LogFileDto logFileDto) {
+        logFileMapper.insert(BeanUtils.copy(TLogFile.class, logFileDto));
+    }
+
+    public LogFileDto getLogFileById(String id) {
+        TLogFile logFile = logFileMapper.selectByPrimaryKey(id);
+        return BeanUtils.copy(LogFileDto.class, logFile);
+    }
+
+    public void deleteLogFileById(String id) {
+        logFileMapper.deleteByPrimaryKey(id);
+    }
+
+    public void deleteLogFiles(List<String> ids) {
+        logFileMapper.deleteAndBatch(ids);
+    }
+
+    public void updateLogFile(LogFileDto logFileDto) {
+        logFileMapper.updateByPrimaryKey(BeanUtils.copy(TLogFile.class, logFileDto));
+    }
+
+    public List<LogFileDto> getLogFileByBusinessType(String businessType) {
+
+        List<TLogFile> logFiles = logFileMapper.selectByBusinessType(businessType);
+        return BeanUtils.copyList(LogFileDto.class, logFiles);
+    }
 }

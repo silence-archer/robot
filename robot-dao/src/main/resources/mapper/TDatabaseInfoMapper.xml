@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silence.robot.mapper.TDatabaseInfoMapper">
+  <resultMap id="BaseResultMap" type="com.silence.robot.model.TDatabaseInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="user" jdbcType="VARCHAR" property="user" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="business_type" jdbcType="VARCHAR" property="businessType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, `type`, url, `user`, `password`, business_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_database_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByBusinessType" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_database_info
+    where business_type = #{businessType,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from t_database_info
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_database_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.silence.robot.model.TDatabaseInfo">
+    insert into t_database_info (id, `type`, url, 
+      `user`, `password`, business_type
+      )
+    values (#{id,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{user,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.silence.robot.model.TDatabaseInfo">
+    insert into t_database_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="user != null">
+        `user`,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null">
+        #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.silence.robot.model.TDatabaseInfo">
+    update t_database_info
+    <set>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null">
+        `user` = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        business_type = #{businessType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.silence.robot.model.TDatabaseInfo">
+    update t_database_info
+    set `type` = #{type,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      `user` = #{user,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      business_type = #{businessType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+    <update id="updateByBusinessType" parameterType="com.silence.robot.model.TDatabaseInfo">
+      update t_database_info
+      set `type` = #{type,jdbcType=VARCHAR},
+          url = #{url,jdbcType=VARCHAR},
+          `user` = #{user,jdbcType=VARCHAR},
+          `password` = #{password,jdbcType=VARCHAR}
+      where business_type = #{businessType,jdbcType=VARCHAR}
+    </update>
+</mapper>

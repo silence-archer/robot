@@ -10,6 +10,10 @@ import java.util.Date;
  */
 public class LogFileDto {
     /**
+     * id
+     */
+    private String id;
+    /**
      * 日志时间
      */
     private Date dateTime;
@@ -151,10 +155,19 @@ public class LogFileDto {
         this.content = content;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "LogFileDto{" +
-                "dateTime=" + dateTime +
+                "id='" + id + '\'' +
+                ", dateTime=" + dateTime +
                 ", serviceName='" + serviceName + '\'' +
                 ", traceId='" + traceId + '\'' +
                 ", tranCode='" + tranCode + '\'' +
@@ -163,6 +176,8 @@ public class LogFileDto {
                 ", className='" + className + '\'' +
                 ", lineNum=" + lineNum +
                 ", content='" + content + '\'' +
+                ", subTraceId='" + subTraceId + '\'' +
+                ", businessType='" + businessType + '\'' +
                 '}';
     }
 }

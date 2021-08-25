@@ -18,6 +18,11 @@ public class BusinessException extends RuntimeException {
 
     }
 
+    public BusinessException(String msg){
+        this.code = 77777;
+        this.msg = msg;
+    }
+
     public BusinessException(ExceptionCode exceptionCode){
         super(exceptionCode.getMsg());
         this.code = exceptionCode.getCode();

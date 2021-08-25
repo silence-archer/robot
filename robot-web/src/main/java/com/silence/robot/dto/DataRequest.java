@@ -1,7 +1,11 @@
 package com.silence.robot.dto;
 
 
-
+/**
+ * 请求类
+ * @author silence
+ * @date 2021/5/24 17:17
+ */
 public class DataRequest<T> {
 
     private String apiCd;

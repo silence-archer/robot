@@ -5,6 +5,9 @@ package com.silence.robot.dto;
 import java.math.BigDecimal;
 
 
+/**
+ * @author silence
+ */
 public class LoanDto {
 
     private BigDecimal principal;

@@ -154,10 +154,10 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
                 parseObject = JSONObject.parseObject(str, clazz);
                 break;
             case VERTICAL_SEPARATOR_SKIP:
-                parseObject = verticalSeparatorToObjectForSkip(str, clazz, fileFormatEnum.getName());
+                parseObject = verticalSeparatorToObjectForSkip(str, clazz, fileFormatEnum.getValue());
                 break;
             default:
-                parseObject = verticalSeparatorToObject(str, clazz, fileFormatEnum.getName());
+                parseObject = verticalSeparatorToObject(str, clazz, fileFormatEnum.getValue());
                 break;
         }
         return parseObject;
@@ -174,7 +174,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
     public static <T> T verticalSeparatorToObject(String str, Class<T> clazz, String splitStr) {
         try {
             T o = clazz.newInstance();
-            init(o);
+            init(o, "id");
             String s = JSONObject.toJSONString(o);
             LinkedHashMap<String, Object> map = JSON.parseObject(s, LinkedHashMap.class, Feature.OrderedField);
             Set<String> set = map.keySet();

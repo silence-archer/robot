@@ -59,4 +59,22 @@ public class FileDownloadThread implements Runnable{
         }
         countDownLatch.countDown();
     }
+
+    public static void main(String[] args) {
+        FileUtils.writeFile("D:\\test\\", "1.txt", "111111\n");
+        Thread thread = new Thread(() -> {
+            for (int i = 0; i < 1000000000; i++) {
+                FileUtils.writeFileAppend("D:\\test\\", "1.txt", "111111\n");
+            }
+        });
+        thread.start();
+        FtpConfig ftpConfig = new FtpConfig();
+        ftpConfig.setFtpType("FTP");
+        ftpConfig.setHost("127.0.0.1");
+        ftpConfig.setPassword("test");
+        ftpConfig.setPort(21);
+        ftpConfig.setUsername("test");
+        FtpUtils.download(ftpConfig, "D:\\test\\", "1.txt", "D:\\ftp\\", "1.txt");
+        System.out.println("download >>>>>>>>>>>>>>>>>>");
+    }
 }

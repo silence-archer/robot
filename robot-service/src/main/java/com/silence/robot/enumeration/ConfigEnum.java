@@ -2,16 +2,19 @@ package com.silence.robot.enumeration;
 
 /**
  * 配置项枚举类
+ * @author silence
  */
 public enum ConfigEnum {
 
-
+    //
     ACCESS_TOKEN_ENUM("access_token","获取到的微信公众号凭证"),
-    DELICACY_ENUM("delicacy","每日菜单");
+    LOAN_DATE_ENUM("loan_date","交易系统日期"),
+    DELICACY_ENUM("delicacy","每日菜单"),
+    UPLOAD_PATH_ENUM("upload_path","上传文件路径");
 
-    private String name;
+    private final String name;
 
-    private String desc;
+    private final String desc;
 
     ConfigEnum(String name, String desc){
         this.name = name;

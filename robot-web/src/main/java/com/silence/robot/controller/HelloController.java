@@ -21,8 +21,7 @@ public class HelloController {
 
     @PostMapping("/say")
     public TulingResponseInfo say(@RequestBody TulingRequestInfo requestInfo){
-        TulingResponseInfo tulingResponseInfo = helloService.hello(requestInfo);
-        return tulingResponseInfo;
+        return helloService.hello(requestInfo);
     }
 
 }

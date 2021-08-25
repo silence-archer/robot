@@ -2,8 +2,12 @@ package com.silence.robot.exception;
 
 
 
-public enum ExceptionCode {
+/**
+ * @author silence
+ */
 
+public enum ExceptionCode {
+    //
     PRECISION_ERROR(100001,"精度不足，请添加精度位数后再试"),
     LOGIN_ERROR(100002,"用户名密码错误"),
     AUTH_ERROR(100004,"当前未登录不能访问该页面"),
@@ -27,11 +31,14 @@ public enum ExceptionCode {
     SCHEDULER_RESTART_ERROR(100022,"定时任务重启失败"),
     SUBSCRIBE_TOKEN_ERROR(100023,"获取微信公众号凭证失败"),
     HTTP_REQUEST_ERROR(100024,"http请求失败"),
+    UPLOAD_ERROR(100025,"上传文件失败"),
+    FILE_READ_ERROR(100026,"文件读取失败"),
+    EMPTY_ERROR(100027,"存在为空数据项"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
-    private int code;
+    private final int code;
 
-    private String msg;
+    private final String msg;
 
     ExceptionCode(int code, String msg){
         this.code = code;

@@ -14,24 +14,18 @@ import com.silence.robot.config.DynamicDataSource;
 import com.silence.robot.interceptor.DynamicDataSourceInterceptor;
 import com.silence.robot.interceptor.ParameterInterceptor;
 import com.silence.robot.utils.SpringContextHelper;
-import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.aspectj.lang.annotation.Aspect;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -40,13 +34,11 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,8 +91,7 @@ public class TransactionAdviceConfig {
         List<DataSource> readDataSources = new ArrayList<>(2);
         readDataSources.add(readDataSource);
         readDataSources.add(readDataSource);
-        DynamicDataSource dynamicDataSource = new DynamicDataSource(writeDataSource, readDataSources);
-        return dynamicDataSource;
+        return new DynamicDataSource(writeDataSource, readDataSources);
     }
 
     @Bean

@@ -18,7 +18,6 @@ import javax.sql.DataSource;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -31,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
 
-    private AtomicInteger count = new AtomicInteger(0);
+    private final AtomicInteger count = new AtomicInteger(0);
 
     public DynamicDataSource(DataSource writeDataSource, List<DataSource> readDataSources) {
         super.setDefaultTargetDataSource(writeDataSource);

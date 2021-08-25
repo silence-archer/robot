@@ -59,7 +59,11 @@
             </if>
         </where>
     </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <select id="selectByBusinessType" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> from t_log_file
+        where business_type = #{businessType, jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from t_log_file
     where id = #{id,jdbcType=VARCHAR}
   </delete>
@@ -87,12 +91,21 @@
             <if test="tranCode != null and tranCode != '' ">
                 and tran_code = #{tranCode}
             </if>
+            <if test="businessType != null and businessType != '' ">
+                and business_type = #{businessType}
+            </if>
             <if test="content != null and content != '' ">
                 and content like '%' || #{content} || '%'
             </if>
         </where>
     </delete>
-  <insert id="insert" parameterType="com.silence.robot.model.TLogFile">
+    <delete id="deleteAndBatch">
+        delete from t_log_file where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator="," index="index">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    <insert id="insert" parameterType="com.silence.robot.model.TLogFile">
     insert into t_log_file (id, date_time, service_name, 
       trace_id, tran_code, thread_name, 
       `level`, class_name, line_num, 

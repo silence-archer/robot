@@ -17,6 +17,8 @@ public class DataResponse<T> {
         this.msg = msg;
     }
 
+    private String serialNumber;
+
     private int code;
     private String msg;
 
@@ -66,10 +68,19 @@ public class DataResponse<T> {
         this.type = type;
     }
 
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
     @Override
     public String toString() {
         return "DataResponse{" +
-                "code=" + code +
+                "serialNumber='" + serialNumber + '\'' +
+                ", code=" + code +
                 ", msg='" + msg + '\'' +
                 ", type='" + type + '\'' +
                 ", count=" + count +
