@@ -6,7 +6,6 @@ import com.silence.robot.dto.DataRequest;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.DataDictService;
 import com.silence.robot.service.FileReadService;
-import com.silence.robot.utils.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -38,7 +40,6 @@ public class FileReadController {
     @PostMapping("/upload/uploadFileHead")
     public DataResponse<List<JSONObject>> uploadFileHead(@RequestParam("file") MultipartFile file) {
         Path path = dataDictService.uploadFile(file);
-        logger.info(HttpUtils.getLoginUserName());
         return new DataResponse<>(fileReadService.getFileHead(path));
     }
 
@@ -70,10 +71,10 @@ public class FileReadController {
     }
 
     @PostMapping("/upload/uploadFileBody")
-    public DataResponse<?> uploadFileBody(@RequestParam("file") MultipartFile file) {
+    public DataResponse<?> uploadFileBody(@RequestParam("file") MultipartFile file, @RequestParam("username") String username) {
 
         Path path = dataDictService.uploadFile(file);
-        fileReadService.addFileBody(path);
+        fileReadService.addFileBody(path, username);
         return new DataResponse<>();
     }
 

@@ -56,16 +56,15 @@ public class FileReadService {
         return results;
     }
 
-    public void addFileBody(Path path) {
+    public void addFileBody(Path path, String username) {
         List<String> lines = FileUtils.readAllLines(path);
         List<LogFileDto> list = new ArrayList<>(lines.size());
-        String loginUserName = HttpUtils.getLoginUserName();
         QueryLogFileDto logFileDto = new QueryLogFileDto();
-        logFileDto.setBusinessType(loginUserName);
+        logFileDto.setBusinessType(username);
         logFileService.deleteLogFileByCondition(logFileDto);
         lines.forEach(line -> {
             LogFileDto logFile = new LogFileDto();
-            logFile.setBusinessType(loginUserName);
+            logFile.setBusinessType(username);
             logFile.setContent(line);
             list.add(logFile);
         });
