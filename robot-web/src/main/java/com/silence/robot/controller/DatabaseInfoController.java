@@ -1,6 +1,7 @@
 package com.silence.robot.controller;
 
 import com.silence.robot.domain.DatabaseInfoDto;
+import com.silence.robot.domain.RobotPage;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.DatabaseInfoService;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,10 @@ public class DatabaseInfoController {
 
     @GetMapping("getDatabaseInfo")
     public DataResponse<List<DatabaseInfoDto>> getDatabaseInfo(@RequestParam Integer page, @RequestParam Integer limit) {
-        List<DatabaseInfoDto> databaseInfoDtos = databaseInfoService.queryAllDatabaseInfo();
-        return new DataResponse<>(databaseInfoDtos);
+        RobotPage<DatabaseInfoDto> robotPage = databaseInfoService.queryAllDatabaseInfo(page, limit);
+        DataResponse<List<DatabaseInfoDto>> dataResponse = new DataResponse<>(robotPage.getList());
+        dataResponse.setCount(robotPage.getTotal());
+        return dataResponse;
     }
 
     @GetMapping("/getDatabaseInfoByCondition")

@@ -34,6 +34,7 @@ public enum ExceptionCode {
     UPLOAD_ERROR(100025,"上传文件失败"),
     FILE_READ_ERROR(100026,"文件读取失败"),
     EMPTY_ERROR(100027,"存在为空数据项"),
+    DATABASE_CONNECT_ERROR(100028,"自定义数据库链接失败"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private final int code;

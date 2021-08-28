@@ -59,9 +59,7 @@ public class FileReadService {
     public void addFileBody(Path path, String username) {
         List<String> lines = FileUtils.readAllLines(path);
         List<LogFileDto> list = new ArrayList<>(lines.size());
-        QueryLogFileDto logFileDto = new QueryLogFileDto();
-        logFileDto.setBusinessType(username);
-        logFileService.deleteLogFileByCondition(logFileDto);
+
         lines.forEach(line -> {
             LogFileDto logFile = new LogFileDto();
             logFile.setBusinessType(username);
@@ -145,6 +143,12 @@ public class FileReadService {
         List<String> ids = new ArrayList<>(list.size());
         list.forEach(jsonObject -> ids.add(jsonObject.getString("id")));
         logFileService.deleteLogFiles(ids);
+    }
+
+    public void deleteFileBody(String username) {
+        QueryLogFileDto logFileDto = new QueryLogFileDto();
+        logFileDto.setBusinessType(username);
+        logFileService.deleteLogFileByCondition(logFileDto);
     }
 
 

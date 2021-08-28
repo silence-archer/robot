@@ -3,8 +3,10 @@ package com.silence.robot.controller;
 import com.silence.robot.constants.RobotConstants;
 import com.silence.robot.domain.DataDiffDetailDto;
 import com.silence.robot.domain.DataDiffDto;
+import com.silence.robot.domain.RobotPage;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.DatabaseOperationService;
+import com.silence.robot.utils.CommonUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,10 +32,9 @@ public class DatabaseOperationController {
         }else {
             list = databaseOperationService.getDiffData(destBusinessType);
         }
-        int fromIndex = (page - 1) * limit;
-        list = list.subList(fromIndex, fromIndex + limit);
-        DataResponse<List<DataDiffDto>> dataResponse = new DataResponse<>(list);
-        dataResponse.setCount((long) list.size());
+        RobotPage<DataDiffDto> robotPage = CommonUtils.getSubList(list, page, limit);
+        DataResponse<List<DataDiffDto>> dataResponse = new DataResponse<>(robotPage.getList());
+        dataResponse.setCount(robotPage.getTotal());
         return dataResponse;
     }
 
@@ -42,10 +43,9 @@ public class DatabaseOperationController {
         List<DataDiffDetailDto> list = databaseOperationService.getDiffDetail(dataDiffDto);
         int page = dataDiffDto.getPage() == null ? 1 : dataDiffDto.getPage();
         int limit = dataDiffDto.getLimit() == null ? Integer.MAX_VALUE : dataDiffDto.getLimit();
-        int fromIndex = (page - 1) * limit;
-        list = list.subList(fromIndex, fromIndex + limit);
-        DataResponse<List<DataDiffDetailDto>> dataResponse = new DataResponse<>(list);
-        dataResponse.setCount((long) list.size());
+        RobotPage<DataDiffDetailDto> robotPage = CommonUtils.getSubList(list, page, limit);
+        DataResponse<List<DataDiffDetailDto>> dataResponse = new DataResponse<>(robotPage.getList());
+        dataResponse.setCount(robotPage.getTotal());
         return dataResponse;
     }
 

@@ -43,25 +43,21 @@ public class EurekaManageService {
         if (object == null) {
             return instanceList;
         }
-        try {
 
-            if(object instanceof JSONArray){
-                JSONArray serviceInstance = applications.getJSONArray("application");
-                for (Object o : serviceInstance) {
-                    JSONObject application = new JSONObject((LinkedHashMap) o);
-                    getInstanceInfo(instanceList, application);
-                }
-            }else{
-                JSONObject application = applications.getJSONObject("application");
+
+        if (object instanceof List) {
+            JSONArray serviceInstance = applications.getJSONArray("application");
+            for (Object o : serviceInstance) {
+                JSONObject application = new JSONObject((LinkedHashMap) o);
                 getInstanceInfo(instanceList, application);
             }
-        } catch (JSONException e) {
-            logger.error("XML转JSON失败", e);
+        } else {
+            JSONObject application = applications.getJSONObject("application");
+            getInstanceInfo(instanceList, application);
         }
 
+
         return instanceList;
-
-
 
 
     }
@@ -69,14 +65,14 @@ public class EurekaManageService {
     private void getInstanceInfo(List<EurekaManageDto> instanceList, JSONObject application) {
         String appName = application.getString("name");
         Object instanceObj = application.get("instance");
-        if(instanceObj instanceof JSONArray){
+        if (instanceObj instanceof List) {
             JSONArray instances = application.getJSONArray("instance");
             for (Object o : instances) {
                 JSONObject instance = new JSONObject((LinkedHashMap) o);
                 getServerInfo(instanceList, appName, instance);
             }
-        }else{
-            JSONObject instance = (JSONObject) instanceObj;
+        } else {
+            JSONObject instance = new JSONObject((LinkedHashMap) instanceObj);
             getServerInfo(instanceList, appName, instance);
         }
 

@@ -70,6 +70,12 @@ public class FileReadController {
         return new DataResponse<>();
     }
 
+    @GetMapping("/deleteFileBody")
+    public DataResponse<?> deleteFileBody(@RequestParam("username") String username) {
+        fileReadService.deleteFileBody(username);
+        return new DataResponse<>();
+    }
+
     @PostMapping("/upload/uploadFileBody")
     public DataResponse<?> uploadFileBody(@RequestParam("file") MultipartFile file, @RequestParam("username") String username) {
 

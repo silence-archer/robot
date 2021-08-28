@@ -33,7 +33,11 @@
     delete from t_database_info
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.silence.robot.model.TDatabaseInfo">
+    <delete id="deleteByBusinessType">
+      delete from t_database_info
+      where business_type = #{businessType,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.silence.robot.model.TDatabaseInfo">
     insert into t_database_info (id, `type`, url, 
       `user`, `password`, business_type
       )

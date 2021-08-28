@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface TDatabaseInfoMapper {
     int deleteByPrimaryKey(String id);
+    int deleteByBusinessType(String businessType);
 
     int insert(TDatabaseInfo record);
 

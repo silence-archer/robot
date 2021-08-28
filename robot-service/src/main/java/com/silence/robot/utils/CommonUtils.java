@@ -224,7 +224,8 @@ public class CommonUtils {
             preparedStatement.close();
             conn.close();
         } catch (Exception e) {
-            throw new BusinessException("数据库连接失败", e);
+            logger.error("数据库链接失败", e);
+            throw new BusinessException(ExceptionCode.DATABASE_CONNECT_ERROR);
         }
         logger.debug("sql语句执行结果>>>>>>>[{}]", list);
         return list;
