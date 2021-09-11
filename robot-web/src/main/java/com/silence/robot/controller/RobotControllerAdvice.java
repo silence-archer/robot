@@ -1,16 +1,18 @@
 package com.silence.robot.controller;
 
+import com.alibaba.fastjson.JSONException;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
+/**
+ * @author silence
+ */
 @RestControllerAdvice
 public class RobotControllerAdvice {
 
@@ -26,6 +28,12 @@ public class RobotControllerAdvice {
     public DataResponse<?> errorBusinessHandle(SQLIntegrityConstraintViolationException e){
         log.error("插入重复",e);
         return new DataResponse<>(99998,"插入重复");
+    }
+
+    @ExceptionHandler(JSONException.class)
+    public DataResponse<?> errorBusinessHandle(JSONException e){
+        log.error("JSON转化失败",e);
+        return new DataResponse<>(99997,"JSON转化失败");
     }
 
     @ExceptionHandler(BusinessException.class)

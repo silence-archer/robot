@@ -10,6 +10,7 @@
  */
 package com.silence.robot.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.domain.UserInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
@@ -46,24 +47,23 @@ public class HttpUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
-    public static Map doPost(String uri, Map<String, String> headers, String bodys) {
+    public static JSONObject doPost(String uri, Map<String, String> headers, String bodys) {
 
         HttpPost request = new HttpPost(uri);
-        headers.forEach((key, value) -> request.setHeader(key, value));
+        headers.forEach(request::setHeader);
         HttpEntity httpEntity = new StringEntity(bodys, ContentType.APPLICATION_JSON);
         request.setEntity(httpEntity);
-        Map map = httpClientExecute(request);
-        return map;
+        return httpClientExecute(request);
     }
 
-    public static Map doPost(String uri, String bodys) {
+    public static JSONObject doPost(String uri, String bodys) {
         return doPost(uri, new HashMap<>(0), bodys);
     }
 
 
 
 
-    public static Map httpClientExecute(HttpRequestBase request) {
+    public static JSONObject httpClientExecute(HttpRequestBase request) {
         InputStream content = null;
         try {
             content = httpClientExecuteByStream(request).getEntity().getContent();

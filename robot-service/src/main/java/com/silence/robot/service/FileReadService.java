@@ -85,17 +85,45 @@ public class FileReadService {
         logFileService.insert(logFileDto);
     }
 
+    public void updateBatchFileBody(String separator, JSONObject data) {
+        String updateName = data.getString("updateName");
+        if (CommonUtils.isEmpty(updateName)) {
+            throw new BusinessException(ExceptionCode.CHECK_NULL_ERROR);
+        }
+        String updateId = getQueryId(getHeads(data.getJSONArray("heads")), updateName);
+        String updateValue = data.getString("updateValue") == null ? "" : data.getString("updateValue");
+        RobotPage<JSONObject> robotPage = getFileBodyByCondition(separator, data, 1, Integer.MAX_VALUE);
+        robotPage.getList().forEach(jsonObject -> {
+            jsonObject.put(updateId, updateValue);
+            LogFileDto logFileDto = new LogFileDto();
+            logFileDto.setId(jsonObject.getString("id"));
+            logFileDto.setContent(getContent(separator, jsonObject));
+            logFileDto.setBusinessType(HttpUtils.getLoginUserName());
+            logFileService.updateLogFile(logFileDto);
+        });
+
+
+    }
+
     public void updateFileBody(String separator, JSONArray heads, JSONObject jsonObject) {
         LogFileDto logFileDto = logFileService.getLogFileById(jsonObject.getString("id"));
         List<JSONObject> list = getHeads(heads);
         JSONObject result = getJsonObject(separator, list, logFileDto.getContent());
         result.put(jsonObject.getString("field"), jsonObject.get("value"));
-        StringBuilder stringBuilder = new StringBuilder();
-        result.forEach((s, o) -> stringBuilder.append(o).append(Objects.requireNonNull(FileFormatEnum.getEnumByName(separator)).getValue()));
-        logFileDto.setContent(stringBuilder.substring(0, stringBuilder.length() - 1));
+        logFileDto.setContent(getContent(separator, result));
         logFileService.updateLogFile(logFileDto);
 
 
+    }
+
+    private String getContent(String separator, JSONObject result) {
+        StringBuilder stringBuilder = new StringBuilder();
+        result.forEach((s, o) -> {
+            if (!"id".equals(s)) {
+                stringBuilder.append(o).append(Objects.requireNonNull(FileFormatEnum.getEnumByName(separator)).getValue());
+            }
+        });
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
     }
 
     private List<JSONObject> getHeads(JSONArray heads) {
@@ -158,8 +186,8 @@ public class FileReadService {
         String queryValue = data.getString("queryValue") == null ? "" : data.getString("queryValue");
         List<LogFileDto> logFileDtos = logFileService.getLogFileByBusinessType(HttpUtils.getLoginUserName());
         List<JSONObject> result = new ArrayList<>(logFileDtos.size());
-        JSONObject headObject = heads.stream().filter(head -> head.getString("title").equals(queryName)).findAny().orElse(null);
-        String queryId = CommonUtils.isNotEmpty(headObject) ? headObject.getString("field") : null;
+        String queryId = getQueryId(heads, queryName);
+
         logFileDtos.forEach(logFileDto -> {
             JSONObject jsonObject = getJsonObject(separator, heads, logFileDto.getContent());
             jsonObject.put("id", logFileDto.getId());
@@ -167,10 +195,14 @@ public class FileReadService {
                 result.add(jsonObject);
             }else {
                 if (CommonUtils.isNotEmpty(queryId)) {
-
                     jsonObject.forEach((s, o) -> {
-                        if (s.equals(queryId) && o.toString().contains(queryValue)) {
-                            result.add(jsonObject);
+                        if (s.equals(queryId)) {
+                            if (CommonUtils.isAllEmpty(o, queryValue)) {
+                                result.add(jsonObject);
+                            } else if(o.toString().contains(queryValue) && CommonUtils.isNotEmpty(queryValue)) {
+                                result.add(jsonObject);
+                            }
+
                         }
                     });
                 }
@@ -179,6 +211,15 @@ public class FileReadService {
 
         });
         return CommonUtils.getSubList(result, page, limit);
+    }
+
+    private String getQueryId(List<JSONObject> heads, String queryName) {
+        JSONObject headObject = heads.stream().filter(head -> head.getString("title").equals(queryName)).findAny().orElse(null);
+        String queryId = CommonUtils.isNotEmpty(headObject) ? headObject.getString("field") : null;
+        if (CommonUtils.isNotEmpty(queryName) && CommonUtils.isEmpty(queryId)) {
+            throw new BusinessException(ExceptionCode.QUERY_ERROR);
+        }
+        return queryId;
     }
 
     public File writeFile() {

@@ -40,8 +40,10 @@ public class LoginController {
         HttpSession session = SessionListener.map.get(userInfo.getUsername());
         if (session != null && !session.getId().equals(httpSession.getId())) {
             logger.info("开始销毁session：{}",userInfo.getUsername());
-            synchronized (session) {
+            try {
                 session.invalidate();
+            } catch (IllegalStateException e) {
+                logger.error("session已失效", e);
             }
 
         }

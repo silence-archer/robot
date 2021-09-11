@@ -33,7 +33,7 @@ public class LoanController {
     @PostMapping("/loan")
     public DataResponse<JSONObject> loanService(@RequestBody DataRequest<JSONObject> request){
         JSONObject data = request.getData();
-        JSONObject body = loanService.executeLoan(data);
+        JSONObject body = loanService.executeLoan(request.getApiCd(), data);
         return new DataResponse<>(body);
     }
 }

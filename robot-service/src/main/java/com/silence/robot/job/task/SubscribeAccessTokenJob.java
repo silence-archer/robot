@@ -10,32 +10,21 @@
  */
 package com.silence.robot.job.task;
 
+import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
-import com.silence.robot.job.RobotQuartzJob;
 import com.silence.robot.job.RobotQuartzTask;
-import com.silence.robot.mapper.TSubscribeConfigInfoMapper;
-import com.silence.robot.model.TSubscribeConfigInfo;
 import com.silence.robot.service.SubscribeConfigInfoService;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.HttpUtils;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -67,10 +56,8 @@ public class SubscribeAccessTokenJob implements RobotQuartzTask {
 
     @Override
     public void execute() {
-        StringBuilder uri = new StringBuilder();
-        uri.append(api).append("?").append("grant_type=").append(grantType).append("&appid=").append(appId).append("&secret=").append(secret);
-        HttpGet request = new HttpGet(uri.toString());
-        Map map = HttpUtils.httpClientExecute(request);
+        HttpGet request = new HttpGet(api + "?" + "grant_type=" + grantType + "&appid=" + appId + "&secret=" + secret);
+        JSONObject map = HttpUtils.httpClientExecute(request);
         if(CommonUtils.isEmpty(map.get("access_token"))){
             logger.error("返回的错误码为{}，错误信息为{}", map.get("errcode"), map.get("errmsg"));
             throw new BusinessException(ExceptionCode.SUBSCRIBE_TOKEN_ERROR);

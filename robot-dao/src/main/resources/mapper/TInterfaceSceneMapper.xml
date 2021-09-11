@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silence.robot.mapper.TInterfaceSceneMapper">
+  <resultMap id="BaseResultMap" type="com.silence.robot.model.TInterfaceScene">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="tran_code" jdbcType="VARCHAR" property="tranCode" />
+    <result column="scene_id" jdbcType="VARCHAR" property="sceneId" />
+    <result column="scene_desc" jdbcType="VARCHAR" property="sceneDesc" />
+    <result column="scene_value" jdbcType="VARCHAR" property="sceneValue" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tran_code, scene_id, scene_desc, scene_value, create_time, create_user, update_time, 
+    update_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_interface_scene
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectBySceneId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_interface_scene
+    where scene_id = #{sceneId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_interface_scene
+  </select>
+  <select id="selectByTranCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_interface_scene
+    where tran_code = #{tranCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_interface_scene
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteBatchByPrimaryKey">
+    delete from t_interface_scene
+    where id in
+    <foreach collection="ids" item="id" open="(" close=")" separator="," index="index">
+      #{id,jdbcType=VARCHAR}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.silence.robot.model.TInterfaceScene">
+    insert into t_interface_scene (id, tran_code, scene_id, 
+      scene_desc, scene_value, create_time, 
+      create_user, update_time, update_user
+      )
+    values (#{id,jdbcType=VARCHAR}, #{tranCode,jdbcType=VARCHAR}, #{sceneId,jdbcType=VARCHAR}, 
+      #{sceneDesc,jdbcType=VARCHAR}, #{sceneValue,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.silence.robot.model.TInterfaceScene">
+    insert into t_interface_scene
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tranCode != null">
+        tran_code,
+      </if>
+      <if test="sceneId != null">
+        scene_id,
+      </if>
+      <if test="sceneDesc != null">
+        scene_desc,
+      </if>
+      <if test="sceneValue != null">
+        scene_value,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="tranCode != null">
+        #{tranCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneId != null">
+        #{sceneId,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneDesc != null">
+        #{sceneDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneValue != null">
+        #{sceneValue,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.silence.robot.model.TInterfaceScene">
+    update t_interface_scene
+    <set>
+      <if test="tranCode != null">
+        tran_code = #{tranCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneId != null">
+        scene_id = #{sceneId,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneDesc != null">
+        scene_desc = #{sceneDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneValue != null">
+        scene_value = #{sceneValue,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.silence.robot.model.TInterfaceScene">
+    update t_interface_scene
+    set tran_code = #{tranCode,jdbcType=VARCHAR},
+      scene_id = #{sceneId,jdbcType=VARCHAR},
+      scene_desc = #{sceneDesc,jdbcType=VARCHAR},
+      scene_value = #{sceneValue,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

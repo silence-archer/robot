@@ -35,6 +35,9 @@ public enum ExceptionCode {
     FILE_READ_ERROR(100026,"文件读取失败"),
     EMPTY_ERROR(100027,"存在为空数据项"),
     DATABASE_CONNECT_ERROR(100028,"自定义数据库链接失败"),
+    JSON_PARSE_ERROR(100029,"暂不支持json报文进行数组嵌套"),
+    JSON_TEXT_ERROR(100030,"json格式不正确"),
+    NO_EXIST_PARAM(100031,"当前用户[%s]对应的杂类参数[%s]不存在"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private final int code;

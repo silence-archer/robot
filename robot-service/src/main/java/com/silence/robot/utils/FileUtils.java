@@ -504,10 +504,10 @@ public class FileUtils {
      * @param inputStream
      * @return
      */
-    public static Map getJsonMap(InputStream inputStream) {
+    public static JSONObject getJsonMap(InputStream inputStream) {
         Reader reader = new InputStreamReader(inputStream);
         JSONReader jsonReader = new JSONReader(reader);
-        return jsonReader.readObject(Map.class);
+        return jsonReader.readObject(JSONObject.class);
     }
 
     /**
@@ -631,7 +631,7 @@ public class FileUtils {
 
         String bodys = requestObj.toString();
 
-        Map map = HttpUtils.doPost(uri, headers, bodys);
+        JSONObject map = HttpUtils.doPost(uri, headers, bodys);
 
         return map.get("tables").toString();
 
@@ -969,6 +969,27 @@ public class FileUtils {
         } catch (IOException e) {
             logger.error("{}文件{}创建失败", filePath, fileName, e);
         }
+    }
+
+    public static void createFile(String fileName) {
+        Path path = Paths.get(fileName);
+        createFile(path.getParent().toString(), path.getFileName().toString());
+    }
+
+
+    public static void createDir(String filePath) {
+        try {
+            Files.createDirectories(Paths.get(filePath));
+        } catch (FileAlreadyExistsException ignored) {
+        } catch (IOException e) {
+            logger.error("{}文件创建失败", filePath, e);
+        }
+    }
+
+    public static String convertListToContent(List<String> lines) {
+        StringBuilder stringBuilder = new StringBuilder();
+        lines.forEach(s -> stringBuilder.append(s).append("\n"));
+        return stringBuilder.substring(0, stringBuilder.length()-1);
     }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FilterConfiguration {
 
-    private Logger logger = LoggerFactory.getLogger(FilterConfiguration.class);
+    private final Logger logger = LoggerFactory.getLogger(FilterConfiguration.class);
 
     @Bean
     public FilterRegistrationBean myFilter(){

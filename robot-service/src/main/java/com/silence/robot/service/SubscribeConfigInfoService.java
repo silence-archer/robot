@@ -10,18 +10,24 @@
  */
 package com.silence.robot.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.silence.robot.domain.RobotPage;
+import com.silence.robot.domain.SubscribeConfigDto;
 import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TSubscribeConfigInfoMapper;
 import com.silence.robot.model.TSubscribeConfigInfo;
+import com.silence.robot.utils.BeanUtils;
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -40,12 +46,17 @@ public class SubscribeConfigInfoService {
     private TSubscribeConfigInfoMapper subscribeConfigInfoMapper;
 
     public String getConfigValue(ConfigEnum configEnum){
-        TSubscribeConfigInfo subscribeConfigInfo = subscribeConfigInfoMapper.selectByConfigName(configEnum.getName());
-        if(subscribeConfigInfo == null){
-            throw new BusinessException(ExceptionCode.NO_EXIST);
+        return getConfigValue(configEnum.getName());
+    }
+
+    public String getConfigValue(String configName){
+        TSubscribeConfigInfo subscribeConfigInfo = subscribeConfigInfoMapper.selectByConfigName(configName);
+        String userName = HttpUtils.getLoginUserName();
+        if(subscribeConfigInfo == null || CommonUtils.isNotEquals(userName, subscribeConfigInfo.getCreateUser())){
+            throw new BusinessException(ExceptionCode.NO_EXIST_PARAM, userName, configName);
         }
         String configValue = subscribeConfigInfo.getConfigValue();
-        logger.info("当前配置名称{}对应配置值为{}",configEnum.getName(),configValue);
+        logger.info("当前配置名称{}对应配置值为{}",configName,configValue);
         return configValue;
     }
 
@@ -64,5 +75,36 @@ public class SubscribeConfigInfoService {
             subscribeConfigInfoMapper.updateByPrimaryKey(subscribeConfigInfo);
         }
 
+    }
+
+    public RobotPage<SubscribeConfigDto> getSubscribeConfig(Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
+        String loginUserName = HttpUtils.getLoginUserName();
+        List<TSubscribeConfigInfo> subscribeConfigInfos;
+        if (CommonUtils.isEquals(loginUserName, "admin")) {
+            subscribeConfigInfos = subscribeConfigInfoMapper.selectAll();
+        }else {
+            subscribeConfigInfos = subscribeConfigInfoMapper.selectByCreateUser(loginUserName);
+        }
+
+        PageInfo<TSubscribeConfigInfo> pageInfo = new PageInfo<>(subscribeConfigInfos);
+        return new RobotPage<>(pageInfo.getTotal(), BeanUtils.copyList(SubscribeConfigDto.class, pageInfo.getList()));
+
+    }
+
+    public void updateSubscribeConfig(SubscribeConfigDto subscribeConfigDto) {
+        subscribeConfigInfoMapper.updateByPrimaryKey(BeanUtils.copy(TSubscribeConfigInfo.class, subscribeConfigDto));
+    }
+
+    public void addSubscribeConfig(SubscribeConfigDto subscribeConfigDto) {
+        subscribeConfigInfoMapper.insert(BeanUtils.copy(TSubscribeConfigInfo.class, subscribeConfigDto));
+    }
+
+    public void deleteSubscribeConfig(String id) {
+        subscribeConfigInfoMapper.deleteByPrimaryKey(id);
+    }
+
+    public void deleteBatchSubscribeConfig(List<String> ids) {
+        subscribeConfigInfoMapper.deleteAndBatchById(ids);
     }
 }

@@ -35,6 +35,8 @@ robot:
     url: http://openapi.tuling123.com/openapi/api/v2
     userId: 508353
     key: db102bba955342ee8e32c2e3f317704e
+  ftl:
+    path: D:/test/ftl/
 server:
   port: 18002
 spring:

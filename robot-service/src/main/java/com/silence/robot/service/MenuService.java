@@ -12,7 +12,6 @@ package com.silence.robot.service;
 
 import com.silence.robot.domain.MenuData;
 import com.silence.robot.domain.NavigationMenu;
-import com.silence.robot.domain.RoleInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TMenuMapper;
@@ -20,12 +19,10 @@ import com.silence.robot.mapper.TRoleMapper;
 import com.silence.robot.model.TMenu;
 import com.silence.robot.model.TRole;
 import com.silence.robot.utils.CommonUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -161,6 +158,17 @@ public class MenuService {
         menuItem.setSpread(true);
         menuItem.setChildren(new ArrayList<>());
         return menuItem;
+    }
+
+    public void addAutoInterfaceMenu(String name, String desc) {
+        TMenu menu = new TMenu();
+        String id = "Menu1002";
+        menu.setParentMenuNo(id);
+        menu.setMenuLevel(2);
+        menu.setMenuNo(getMenuNo(menu.getMenuLevel(), id));
+        menu.setMenuPath("/autoInterface/"+name);
+        menu.setMenuName(desc);
+        menuMapper.insert(menu);
     }
 
 

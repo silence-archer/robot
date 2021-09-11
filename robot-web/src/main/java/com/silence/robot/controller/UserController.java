@@ -1,8 +1,5 @@
 package com.silence.robot.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.silence.robot.domain.MockInfo;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.domain.UserInfo;
 import com.silence.robot.dto.DataResponse;
@@ -18,6 +15,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * @author silence
+ */
 @RestController
 public class UserController {
 
@@ -46,6 +46,10 @@ public class UserController {
         DataResponse<List<UserInfo>> dataResponse = new DataResponse<>(userInfoByPage.getList());
         dataResponse.setCount(userInfoByPage.getTotal());
         return dataResponse;
+    }
+    @GetMapping("/getUserList")
+    public DataResponse<List<UserInfo>> getUserList(){
+        return new DataResponse<>(userService.getUserInfo());
     }
 
     @PostMapping("/getUserInfoByCondition")
@@ -80,9 +84,7 @@ public class UserController {
         HttpSession session = SessionListener.map.get(userInfo.getUsername());
         if (session != null) {
             logger.info("开始销毁session：{}",userInfo.getUsername());
-            synchronized (session) {
-                session.invalidate();
-            }
+            session.invalidate();
         }
         return new DataResponse<>();
     }

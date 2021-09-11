@@ -1,7 +1,7 @@
 package com.silence.robot.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.utils.HttpUtils;
@@ -11,8 +11,6 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author silence
@@ -86,26 +84,23 @@ public class LoanService {
     /**
      * 模拟接口发送
      *
-     * @param data
+     * @param request
      * @return com.alibaba.fastjson.JSONObject
      * @author silence
      * @date 2021/5/22 21:07
      */
-    public JSONObject executeLoan(JSONObject data) {
-        JSONObject request = new JSONObject();
-        request.put("body", data);
-        JSONObject sysHead = new JSONObject();
-        String tranDate = subscribeConfigInfoService.getConfigValue(ConfigEnum.LOAN_DATE_ENUM);
-        sysHead.put("tranDate", tranDate);
+    public JSONObject executeLoan(String uri, JSONObject request) {
+        JSONObject sysHead = request.getJSONObject("sysHead");
         sysHead.put("seqNo", System.currentTimeMillis());
         sysHead.put("subSeqNo", System.currentTimeMillis());
-        request.put("sysHead", sysHead);
-        Map map = HttpUtils.doPost("/cl/inq/trial/schedule", request.toJSONString());
-        List<Map> rets = (List<Map>) map.get("ret");
-        String retCode = rets.get(0).get("retCode").toString();
-        String retMsg = rets.get(0).get("retMsg").toString();
+        JSONObject jsonObject = HttpUtils.doPost("http://"+uri, request.toJSONString());
+        JSONObject sysHeadResult = jsonObject.getJSONObject("sysHead");
+        JSONArray rets = sysHeadResult.getJSONArray("ret");
+        JSONObject ret = rets.getJSONObject(0);
+        String retCode = ret.getString("retCode");
+        String retMsg = ret.getString("retMsg");
         if ("000000".equals(retCode)) {
-            return new JSONObject((Map) map.get("body"));
+            return jsonObject.getJSONObject("body");
         }
         throw new BusinessException(retCode+ "-" + retMsg);
 

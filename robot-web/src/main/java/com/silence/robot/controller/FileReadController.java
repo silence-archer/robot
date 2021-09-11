@@ -64,6 +64,12 @@ public class FileReadController {
         return new DataResponse<>();
     }
 
+    @PostMapping("/updateBatchFileBody")
+    public DataResponse<?> updateBatchFileBody(@RequestParam String separator, @RequestBody JSONObject data) {
+        fileReadService.updateBatchFileBody(separator, data);
+        return new DataResponse<>();
+    }
+
     @PostMapping("/deleteFileBody")
     public DataResponse<?> deleteFileBody(@RequestBody List<JSONObject> data) {
         fileReadService.deleteFileBody(data);

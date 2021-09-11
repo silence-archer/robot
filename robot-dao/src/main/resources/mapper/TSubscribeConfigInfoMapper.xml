@@ -24,6 +24,13 @@
     delete from t_subscribe_config_info
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteAndBatchById">
+    delete from t_subscribe_config_info
+    where id in
+    <foreach collection="ids" item="id" open="(" close=")" separator="," index="index">
+      #{id,jdbcType=VARCHAR}
+    </foreach>
+  </delete>
   <insert id="insert" parameterType="com.silence.robot.model.TSubscribeConfigInfo">
     <!--
       WARNING - @mbg.generated
@@ -82,5 +89,11 @@
     select ID, config_name, config_value, config_desc, expire_time, create_time, create_user, 
     update_time, update_user
     from t_subscribe_config_info
+  </select>
+  <select id="selectByCreateUser" resultMap="BaseResultMap">
+    select ID, config_name, config_value, config_desc, expire_time, create_time, create_user,
+           update_time, update_user
+    from t_subscribe_config_info
+    where create_user = #{createUser,jdbcType=VARCHAR}
   </select>
 </mapper>

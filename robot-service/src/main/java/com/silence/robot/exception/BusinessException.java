@@ -23,6 +23,11 @@ public class BusinessException extends RuntimeException {
         this.msg = msg;
     }
 
+    public BusinessException(ExceptionCode exceptionCode, Object... params){
+        super(exceptionCode.getMsg());
+        this.code = exceptionCode.getCode();
+        this.msg = String.format(exceptionCode.getMsg(), params);
+    }
     public BusinessException(ExceptionCode exceptionCode){
         super(exceptionCode.getMsg());
         this.code = exceptionCode.getCode();
