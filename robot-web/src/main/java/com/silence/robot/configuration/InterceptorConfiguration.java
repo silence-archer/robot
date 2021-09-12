@@ -11,17 +11,12 @@
 package com.silence.robot.configuration;
 
 import com.silence.robot.interceptor.LoginInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Resource;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -35,7 +30,7 @@ import java.util.List;
 @EnableConfigurationProperties(SilenceConfigurationProperties.class)
 public class InterceptorConfiguration implements WebMvcConfigurer {
 
-    @Autowired
+    @Resource
     private SilenceConfigurationProperties properties;
 
     @Override

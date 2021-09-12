@@ -15,11 +15,6 @@ silence:
       - /mock
       - /upload/**
       - /signature/*
-      - /swagger-ui.html/**
-      - /swagger-ui.html
-      - /webjars/**
-      - /swagger-resources/**
-      - /v2/**
   wechat:
     subscribe:
       api: https://api.weixin.qq.com/cgi-bin/token
