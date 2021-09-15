@@ -26,6 +26,8 @@ public class DataResponse<T> {
 
     private Long count;
 
+    private String token;
+
     private T data;
 
     public Long getCount() {
@@ -74,6 +76,14 @@ public class DataResponse<T> {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override

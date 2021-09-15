@@ -5,14 +5,14 @@ import com.silence.robot.domain.UserInfo;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
-import com.silence.robot.listener.SessionListener;
 import com.silence.robot.service.UserService;
+import com.silence.robot.utils.HttpUtils;
+import com.silence.robot.utils.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -27,14 +27,16 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/getUser")
-    public DataResponse<UserInfo> getUser(HttpSession httpSession){
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+    public DataResponse<UserInfo> getUser(){
+        UserInfo userInfo = HttpUtils.getUserInfo();
         if(userInfo == null){
             throw new BusinessException(ExceptionCode.AUTH_ERROR);
         }
-        logger.info("当前session id 为：{},用户名为：{}",httpSession.getId(), userInfo.getUsername());
+        String token = JwtUtils.createToken(userInfo);
+        logger.info("当前用户id 为：{},用户名为：{}",userInfo.getId(), userInfo.getUsername());
         DataResponse<UserInfo> userDataResponse = new DataResponse<>();
         userDataResponse.setData(userInfo);
+        userDataResponse.setToken(token);
         return userDataResponse;
     }
 
@@ -80,12 +82,7 @@ public class UserController {
     public DataResponse<?> modifyPassword(@RequestBody UserInfo userInfo){
         userService.modifyPassword(userInfo);
         //修改密码成功后需要重新登录
-        //防止并发
-        HttpSession session = SessionListener.map.get(userInfo.getUsername());
-        if (session != null) {
-            logger.info("开始销毁session：{}",userInfo.getUsername());
-            session.invalidate();
-        }
+        HttpUtils.removeUserInfo();
         return new DataResponse<>();
     }
 

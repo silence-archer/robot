@@ -46,14 +46,16 @@ public class SubscribeConfigInfoService {
     private TSubscribeConfigInfoMapper subscribeConfigInfoMapper;
 
     public String getConfigValue(ConfigEnum configEnum){
-        return getConfigValue(configEnum.getName());
+        return getConfigValue(configEnum.getName(), null);
     }
 
-    public String getConfigValue(String configName){
+    public String getConfigValue(String configName, String username){
         TSubscribeConfigInfo subscribeConfigInfo = subscribeConfigInfoMapper.selectByConfigName(configName);
-        String userName = HttpUtils.getLoginUserName();
-        if(subscribeConfigInfo == null || CommonUtils.isNotEquals(userName, subscribeConfigInfo.getCreateUser())){
-            throw new BusinessException(ExceptionCode.NO_EXIST_PARAM, userName, configName);
+        if(subscribeConfigInfo == null){
+            throw new BusinessException(ExceptionCode.NO_EXIST_PARAM, username, configName);
+        }
+        if(CommonUtils.isNotEmpty(username) && CommonUtils.isNotEquals(username, subscribeConfigInfo.getCreateUser())) {
+            throw new BusinessException(ExceptionCode.NO_EXIST_PARAM, username, configName);
         }
         String configValue = subscribeConfigInfo.getConfigValue();
         logger.info("当前配置名称{}对应配置值为{}",configName,configValue);

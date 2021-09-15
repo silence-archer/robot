@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.domain.UserInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
+import com.silence.robot.listener.JwtSessionListener;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -103,15 +104,8 @@ public class HttpUtils {
      * @date: 2020/4/7 18:39
      */
     public static String getLoginUserName(){
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            HttpServletRequest request = requestAttributes.getRequest();
-            UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
-            if(userInfo != null){
-                return userInfo.getUsername();
-            }
-        }
-        return "admin";
+
+        return JwtSessionListener.getUserInfo() == null ? "admin" : JwtSessionListener.getUserInfo().getUsername();
     }
 
     public static InputStream getStreamByHttp(String uri) {
@@ -124,6 +118,80 @@ public class HttpUtils {
         return null;
 
     }
+
+    public static String getIpAddress() {
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes == null) {
+            throw new BusinessException(ExceptionCode.AUTH_ERROR);
+        }
+        HttpServletRequest request = requestAttributes.getRequest();
+        return request.getRemoteAddr();
+    }
+
+    public static UserInfo getUserInfo(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        UserInfo userInfo = null;
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+        }
+        if (userInfo == null) {
+            userInfo = JwtSessionListener.getUserInfo();
+        }
+        return userInfo;
+    }
+
+    public static void removeUserInfo(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            request.getSession().invalidate();
+        }
+        JwtSessionListener.removeUserInfo();
+    }
+
+    public static void putUserInfo(UserInfo userInfo){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            request.getSession().setAttribute("userInfo", userInfo);
+        }
+        JwtSessionListener.putUserInfo(userInfo);
+    }
+
+    public static void putImageCode(String imageCode){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            request.getSession().setAttribute("imageCode", imageCode+"-"+System.currentTimeMillis());
+        }
+        JwtSessionListener.putImageCode(imageCode);
+    }
+
+    public static String getImageCode(){
+        String imageCode = null;
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            imageCode = (String) request.getSession().getAttribute("imageCode");
+        }
+        if (CommonUtils.isEmpty(imageCode)) {
+            imageCode = JwtSessionListener.getImageCode();
+        }
+
+        return imageCode;
+    }
+
+    public static void removeImageCode(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            request.getSession().removeAttribute("imageCode");
+        }
+        JwtSessionListener.removeImageCode();
+
+    }
+
 
 
 }

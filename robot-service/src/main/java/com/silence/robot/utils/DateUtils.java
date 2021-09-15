@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -55,6 +56,13 @@ public class DateUtils {
             logger.error("{}日期转化失败", date, e);
         }
         return null;
+    }
+
+    public static Date addMinutes(Date date, int minutes) {
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(date);
+        instance.add(Calendar.MINUTE, minutes);
+        return instance.getTime();
     }
 
 }

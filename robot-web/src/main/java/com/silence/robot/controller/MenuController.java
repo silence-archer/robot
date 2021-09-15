@@ -17,13 +17,13 @@ import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.service.MenuService;
+import com.silence.robot.utils.HttpUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -66,8 +66,8 @@ public class MenuController {
     }
 
     @RequestMapping("/getNavigationMenu")
-    public DataResponse<List<NavigationMenu>> getNavigationMenu(HttpSession httpSession){
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+    public DataResponse<List<NavigationMenu>> getNavigationMenu(){
+        UserInfo userInfo = HttpUtils.getUserInfo();
         if(userInfo == null){
             throw new BusinessException(ExceptionCode.AUTH_ERROR);
         }

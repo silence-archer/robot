@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+/**
+ * @author silence
+ */
 @RestController
 public class HelloController {
 

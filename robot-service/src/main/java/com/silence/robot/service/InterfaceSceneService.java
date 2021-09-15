@@ -12,6 +12,7 @@ import com.silence.robot.mapper.TInterfaceSceneMapper;
 import com.silence.robot.model.TInterfaceScene;
 import com.silence.robot.utils.BeanUtils;
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class InterfaceSceneService {
 
     public RobotPage<InterfaceSceneDto> getSceneByTranCode(String tranCode, Integer page, Integer limit) {
         page = page == null ? 1 : page;
-        limit = limit == null ? 1 : Integer.MAX_VALUE;
+        limit = limit == null ? Integer.MAX_VALUE : limit;
         PageHelper.startPage(page, limit);
         List<TInterfaceScene> interfaceScenes = interfaceSceneMapper.selectByTranCode(tranCode);
         PageInfo<TInterfaceScene> pageInfo = new PageInfo<>(interfaceScenes);
@@ -96,7 +97,11 @@ public class InterfaceSceneService {
         if (configName.contains("{{") && configName.contains("}}")) {
             configName = configName.replace("{{", "");
             configName = configName.replace("}}", "");
-            configValue = subscribeConfigInfoService.getConfigValue(configName);
+            if (CommonUtils.isEquals("$timestamp", configName)) {
+                configValue = System.currentTimeMillis()+"";
+            }else {
+                configValue = subscribeConfigInfoService.getConfigValue(configName, HttpUtils.getLoginUserName());
+            }
         }
         return configValue;
     }

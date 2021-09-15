@@ -34,6 +34,7 @@ public class LoginService {
             userInfo.setRoleNo(user.getRoleNo());
             String avatar = userTalkInfo == null ? null : userTalkInfo.getAvatar();
             userInfo.setAvatar(avatar);
+            userInfo.setIpAddr(user.getIpAddr());
         }else{
             throw new BusinessException(ExceptionCode.LOGIN_ERROR);
         }

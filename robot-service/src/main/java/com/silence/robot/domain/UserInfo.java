@@ -1,6 +1,6 @@
 package com.silence.robot.domain;
 
-import java.util.Date;
+import com.alibaba.fastjson.JSONObject;
 
 
 public class UserInfo {
@@ -64,6 +64,10 @@ public class UserInfo {
      * 我的头像
      */
     private String avatar;
+
+    public UserInfo(){
+
+    }
 
 
     public String getRoleNo() {
@@ -178,5 +182,9 @@ public class UserInfo {
                 ", sign='" + sign + '\'' +
                 ", avatar='" + avatar + '\'' +
                 '}';
+    }
+
+    public String toJSONString() {
+        return JSONObject.toJSONString(this);
     }
 }

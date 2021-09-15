@@ -83,7 +83,7 @@
 </fieldset>
 
 <blockquote class="layui-elem-quote">主体信息</blockquote>
-<form class="layui-form" id="formLoan" lay-filter="formLoan">
+<form class="layui-form" id="testBody" lay-filter="testBody">
     <#list bodys?chunk(3) as subBodys>
     <div class="layui-form-item">
         <#list subBodys as body>

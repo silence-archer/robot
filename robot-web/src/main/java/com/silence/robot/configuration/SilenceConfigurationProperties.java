@@ -11,7 +11,6 @@
 package com.silence.robot.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
@@ -31,6 +30,8 @@ public class SilenceConfigurationProperties {
      */
     private List<String> paths;
 
+    private Boolean allowCookie;
+
     public List<String> getPaths() {
         return paths;
     }
@@ -39,10 +40,12 @@ public class SilenceConfigurationProperties {
         this.paths = paths;
     }
 
-    @Override
-    public String toString() {
-        return "SilenceConfigurationProperties{" +
-                "paths=" + paths +
-                '}';
+    public Boolean getAllowCookie() {
+        return allowCookie;
     }
+
+    public void setAllowCookie(Boolean allowCookie) {
+        this.allowCookie = allowCookie;
+    }
+
 }

@@ -10,6 +10,7 @@
  */
 package com.silence.robot.configuration;
 
+import com.silence.robot.interceptor.JwtAuthenticationInterceptor;
 import com.silence.robot.interceptor.LoginInterceptor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,13 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).excludePathPatterns(properties.getPaths());
+        if (properties.getAllowCookie()) {
+            registry.addInterceptor(new LoginInterceptor())
+                    .excludePathPatterns(properties.getPaths());
+        } else {
+            registry.addInterceptor(new JwtAuthenticationInterceptor())
+                    .excludePathPatterns(properties.getPaths());
+        }
+
     }
 }

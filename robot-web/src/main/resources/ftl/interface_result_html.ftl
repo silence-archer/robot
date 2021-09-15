@@ -11,7 +11,7 @@
                                     <#if body.required>
                                         lay-verify="required"
                                     </#if>
-                            ><option value="">请选择</option></select>
+                            disabled ><option value="">请选择</option></select>
                         </div>
                     </div>
                 <#else>
@@ -22,7 +22,7 @@
                                     lay-verify="required"
                                 </#if>
                                style="width: 250px;" placeholder="请输入${body.desc}"
-                               autocomplete="off"
+                               autocomplete="off" disabled
                                class="layui-input">
                     </div>
                 </#if>

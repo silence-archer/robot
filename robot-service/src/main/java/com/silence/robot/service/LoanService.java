@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
+import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.HttpUtils;
 import org.springframework.stereotype.Service;
 
@@ -90,6 +91,7 @@ public class LoanService {
      * @date 2021/5/22 21:07
      */
     public JSONObject executeLoan(String uri, JSONObject request) {
+        CommonUtils.deleteJsonEmptyStr(request);
         JSONObject sysHead = request.getJSONObject("sysHead");
         sysHead.put("seqNo", System.currentTimeMillis());
         sysHead.put("subSeqNo", System.currentTimeMillis());

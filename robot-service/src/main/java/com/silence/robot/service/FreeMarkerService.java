@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * FreeMarker  文件输出
@@ -49,28 +50,27 @@ public class FreeMarkerService {
         List<FreeMarkerArrayDto> freeMarkerArrayDtos = new ArrayList<>();
         freeMarkerDto.setBodys(freeMarkerBodyDtos);
         freeMarkerDto.setArrays(freeMarkerArrayDtos);
-        String arrayName = null;
-        boolean arrayFlag = false;
+        Stack<String> stack = new Stack<>();
         for (String line : lines) {
             String[] split = line.split("\t");
             if (split.length != 5) {
                 throw new BusinessException(ExceptionCode.QUERY_ERROR);
             }
-            if (CommonUtils.isEquals(split[2], "Array") && CommonUtils.isNotEquals(arrayName, split[0])) {
-                if (arrayFlag) {
+            if (CommonUtils.isEquals(split[2], "Array")) {
+                if (stack.isEmpty()) {
+                    stack.push(split[0]);
+                    FreeMarkerArrayDto freeMarkerArrayDto = new FreeMarkerArrayDto();
+                    freeMarkerArrayDto.setName(split[0]);
+                    freeMarkerArrayDto.setDesc(split[1]);
+                    freeMarkerArrayDto.setList(new ArrayList<>());
+                    freeMarkerArrayDtos.add(freeMarkerArrayDto);
+                    continue;
+                }else if (CommonUtils.isNotEquals(stack.peek(), split[0])){
                     throw new BusinessException(ExceptionCode.JSON_PARSE_ERROR);
+                }else if (CommonUtils.isEquals(stack.peek(), split[0])) {
+                    stack.pop();
+                    continue;
                 }
-                arrayFlag = true;
-                FreeMarkerArrayDto freeMarkerArrayDto = new FreeMarkerArrayDto();
-                freeMarkerArrayDto.setName(split[0]);
-                freeMarkerArrayDto.setDesc(split[1]);
-                freeMarkerArrayDto.setList(new ArrayList<>());
-                freeMarkerArrayDtos.add(freeMarkerArrayDto);
-                arrayName = split[0];
-                continue;
-            }
-            if (CommonUtils.isEquals(split[2], "Array") && CommonUtils.isEquals(arrayName, split[0])) {
-                arrayFlag = false;
             }
 
             FreeMarkerBodyDto freeMarkerBodyDto = new FreeMarkerBodyDto();
@@ -83,7 +83,7 @@ public class FreeMarkerService {
             freeMarkerBodyDto.setRequired(CommonUtils.isEqualsY(split[4]));
             freeMarkerBodyDto.setName(split[0]);
             freeMarkerBodyDto.setDesc(split[1]);
-            if (arrayFlag) {
+            if (stack.size() == 1) {
                 freeMarkerArrayDtos.get(freeMarkerArrayDtos.size()-1).getList().add(freeMarkerBodyDto);
             }else {
                 freeMarkerBodyDtos.add(freeMarkerBodyDto);

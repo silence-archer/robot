@@ -54,7 +54,7 @@ data: data.${array.name}
 
 form.val('test', data);
 $scope.exit = function () {
-$location.url('/${name}')
+$location.url('/autoInterface/${name}')
 }
 
 

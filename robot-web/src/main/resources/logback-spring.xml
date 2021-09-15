@@ -11,9 +11,9 @@
     <property name="LOG_FILE_MAX_SIZE" value="1MB" />
     <property name="LOG_FILE_MAX_HISTORY" value="7" />
     <property name="LOG_FILE_TOTAL_SIZE_CAP" value="0" />
-    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr([%X{TRACE_ID}]--){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
     <property name="LOG_DATEFORMAT_PATTERN" value="yyyy-MM-dd HH:mm:ss.SSS" />
-    <property name="FILE_LOG_PATTERN" value="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : [line:%L] : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+    <property name="FILE_LOG_PATTERN" value="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } [%X{TRACE_ID}]-- [%t] %-40.40logger{39} : [line:%L] : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
     <property name="ROLLING_FILE_NAME_PATTERN" value="${LOG_PATH}/%d{yyyyMMdd}/${LOG_FILE}-%i.log" />
     <property name="ROLLING_ERROR_FILE_NAME_PATTERN" value="${LOG_PATH}/%d{yyyyMMdd}/${ERROR_LOG_FILE}-%i.log" />
 

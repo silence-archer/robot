@@ -10,6 +10,7 @@
  */
 package com.silence.robot.utils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.constants.RobotConstants;
 import com.silence.robot.domain.RobotPage;
@@ -49,7 +50,7 @@ public class CommonUtils {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-    private static final String SLAT = "&%5123***&&%%$$#@";
+    public static final String SLAT = "&%5123***&&%%$$#@";
 
     public static final String JOB_PACKAGE_NAME = "com.silence.robot.job.";
 
@@ -275,6 +276,32 @@ public class CommonUtils {
 
     public static boolean isNotEquals(String str1, String str2) {
         return !isEquals(str1, str2);
+    }
+
+    public static void deleteJsonEmptyStr(Map<String, Object> jsonObject) {
+        jsonObject.forEach((s, o) -> {
+            if (o instanceof List) {
+                deleteJsonArrayEmptyStr((List<Object>) o);
+            }else if (o instanceof Map){
+                deleteJsonEmptyStr((Map<String, Object>) o);
+            }else {
+                if(CommonUtils.isEmpty(o)) {
+                    jsonObject.put(s, null);
+                }
+            }
+        });
+    }
+
+    public static void deleteJsonArrayEmptyStr(List<Object> jsonArray) {
+        jsonArray.forEach(o -> {
+            if (o instanceof List) {
+                deleteJsonArrayEmptyStr((JSONArray) o);
+            }else if (o instanceof Map){
+                deleteJsonEmptyStr((Map<String, Object>) o);
+            }else {
+                throw new BusinessException(ExceptionCode.JSON_TEXT_ERROR);
+            }
+        });
     }
 
 

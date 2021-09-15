@@ -4,8 +4,9 @@ import com.silence.robot.domain.UserInfo;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
-import com.silence.robot.listener.SessionListener;
 import com.silence.robot.service.LoginService;
+import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author silence
@@ -27,28 +27,22 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public DataResponse<?> login(@RequestBody UserInfo userInfo, HttpSession httpSession) {
-        if (userInfo.getImageCode().equalsIgnoreCase((String) httpSession.getAttribute("imageCode"))) {
-            //TODO 验证码过期 及时刷新
-            httpSession.removeAttribute("imageCode");
+    public DataResponse<?> login(@RequestBody UserInfo userInfo) {
+        String imageCode = HttpUtils.getImageCode();
+        if (CommonUtils.isEmpty(imageCode)) {
+            throw new BusinessException(ExceptionCode.VERIFY_ERROR);
+        }
+        String[] split = imageCode.split("-");
+        if (userInfo.getImageCode().equalsIgnoreCase(split[0]) && (System.currentTimeMillis() - Long.parseLong(split[1]) < 60*1000)) {
+            HttpUtils.removeImageCode();
         } else {
             throw new BusinessException(ExceptionCode.VERIFY_ERROR);
         }
         loginService.login(userInfo);
-        httpSession.setAttribute("userInfo", userInfo);
-        //防止并发
-        HttpSession session = SessionListener.map.get(userInfo.getUsername());
-        if (session != null && !session.getId().equals(httpSession.getId())) {
-            logger.info("开始销毁session：{}",userInfo.getUsername());
-            try {
-                session.invalidate();
-            } catch (IllegalStateException e) {
-                logger.error("session已失效", e);
-            }
-
-        }
-        SessionListener.map.put(userInfo.getUsername(), httpSession);
-
+        userInfo.setPassword(null);
+        userInfo.setImageCode(null);
+        userInfo.setImageWithVerifyCode(null);
+        HttpUtils.putUserInfo(userInfo);
 
         return new DataResponse<>();
     }

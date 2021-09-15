@@ -12,7 +12,6 @@ package com.silence.robot.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.silence.robot.domain.MockInfo;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.domain.UserInfo;
 import com.silence.robot.exception.BusinessException;
@@ -21,17 +20,15 @@ import com.silence.robot.mapper.TUserMapper;
 import com.silence.robot.mapper.TUserTalkFriendMapper;
 import com.silence.robot.mapper.TUserTalkInfoMapper;
 import com.silence.robot.mapper.TUserTalkMembersMapper;
-import com.silence.robot.model.TMockInfo;
 import com.silence.robot.model.TUser;
 import com.silence.robot.model.TUserTalkInfo;
+import com.silence.robot.utils.BeanUtils;
 import com.silence.robot.utils.CommonUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.management.relation.RoleUnresolved;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -85,6 +82,11 @@ public class UserService {
         BeanUtils.copyProperties(userInfo, user);
         List<TUser> userList = userMapper.selectByCondition(user);
         return appendUserInfo(userList);
+    }
+
+    public UserInfo getUserInfoById(String userId){
+        TUser user = userMapper.selectByPrimaryKey(userId);
+        return appendUserInfo(Collections.singletonList(user)).get(0);
     }
 
     public void addUser(UserInfo userInfo){

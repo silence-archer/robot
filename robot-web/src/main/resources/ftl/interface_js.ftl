@@ -23,7 +23,7 @@ form.render();
 form.on('select(selectScene)', function(data){
 $http.get(baseUrl+'getSceneBySceneId?sceneId='+data.value).then(function successCallback(response) {
 if(response.data.code === 0){
-form.val('formLoan', response.data.data.body);
+form.val('testBody', response.data.data.body);
 form.val('testSys', response.data.data.sysHead);
 <#list arrays as array>
 table.reload('test${array?index}', {
@@ -124,17 +124,13 @@ const body = info.field;
 <#list arrays as array>
 body["${array.name}"] = table.getData("test${array?index}");
 </#list>
-console.log(body);
 $http.post(baseUrl+"loan",{
 apiCd: $('#ipOwner').val()+":"+$('#port').val()+"${uri}",
-data: {'body':body,'sysHead':{
-'sourceType': $('#sourceType').val(),
-'branchId': $('#branchId').val()
-}}
+data: {'body':body,'sysHead':form.val("testSys")}
 }).then(function successCallback(response) {
 if(response.data.code === 0){
 dataService.setData(response.data.data);
-$location.url("/${name}/result");
+$location.url("/autoInterface/${name}/result");
 }else{
 layer.msg(response.data.msg, {icon: 5});
 }
