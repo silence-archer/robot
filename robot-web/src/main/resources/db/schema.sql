@@ -1,6 +1,3 @@
-
-
-
 create table t_cron_task
 (
     ID varchar(64) not null comment '物理主键'
@@ -16,8 +13,7 @@ create table t_cron_task
     update_time datetime not null comment '更新时间',
     constraint t_cron_task_job_name_uindex
         unique (job_name)
-)
-    comment '定时任务配置表';
+) comment='定时任务配置表';
 
 create table t_cron_task_proc_log
 (
@@ -33,8 +29,29 @@ create table t_cron_task_proc_log
     update_user varchar(64) null comment '更新人',
     constraint t_cron_task_proc_log_job_name_uindex
         unique (job_name)
-)
-    comment '定时任务执行日志表';
+) comment='定时任务执行日志表';
+
+create table t_data_dict
+(
+    id varchar(54) not null comment '物理主键'
+        primary key,
+    name varchar(20) null comment '名称',
+    `desc` varchar(255) null comment '描述',
+    enum_name varchar(20) null comment '枚举值',
+    enum_desc varchar(255) null comment '枚举值描述',
+    remark varchar(255) null comment '备注'
+) comment='数据字典表';
+
+create table t_database_info
+(
+    id varchar(50) not null comment '物理主键'
+        primary key,
+    type varchar(20) null comment '数据库类型',
+    url varchar(32) null comment '数据库链接',
+    user varchar(32) null comment '用户名',
+    password varchar(32) null comment '密码',
+    business_type varchar(32) null comment '业务类型'
+) comment='数据库配置表';
 
 create table t_file_config
 (
@@ -55,8 +72,38 @@ create table t_file_config
     create_time datetime not null comment '创建时间',
     update_user varchar(20) null comment '更新人',
     update_time datetime not null comment '更新时间'
-)
-    comment '文件配置表';
+) comment='文件配置表';
+
+create table t_interface_scene
+(
+    id varchar(64) not null comment '物理主键'
+        primary key,
+    tran_code varchar(32) null comment '交易码',
+    scene_id varchar(32) null comment '场景编号',
+    scene_desc varchar(255) null comment '场景描述',
+    scene_value longtext null comment '场景json报文',
+    create_time datetime null comment '创建时间',
+    create_user varchar(32) null comment '创建人',
+    update_time datetime null comment '更新时间',
+    update_user varchar(32) null comment '更新人'
+) comment='接口场景配置表';
+
+create table t_log_file
+(
+    id varchar(40) not null comment '物理主键'
+        primary key,
+    date_time datetime null comment '日志时间',
+    service_name varchar(30) null comment '系统名称',
+    trace_id varchar(50) null comment '流水号',
+    tran_code varchar(30) null comment '交易码',
+    thread_name varchar(20) null comment '线程名称',
+    level varchar(10) null comment '日志级别',
+    class_name varchar(30) null comment '类名称',
+    line_num int null comment '行号',
+    content longtext null comment '日志内容',
+    sub_trace_id varchar(30) null comment '子流水号',
+    business_type varchar(20) null comment '业务类型'
+) comment='日志信息表';
 
 create table t_menu
 (
@@ -74,8 +121,7 @@ create table t_menu
     UPDATE_USER varchar(32) default '' null comment '修改人',
     constraint MENU_UQ_IDX
         unique (MENU_NO)
-)
-    comment '菜单信息表';
+)comment='菜单信息表';
 
 create table t_mock_info
 (
@@ -90,8 +136,7 @@ create table t_mock_info
     CREATE_TIME datetime null comment '创建时间',
     UPDATE_USER varchar(64) null comment '更新人',
     UPDATE_TIME datetime null comment '更新时间'
-)
-    comment '挡板信息';
+)comment='挡板信息';
 
 create table t_role
 (
@@ -104,8 +149,7 @@ create table t_role
     CREATE_USER varchar(32) null comment '创建人',
     UPDATE_TIME datetime not null comment '修改时间',
     UPDATE_USER varchar(32) null comment '修改人'
-)
-    comment '角色信息表';
+)comment='角色信息表';
 
 create table t_sequence
 (
@@ -115,8 +159,7 @@ create table t_sequence
     seq_value int(10) null comment '序列值',
     constraint SEQ_UQ_IDX
         unique (seq_name)
-)
-    comment '序列表';
+)comment='序列表';
 
 create table t_subscribe_config_info
 (
@@ -132,8 +175,7 @@ create table t_subscribe_config_info
     update_user varchar(64) null comment '更新人',
     constraint t_subscribe_config_info_config_name_uindex
         unique (config_name)
-)
-    comment '微信订阅号配置信息表';
+)comment='微信订阅号配置信息表';
 
 create table t_svn_info
 (
@@ -145,8 +187,7 @@ create table t_svn_info
     over_flag varchar(1) null comment '检出成功标志',
     constraint SVN_UQ_IDX
         unique (url)
-)
-    comment 'SVN信息表';
+)comment='SVN信息表';
 
 create table t_user
 (
@@ -154,17 +195,16 @@ create table t_user
         primary key,
     USERNAME varchar(64) not null comment '用户名',
     NICKNAME varchar(64) null comment '昵称',
-    PASSWORD varchar(60) null comment '密码',
+    PASSWORD varchar(200) null comment '密码',
     ROLE_NO varchar(32) null comment '角色编号',
-    IP_ADDR varchar(32) null comment 'ip地址',
     CREATE_TIME datetime not null comment '创建时间',
     CREATE_USER varchar(32) null comment '创建人',
     UPDATE_TIME datetime not null comment '修改时间',
     UPDATE_USER varchar(32) null comment '修改人',
+    IP_ADDR varchar(20) null comment 'ip地址',
     constraint UQ_IDX
         unique (USERNAME)
-)
-    comment '用户信息表';
+)comment='用户信息表';
 
 create table t_user_talk_friend
 (
@@ -173,8 +213,7 @@ create table t_user_talk_friend
     group_id int null comment '分组id',
     mine_id varchar(64) null comment '我的id',
     friend_id varchar(64) null comment '朋友id'
-)
-    comment '用户即时聊天好友信息表';
+)comment='用户即时聊天好友信息表';
 
 create table t_user_talk_friend_group
 (
@@ -183,8 +222,7 @@ create table t_user_talk_friend_group
     mine_id varchar(64) null comment '我的ID',
     group_id int null comment '分组ID',
     groupname varchar(255) null comment '分组名称'
-)
-    comment '即时聊天好友分组信息表';
+)comment='即时聊天好友分组信息表';
 
 create table t_user_talk_group
 (
@@ -194,8 +232,7 @@ create table t_user_talk_group
     mine_id varchar(64) null comment '我的id',
     groupname varchar(255) null comment '群组名称',
     avatar varchar(255) null comment '群组头像地址'
-)
-    comment '用户即时聊天群组信息表';
+)comment='用户即时聊天群组信息表';
 
 create table t_user_talk_info
 (
@@ -205,8 +242,7 @@ create table t_user_talk_info
     status varchar(20) null comment '状态',
     sign varchar(255) null comment '签名',
     avatar varchar(255) null comment '头像地址'
-)
-    comment '用户即时聊天信息表';
+)comment='用户即时聊天信息表';
 
 create table t_user_talk_members
 (
@@ -214,6 +250,5 @@ create table t_user_talk_members
         primary key,
     group_id varchar(64) null comment '群组id',
     member_id varchar(64) null comment '成员Id'
-)
-    comment '用户即时聊天群组成员信息表';
+) comment='用户即时聊天群组成员信息表';
 

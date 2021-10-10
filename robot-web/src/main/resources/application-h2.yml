@@ -18,3 +18,6 @@ spring:
       password: sa
       schema: classpath:db/schema.sql
       data: classpath:db/data.sql
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000

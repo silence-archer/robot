@@ -13,6 +13,7 @@ package com.silence.robot.encryptor;
 import com.silence.robot.mapper.TUserMapper;
 import com.silence.robot.model.TUser;
 import com.silence.robot.service.UserService;
+import com.silence.robot.utils.FileUtils;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -62,7 +70,4 @@ public class StringEncryptorTest {
         System.out.println(password);
         System.out.println(token);
     }
-
-
-
 }
