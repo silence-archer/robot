@@ -13,9 +13,12 @@ import java.util.Arrays;
  * @date 2021/4/28
  */
 public final class BufferedRandomAccessFile extends RandomAccessFile {
-    static final int LOG_BUFF_SZ = 16; // 64K buffer
-    public static final int BUFF_SZ = (1 << LOG_BUFF_SZ);
-    static final long BUFF_MASK = -((long) BUFF_SZ);
+    /**
+     * 64K buffer
+      */
+    private static final int LOG_BUFF_SZ = 16;
+    private static final int BUFF_SZ = (1 << LOG_BUFF_SZ);
+    private static final long BUFF_MASK = -((long) BUFF_SZ);
 
     private final String path;
 

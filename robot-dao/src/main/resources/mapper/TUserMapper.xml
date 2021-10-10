@@ -111,5 +111,11 @@
     </where>
 
   </select>
+    <select id="selectPassword" resultType="java.lang.String">
+      select password from t_user where USERNAME = #{username}
+    </select>
+  <select id="selectRole" resultType="java.lang.String">
+    select ROLE_NO from t_user where USERNAME = #{username}
+  </select>
 
 </mapper>

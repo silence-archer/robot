@@ -35,29 +35,43 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
         }
         String userId = JwtUtils.getAudience(token);
 
-        if (JwtSessionListener.getUserInfo() == null) {
+        if (JwtSessionListener.getToken(userId) == null || CommonUtils.isNotEquals(JwtSessionListener.getToken(userId), token)) {
             throw new BusinessException(ExceptionCode.SESSION_ERROR);
         }
         if (JwtUtils.getExpiresAt(token).compareTo(new Date()) < 0) {
             //token超时
-            JwtSessionListener.removeUserInfo();
+            JwtSessionListener.removeUserInfo(userId);
             throw new BusinessException(ExceptionCode.SESSION_ERROR);
         }
 
         JwtUtils.verifyToken(token, userId);
+        request.getSession().setAttribute("userInfo", JwtUtils.getUserInfo(token));
+        Date date = DateUtils.addMinutes(new Date(), 5);
+        if (JwtUtils.getExpiresAt(token).compareTo(date) < 0) {
+            //token还有五分钟超时，自动刷新
+            logger.info("token快过期，自动刷新>>>>>>>>>>>>>>>>");
+            UserInfo userInfo = JwtUtils.getUserInfo(token);
+            token = JwtUtils.createToken(userInfo);
+            JwtSessionListener.putToken(userInfo.getId(), token);
+        }
+
+        response.setHeader("token", token);
         return true;
 
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        Date date = DateUtils.addMinutes(new Date(), 5);
-        String token = request.getHeader("token");
-        if (JwtUtils.getExpiresAt(token).compareTo(date) < 0) {
-            //token还有五分钟超时，自动刷新
-            UserInfo userInfo = JwtUtils.getUserInfo(token);
-            token = JwtUtils.createToken(userInfo);
-        }
-        response.setHeader("token", token);
+//        Date date = DateUtils.addMinutes(new Date(), 29);
+//        String token = request.getHeader("token");
+//        if (JwtUtils.getExpiresAt(token).compareTo(date) < 0) {
+//            //token还有五分钟超时，自动刷新
+//            logger.info("token快过期，自动刷新>>>>>>>>>>>>>>>>");
+//            UserInfo userInfo = JwtUtils.getUserInfo(token);
+//            token = JwtUtils.createToken(userInfo);
+//            JwtSessionListener.putToken(userInfo.getId(), token);
+//        }
+//
+//        response.setHeader("token", token);
     }
 }

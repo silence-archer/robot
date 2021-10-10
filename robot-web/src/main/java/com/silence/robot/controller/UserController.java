@@ -8,6 +8,8 @@ import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.service.UserService;
 import com.silence.robot.utils.HttpUtils;
 import com.silence.robot.utils.JwtUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +29,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/getUser")
+    @RequiresUser
     public DataResponse<UserInfo> getUser(){
+        //RequiresAuthentication 验证用户是否登录，等同于方法subject.isAuthenticated() 结果为true时。
+        //验证用户是否被记忆，user有两种含义：
+        //一种是成功登录的（subject.isAuthenticated() 结果为true）；
+        //另外一种是被记忆的（subject.isRemembered()结果为true）。
         UserInfo userInfo = HttpUtils.getUserInfo();
         if(userInfo == null){
             throw new BusinessException(ExceptionCode.AUTH_ERROR);
@@ -61,6 +68,7 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
+    @RequiresRoles("admin")
     public DataResponse<?> addUser(@RequestBody UserInfo userInfo){
         userService.addUser(userInfo);
         return new DataResponse<>();
@@ -86,9 +94,10 @@ public class UserController {
         return new DataResponse<>();
     }
 
-    @PostMapping("/resetPassword")
-    public DataResponse<?> resetPassword(@RequestBody List<UserInfo> list){
-        userService.resetPassword(list);
+    @GetMapping("/resetPassword")
+    public DataResponse<?> resetPassword(@RequestParam List<String> usernames){
+
+        userService.resetPassword(usernames);
         return new DataResponse<>();
     }
 }

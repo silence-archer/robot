@@ -34,6 +34,9 @@ public class LogFileReadService {
 
     @Resource
     private TLogFileMapper logFileMapper;
+
+    @Resource
+    private LogFileService logFileService;
     /**
      * 日志文件读取
      * @author silence
@@ -142,6 +145,16 @@ public class LogFileReadService {
                 throw new BusinessException("日志文件解析失败", e);
             }
         });
+    }
+
+    public synchronized void insertAndBatchSplit(List<LogFileDto> list, int chunkSize) {
+        int size = list.size() / chunkSize;
+        for (int i = 0; i <= size; i++) {
+            List<LogFileDto> logFileDtos = list.subList(i * chunkSize, Math.min(i * chunkSize + chunkSize, list.size()));
+            if(CommonUtils.isNotEmpty(logFileDtos)){
+                logFileService.newTxInsertAndBatch(logFileDtos);
+            }
+        }
     }
 
 }

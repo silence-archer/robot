@@ -14,6 +14,8 @@ import com.silence.robot.config.DynamicDataSource;
 import com.silence.robot.interceptor.DynamicDataSourceInterceptor;
 import com.silence.robot.interceptor.ParameterInterceptor;
 import com.silence.robot.utils.SpringContextHelper;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -62,6 +64,14 @@ public class TransactionAdviceConfig {
     @Resource
     private PlatformTransactionManager platformTransactionManager;
 
+    @Bean("hikariConfig")
+    @Primary
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    public HikariConfig getHikariConfig(){
+        return new HikariConfig();
+    }
+
+
     @Bean("writeDataSourceProperties")
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource.write")
@@ -71,8 +81,11 @@ public class TransactionAdviceConfig {
 
     @Bean("writeDataSource")
     @Primary
-    public DataSource getWriteDataSource(@Qualifier("writeDataSourceProperties") DataSourceProperties dataSourceProperties){
-        return dataSourceProperties.initializeDataSourceBuilder().build();
+    public DataSource getWriteDataSource(@Qualifier("writeDataSourceProperties") DataSourceProperties dataSourceProperties, @Qualifier("hikariConfig") HikariConfig hikariConfig){
+        HikariDataSource dataSource = dataSourceProperties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+        dataSource.setConnectionTimeout(hikariConfig.getConnectionTimeout());
+        dataSource.setMaximumPoolSize(hikariConfig.getMaximumPoolSize());
+        return dataSource;
     }
 
     @Bean("readDataSourceProperties")
@@ -82,8 +95,11 @@ public class TransactionAdviceConfig {
     }
 
     @Bean("readDataSource")
-    public DataSource getReadDataSource(@Qualifier("readDataSourceProperties") DataSourceProperties dataSourceProperties){
-        return dataSourceProperties.initializeDataSourceBuilder().build();
+    public DataSource getReadDataSource(@Qualifier("readDataSourceProperties") DataSourceProperties dataSourceProperties, @Qualifier("hikariConfig") HikariConfig hikariConfig){
+        HikariDataSource dataSource = dataSourceProperties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+        dataSource.setConnectionTimeout(hikariConfig.getConnectionTimeout());
+        dataSource.setMaximumPoolSize(hikariConfig.getMaximumPoolSize());
+        return dataSource;
     }
 
     @Bean("dynamicDataSource")
@@ -139,9 +155,11 @@ public class TransactionAdviceConfig {
     public TransactionInterceptor txAdvice(){
         DefaultTransactionAttribute txAttrRequired = new DefaultTransactionAttribute();
         DefaultTransactionAttribute txAttrReadOnly = new DefaultTransactionAttribute();
+        DefaultTransactionAttribute txAttrRequiredNew = new DefaultTransactionAttribute();
         txAttrRequired.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         txAttrReadOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
         txAttrReadOnly.setReadOnly(true);
+        txAttrRequiredNew.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
         source.addTransactionalMethod("add*",txAttrRequired);
         source.addTransactionalMethod("update*",txAttrRequired);
@@ -155,6 +173,9 @@ public class TransactionAdviceConfig {
         source.addTransactionalMethod("find*",txAttrReadOnly);
         source.addTransactionalMethod("get*",txAttrReadOnly);
         source.addTransactionalMethod("query*",txAttrReadOnly);
+
+
+        source.addTransactionalMethod("newTx*",txAttrRequiredNew);
 
         return new TransactionInterceptor(platformTransactionManager, source);
 

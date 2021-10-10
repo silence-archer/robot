@@ -45,7 +45,11 @@ public class LogFileService {
         logFileMapper.deleteByCondition(param);
     }
 
-    public void insertAndBatch(List<LogFileDto> list) {
+    public void newTxDeleteLogFile(QueryLogFileDto logFileDto) {
+        deleteLogFileByCondition(logFileDto);
+    }
+
+    public void newTxInsertAndBatch(List<LogFileDto> list) {
         logFileMapper.insertAndBatch(BeanUtils.copyList(TLogFile.class, list, "id"));
     }
 
@@ -75,4 +79,5 @@ public class LogFileService {
         List<TLogFile> logFiles = logFileMapper.selectByBusinessType(businessType);
         return BeanUtils.copyList(LogFileDto.class, logFiles);
     }
+
 }

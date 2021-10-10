@@ -5,6 +5,8 @@ import com.silence.robot.domain.InterfaceSceneDto;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.InterfaceSceneService;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -59,6 +61,7 @@ public class InterfaceSceneController {
     }
 
     @GetMapping("/deleteInterfaceScene")
+    @RequiresPermissions(value = {"admin:delete","customer:delete"}, logical = Logical.OR)
     public DataResponse<?> deleteInterfaceScene(@RequestParam String id){
         interfaceSceneService.deleteInterfaceScene(id);
         return new DataResponse<>();

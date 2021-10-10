@@ -18,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -40,8 +41,10 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
             registry.addInterceptor(new LoginInterceptor())
                     .excludePathPatterns(properties.getPaths());
         } else {
+            List<String> paths = properties.getPaths();
+            paths.remove("/getUser");
             registry.addInterceptor(new JwtAuthenticationInterceptor())
-                    .excludePathPatterns(properties.getPaths());
+                    .excludePathPatterns(paths);
         }
 
     }

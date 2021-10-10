@@ -25,6 +25,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -105,7 +106,7 @@ public class HttpUtils {
      */
     public static String getLoginUserName(){
 
-        return JwtSessionListener.getUserInfo() == null ? "admin" : JwtSessionListener.getUserInfo().getUsername();
+        return getUserInfo() == null ? "admin" : getUserInfo().getUsername();
     }
 
     public static InputStream getStreamByHttp(String uri) {
@@ -135,9 +136,6 @@ public class HttpUtils {
             HttpServletRequest request = requestAttributes.getRequest();
             userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
         }
-        if (userInfo == null) {
-            userInfo = JwtSessionListener.getUserInfo();
-        }
         return userInfo;
     }
 
@@ -145,18 +143,20 @@ public class HttpUtils {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
             HttpServletRequest request = requestAttributes.getRequest();
-            request.getSession().invalidate();
+            UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
+            JwtSessionListener.removeUserInfo(userInfo.getId());
+            SecurityUtils.getSubject().logout();
         }
-        JwtSessionListener.removeUserInfo();
+
     }
 
-    public static void putUserInfo(UserInfo userInfo){
+    public static void putUserInfo(UserInfo userInfo, String token){
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
             HttpServletRequest request = requestAttributes.getRequest();
             request.getSession().setAttribute("userInfo", userInfo);
         }
-        JwtSessionListener.putUserInfo(userInfo);
+        JwtSessionListener.putToken(userInfo.getId(), token);
     }
 
     public static void putImageCode(String imageCode){

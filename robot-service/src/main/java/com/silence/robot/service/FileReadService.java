@@ -2,6 +2,7 @@ package com.silence.robot.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.silence.robot.context.GlobalContext;
 import com.silence.robot.domain.LogFileDto;
 import com.silence.robot.domain.QueryLogFileDto;
 import com.silence.robot.domain.RobotPage;
@@ -13,12 +14,18 @@ import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.FileUtils;
 import com.silence.robot.utils.HttpUtils;
 import com.silence.robot.utils.XmlUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 文件读取服务
@@ -29,8 +36,12 @@ import java.util.*;
 @Service
 public class FileReadService {
 
+    private final Logger logger = LoggerFactory.getLogger(FileReadService.class);
+
     @Resource
     private LogFileService logFileService;
+    @Resource
+    private LogFileReadService logFileReadService;
     @Resource
     private SubscribeConfigInfoService subscribeConfigInfoService;
 
@@ -56,6 +67,7 @@ public class FileReadService {
         return results;
     }
 
+    @Async
     public void addFileBody(Path path, String username) {
         List<String> lines = FileUtils.readAllLines(path);
         List<LogFileDto> list = new ArrayList<>(lines.size());
@@ -66,7 +78,9 @@ public class FileReadService {
             logFile.setContent(line);
             list.add(logFile);
         });
-        logFileService.insertAndBatch(list);
+        GlobalContext.getFirstUserOperationLock(username);
+        logFileReadService.insertAndBatchSplit(list, 100);
+        GlobalContext.getUserOperationLock(username);
     }
 
     public void addFileBody(String separator, List<JSONObject> heads) {
@@ -101,8 +115,6 @@ public class FileReadService {
             logFileDto.setBusinessType(HttpUtils.getLoginUserName());
             logFileService.updateLogFile(logFileDto);
         });
-
-
     }
 
     public void updateFileBody(String separator, JSONArray heads, JSONObject jsonObject) {
@@ -136,8 +148,10 @@ public class FileReadService {
     }
 
     public RobotPage<JSONObject> getFileBody(String separator, List<JSONObject> heads, Integer page, Integer limit) {
+        String userName = HttpUtils.getLoginUserName();
+        GlobalContext.releaseUserOperationLock(userName);
         QueryLogFileDto queryLogFileDto = new QueryLogFileDto();
-        queryLogFileDto.setBusinessType(HttpUtils.getLoginUserName());
+        queryLogFileDto.setBusinessType(userName);
         RobotPage<LogFileDto> robotPage = logFileService.getLogFileByCondition(queryLogFileDto, page, limit);
         List<JSONObject> list = new ArrayList<>(robotPage.getList().size());
         robotPage.getList().forEach(logFileDto -> {
@@ -158,7 +172,7 @@ public class FileReadService {
         }
         String[] split = content.split(fileFormatEnum.getValue(), -1);
         if (split.length != heads.size()) {
-            throw new BusinessException(ExceptionCode.FILE_READ_ERROR);
+            throw new BusinessException(ExceptionCode.FILE_READ_ERROR, content);
         }
         JSONObject jsonObject = new JSONObject(true);
         for (int i = 0; i < split.length; i++) {
@@ -173,10 +187,12 @@ public class FileReadService {
         logFileService.deleteLogFiles(ids);
     }
 
-    public void deleteFileBody(String username) {
+    public void deleteFileBody(Integer fileSize) {
+        String userName = HttpUtils.getLoginUserName();
         QueryLogFileDto logFileDto = new QueryLogFileDto();
-        logFileDto.setBusinessType(username);
-        logFileService.deleteLogFileByCondition(logFileDto);
+        logFileDto.setBusinessType(userName);
+        logFileService.newTxDeleteLogFile(logFileDto);
+        GlobalContext.setUserOperationLock(userName, fileSize);
     }
 
 
@@ -236,4 +252,14 @@ public class FileReadService {
         FileUtils.writeFile(filePath, fileName, stringBuilder.substring(0, stringBuilder.length()-1));
         return new File(filePath + File.separator + fileName);
     }
+
+    public synchronized String queryProgress(Integer fileSize) {
+        AtomicInteger atomicInteger = GlobalContext.getRemainSize(HttpUtils.getLoginUserName());
+        int remainSize = atomicInteger == null ? 0 : atomicInteger.get();
+        logger.info("查询进度>>>>>>>>>>>>>>>>>>{}", remainSize);
+        BigDecimal result = new BigDecimal(fileSize - remainSize).divide(new BigDecimal(fileSize), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+        logger.info("查询进度>>>>>>>>>>>>>>>>>>{}", result);
+        return result.setScale(0, RoundingMode.HALF_UP) + "%";
+    }
+
 }

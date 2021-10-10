@@ -62,6 +62,12 @@
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring-boot-web-starter</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+
         <!--java doc-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

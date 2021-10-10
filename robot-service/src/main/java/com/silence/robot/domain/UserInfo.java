@@ -2,8 +2,13 @@ package com.silence.robot.domain;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.Serializable;
 
-public class UserInfo {
+
+/**
+ * @author silence
+ */
+public class UserInfo implements Serializable {
 
     /**
      * 用户登录名
@@ -65,7 +70,7 @@ public class UserInfo {
      */
     private String avatar;
 
-    public UserInfo(){
+    public UserInfo() {
 
     }
 
@@ -164,24 +169,6 @@ public class UserInfo {
 
     public void setIpAddr(String ipAddr) {
         this.ipAddr = ipAddr;
-    }
-
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", imageCode='" + imageCode + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", roleNo='" + roleNo + '\'' +
-                ", roleName='" + roleName + '\'' +
-                ", ipAddr='" + ipAddr + '\'' +
-                ", imageWithVerifyCode='" + imageWithVerifyCode + '\'' +
-                ", id='" + id + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", sign='" + sign + '\'' +
-                ", avatar='" + avatar + '\'' +
-                '}';
     }
 
     public String toJSONString() {

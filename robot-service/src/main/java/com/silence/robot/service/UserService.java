@@ -24,6 +24,8 @@ import com.silence.robot.model.TUser;
 import com.silence.robot.model.TUserTalkInfo;
 import com.silence.robot.utils.BeanUtils;
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.SpringContextHelper;
+import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -96,7 +98,7 @@ public class UserService {
         if(CommonUtils.isNotEmpty(userFlag)){
             throw new BusinessException(ExceptionCode.EXIST_ERROR);
         }
-        user.setPassword(CommonUtils.strToMD5(user.getUsername()));
+        user.setPassword(encryptPassword(user.getUsername()));
         userMapper.insert(user);
         //添加到聊天面板
         instantMessagingService.registerUser(userInfo);
@@ -135,25 +137,21 @@ public class UserService {
     public void modifyPassword(UserInfo userInfo){
         //暂时用id代替原密码
         TUser user = userMapper.selectByUsername(userInfo.getUsername());
-        String md5 = CommonUtils.strToMD5(userInfo.getId());
-        if(!user.getPassword().equals(md5)){
+        if(!matchPassword(userInfo.getId(), user.getPassword())){
             throw new BusinessException(ExceptionCode.PASSWORD_ERROR);
         }
 
-        String password = userInfo.getPassword();
-        password = CommonUtils.strToMD5(password);
-        if(user.getPassword().equals(password)){
+        if(userInfo.getId().equals(userInfo.getPassword())){
             throw new BusinessException(ExceptionCode.PASSWORD_SAME_ERROR);
         }
-        user.setPassword(password);
+        user.setPassword(encryptPassword(userInfo.getPassword()));
         userMapper.updateByPrimaryKey(user);
     }
 
-    public void resetPassword(List<UserInfo> list){
-        list.forEach(userInfo -> {
-            String username = userInfo.getUsername();
+    public void resetPassword(List<String> list){
+        list.forEach(username -> {
             TUser user = userMapper.selectByUsername(username);
-            user.setPassword(CommonUtils.strToMD5(username));
+            user.setPassword(encryptPassword(user.getUsername()));
             userMapper.updateByPrimaryKey(user);
         });
     }
@@ -177,6 +175,16 @@ public class UserService {
             list.add(userInfo);
         });
         return list;
+    }
+
+    private String encryptPassword(String password) {
+        PasswordMatcher credentialsMatcher = SpringContextHelper.getBean(PasswordMatcher.class);
+        return credentialsMatcher.getPasswordService().encryptPassword(password);
+    }
+
+    private boolean matchPassword(String oldPassword, String newPassword) {
+        PasswordMatcher credentialsMatcher = SpringContextHelper.getBean(PasswordMatcher.class);
+        return credentialsMatcher.getPasswordService().passwordsMatch(oldPassword, newPassword);
     }
 
 

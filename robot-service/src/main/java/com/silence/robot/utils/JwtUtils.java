@@ -30,7 +30,7 @@ public class JwtUtils {
                 //过期时间
                 .withExpiresAt(DateUtils.addMinutes(new Date(), 30))
                 //载荷
-                .withClaim("userInfo", userInfo.toJSONString())
+                .withClaim("userInfo", BeanUtils.beanToMap(userInfo))
                 //加密
                 .sign(Algorithm.HMAC256(userInfo.getId()+CommonUtils.SLAT));
     }

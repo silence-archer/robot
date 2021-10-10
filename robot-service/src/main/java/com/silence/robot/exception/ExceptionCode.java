@@ -32,7 +32,7 @@ public enum ExceptionCode {
     SUBSCRIBE_TOKEN_ERROR(100023,"获取微信公众号凭证失败"),
     HTTP_REQUEST_ERROR(100024,"http请求失败"),
     UPLOAD_ERROR(100025,"上传文件失败"),
-    FILE_READ_ERROR(100026,"文件读取失败"),
+    FILE_READ_ERROR(100026,"文件读取失败[%s]"),
     EMPTY_ERROR(100027,"存在为空数据项"),
     DATABASE_CONNECT_ERROR(100028,"自定义数据库链接失败"),
     JSON_PARSE_ERROR(100029,"暂不支持json报文进行数组嵌套"),

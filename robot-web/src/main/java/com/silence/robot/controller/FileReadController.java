@@ -77,8 +77,8 @@ public class FileReadController {
     }
 
     @GetMapping("/deleteFileBody")
-    public DataResponse<?> deleteFileBody(@RequestParam("username") String username) {
-        fileReadService.deleteFileBody(username);
+    public DataResponse<?> deleteFileBody(@RequestParam("fileSize") Integer fileSize) {
+        fileReadService.deleteFileBody(fileSize);
         return new DataResponse<>();
     }
 
@@ -96,6 +96,11 @@ public class FileReadController {
         DataResponse<List<JSONObject>> dataResponse = new DataResponse<>(fileBody.getList());
         dataResponse.setCount(fileBody.getTotal());
         return dataResponse;
+    }
+
+    @GetMapping("/queryProgress")
+    public DataResponse<String> queryProgress(@RequestParam("fileSize") Integer fileSize) {
+        return new DataResponse<>(fileReadService.queryProgress(fileSize));
     }
 
     @GetMapping("/fileDownload")

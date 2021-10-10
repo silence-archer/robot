@@ -3,6 +3,7 @@ package com.silence.robot.controller;
 import com.alibaba.fastjson.JSONException;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.exception.BusinessException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +22,8 @@ public class RobotControllerAdvice {
     @ExceptionHandler(Exception.class)
     public DataResponse<?> errorHandle(Exception e){
         log.error("未知错误",e);
-        return new DataResponse<>(99999,"未知错误");
+        String msg = e.getMessage() == null ? "未知错误" : e.getMessage();
+        return new DataResponse<>(99999,msg);
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
@@ -34,6 +36,12 @@ public class RobotControllerAdvice {
     public DataResponse<?> errorBusinessHandle(JSONException e){
         log.error("JSON转化失败",e);
         return new DataResponse<>(99997,"JSON转化失败");
+    }
+
+    @ExceptionHandler(IncorrectCredentialsException.class)
+    public DataResponse<?> errorBusinessHandle(IncorrectCredentialsException e){
+        log.error("用户名密码错误",e);
+        return new DataResponse<>(99996,"用户名密码错误");
     }
 
     @ExceptionHandler(BusinessException.class)

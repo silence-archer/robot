@@ -5,6 +5,7 @@ spring:
     read:
       url: jdbc:sqlite:${sqlite.url}?date_string_format=yyyy-MM-dd HH:mm:ss
     hikari:
-      maximum-pool-size: 1
+      maximum-pool-size: 10
+      connection-timeout: 30000
 sqlite:
   url: D:\JetBrains\IntelliJ IDEA 2020.1\bin\identifier.sqlite

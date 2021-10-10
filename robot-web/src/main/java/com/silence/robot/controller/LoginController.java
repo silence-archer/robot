@@ -7,8 +7,13 @@ import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.service.LoginService;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.HttpUtils;
+import com.silence.robot.utils.JwtUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +32,7 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public DataResponse<?> login(@RequestBody UserInfo userInfo) {
+    public DataResponse<UserInfo> login(@RequestBody UserInfo userInfo) {
         String imageCode = HttpUtils.getImageCode();
         if (CommonUtils.isEmpty(imageCode)) {
             throw new BusinessException(ExceptionCode.VERIFY_ERROR);
@@ -38,12 +43,24 @@ public class LoginController {
         } else {
             throw new BusinessException(ExceptionCode.VERIFY_ERROR);
         }
+
+        AuthenticationToken authenticationToken = new UsernamePasswordToken(userInfo.getUsername(), userInfo.getPassword());
+        SecurityUtils.getSubject().login(authenticationToken);
         loginService.login(userInfo);
         userInfo.setPassword(null);
         userInfo.setImageCode(null);
         userInfo.setImageWithVerifyCode(null);
-        HttpUtils.putUserInfo(userInfo);
+        DataResponse<UserInfo> response = new DataResponse<>();
+        String token = JwtUtils.createToken(userInfo);
+        response.setToken(token);
+        HttpUtils.putUserInfo(userInfo, token);
+        response.setData(userInfo);
+        return response;
+    }
 
+    @GetMapping("/logout")
+    public DataResponse<?> logout() {
+        HttpUtils.removeUserInfo();
         return new DataResponse<>();
     }
 }

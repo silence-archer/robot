@@ -31,6 +31,8 @@ public interface TUserMapper {
 
 
     TUser selectByUsername(String username);
+    String selectPassword(String username);
+    String selectRole(String username);
     List<TUser> selectByCondition(TUser record);
 
 

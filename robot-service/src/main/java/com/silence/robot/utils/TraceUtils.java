@@ -15,11 +15,14 @@ import org.slf4j.MDC;
  */
 public class TraceUtils {
 
+    private static final InheritableThreadLocal<String> STRING_INHERITABLE_THREAD_LOCAL = new InheritableThreadLocal<>();
     private static final String TRACE_ID = "TRACE_ID";
     private static final String LOCAL_ID = "LOCAL_ID";
 
     public static void begin(){
-        MDC.put(TRACE_ID, CommonUtils.getUuid());
+        String uuid = CommonUtils.getUuid();
+        MDC.put(TRACE_ID, uuid);
+        STRING_INHERITABLE_THREAD_LOCAL.set(uuid);
     }
 
     public static void begin(String traceId, String localId){
@@ -29,10 +32,15 @@ public class TraceUtils {
 
     public static void end(){
         MDC.clear();
+        STRING_INHERITABLE_THREAD_LOCAL.remove();
     }
 
     public static String getTraceId(){
         return MDC.get(TRACE_ID);
+    }
+
+    public static String getParentTraceId(){
+        return STRING_INHERITABLE_THREAD_LOCAL.get();
     }
 
     public static String getLocalId(){
