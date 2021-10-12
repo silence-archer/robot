@@ -11,6 +11,7 @@ import com.silence.robot.utils.JwtUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,13 +46,15 @@ public class LoginController {
         }
 
         AuthenticationToken authenticationToken = new UsernamePasswordToken(userInfo.getUsername(), userInfo.getPassword());
-        SecurityUtils.getSubject().login(authenticationToken);
+        Subject subject = SecurityUtils.getSubject();
+        subject.login(authenticationToken);
         loginService.login(userInfo);
         userInfo.setPassword(null);
         userInfo.setImageCode(null);
         userInfo.setImageWithVerifyCode(null);
         DataResponse<UserInfo> response = new DataResponse<>();
         String token = JwtUtils.createToken(userInfo);
+        subject.getSession().setAttribute("token", token);
         response.setToken(token);
         HttpUtils.putUserInfo(userInfo, token);
         response.setData(userInfo);

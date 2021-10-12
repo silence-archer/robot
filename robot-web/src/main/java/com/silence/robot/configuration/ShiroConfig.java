@@ -1,10 +1,12 @@
 package com.silence.robot.configuration;
 
+import com.silence.robot.config.MySessionIdGenerator;
 import com.silence.robot.shiro.UserRealm;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
@@ -66,7 +68,11 @@ public class ShiroConfig {
 
     @Bean
     public SessionManager sessionManager() {
-        return new MyShiroWebSessionManager();
+        MyShiroWebSessionManager myShiroWebSessionManager = new MyShiroWebSessionManager();
+        MemorySessionDAO sessionDAO = new MemorySessionDAO();
+        sessionDAO.setSessionIdGenerator(new MySessionIdGenerator());
+        myShiroWebSessionManager.setSessionDAO(sessionDAO);
+        return myShiroWebSessionManager;
     }
 
 

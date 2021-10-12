@@ -7,6 +7,7 @@ import com.silence.robot.listener.JwtSessionListener;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.DateUtils;
 import com.silence.robot.utils.JwtUtils;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -45,7 +46,8 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
         }
 
         JwtUtils.verifyToken(token, userId);
-        request.getSession().setAttribute("userInfo", JwtUtils.getUserInfo(token));
+//        request.getSession().setAttribute("userInfo", JwtUtils.getUserInfo(token));
+        SecurityUtils.getSubject().getSession().setAttribute("userInfo", JwtUtils.getUserInfo(token));
         Date date = DateUtils.addMinutes(new Date(), 5);
         if (JwtUtils.getExpiresAt(token).compareTo(date) < 0) {
             //token还有五分钟超时，自动刷新

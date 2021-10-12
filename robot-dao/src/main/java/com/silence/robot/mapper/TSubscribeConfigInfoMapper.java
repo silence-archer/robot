@@ -1,6 +1,8 @@
 package com.silence.robot.mapper;
 
 import com.silence.robot.model.TSubscribeConfigInfo;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface TSubscribeConfigInfoMapper {
@@ -29,6 +31,7 @@ public interface TSubscribeConfigInfoMapper {
      */
     TSubscribeConfigInfo selectByPrimaryKey(String id);
     TSubscribeConfigInfo selectByConfigName(String configName);
+    TSubscribeConfigInfo selectByConfigNameAndUsername(@Param("configName") String configName, @Param("createUser") String createUser);
     List<TSubscribeConfigInfo> selectByCreateUser(String createUser);
 
     /**

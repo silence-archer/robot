@@ -50,11 +50,8 @@ public class SubscribeConfigInfoService {
     }
 
     public String getConfigValue(String configName, String username){
-        TSubscribeConfigInfo subscribeConfigInfo = subscribeConfigInfoMapper.selectByConfigName(configName);
+        TSubscribeConfigInfo subscribeConfigInfo = subscribeConfigInfoMapper.selectByConfigNameAndUsername(configName, username);
         if(subscribeConfigInfo == null){
-            throw new BusinessException(ExceptionCode.NO_EXIST_PARAM, username, configName);
-        }
-        if(CommonUtils.isNotEmpty(username) && CommonUtils.isNotEquals(username, subscribeConfigInfo.getCreateUser())) {
             throw new BusinessException(ExceptionCode.NO_EXIST_PARAM, username, configName);
         }
         String configValue = subscribeConfigInfo.getConfigValue();
