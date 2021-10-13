@@ -1,14 +1,15 @@
 package com.silence.robot.configuration;
 
-import com.silence.robot.config.MySessionIdGenerator;
 import com.silence.robot.shiro.UserRealm;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.PasswordMatcher;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.session.mgt.SessionManager;
-import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.mgt.DefaultWebSessionStorageEvaluator;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -67,12 +68,12 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SessionManager sessionManager() {
-        MyShiroWebSessionManager myShiroWebSessionManager = new MyShiroWebSessionManager();
-        MemorySessionDAO sessionDAO = new MemorySessionDAO();
-        sessionDAO.setSessionIdGenerator(new MySessionIdGenerator());
-        myShiroWebSessionManager.setSessionDAO(sessionDAO);
-        return myShiroWebSessionManager;
+    public SecurityManager securityManager(@Autowired Realm realm) {
+        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager(realm);
+        DefaultSubjectDAO subjectDAO = (DefaultSubjectDAO) defaultWebSecurityManager.getSubjectDAO();
+        //禁用shiro session
+        ((DefaultWebSessionStorageEvaluator) subjectDAO.getSessionStorageEvaluator()).setSessionStorageEnabled(false);
+        return defaultWebSecurityManager;
     }
 
 

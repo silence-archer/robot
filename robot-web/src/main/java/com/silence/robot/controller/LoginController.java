@@ -54,7 +54,6 @@ public class LoginController {
         userInfo.setImageWithVerifyCode(null);
         DataResponse<UserInfo> response = new DataResponse<>();
         String token = JwtUtils.createToken(userInfo);
-        subject.getSession().setAttribute("token", token);
         response.setToken(token);
         HttpUtils.putUserInfo(userInfo, token);
         response.setData(userInfo);
