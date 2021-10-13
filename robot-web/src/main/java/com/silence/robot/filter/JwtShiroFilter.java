@@ -37,4 +37,9 @@ public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
         HttpServletRequest httpRequest = WebUtils.toHttp(request);
         return httpRequest.getHeader("token");
     }
+
+    @Override
+    protected boolean sendChallenge(ServletRequest request, ServletResponse response) {
+        return false;
+    }
 }

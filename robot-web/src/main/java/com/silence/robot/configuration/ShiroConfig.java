@@ -1,19 +1,30 @@
 package com.silence.robot.configuration;
 
+import com.silence.robot.filter.JwtShiroFilter;
 import com.silence.robot.shiro.UserRealm;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.mgt.SessionsSecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
+import org.apache.shiro.web.filter.mgt.DefaultFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.DefaultWebSessionStorageEvaluator;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.Filter;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -42,7 +53,22 @@ public class ShiroConfig {
         //比如/admins/**=anon 没有参数，表示可以匿名使用。
         chainDefinition.addPathDefinition("/verifyCode", "anon");
         chainDefinition.addPathDefinition("/login", "anon");
+        chainDefinition.addPathDefinition("/**", "jwt");
         return chainDefinition;
+    }
+
+    @Bean
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager, ShiroFilterChainDefinition shiroFilterChainDefinition) {
+        ShiroFilterFactoryBean filterFactoryBean = new ShiroFilterFactoryBean();
+
+        filterFactoryBean.setSecurityManager(securityManager);
+        filterFactoryBean.setGlobalFilters(Collections.singletonList(DefaultFilter.invalidRequest.name()));
+        filterFactoryBean.setFilterChainDefinitionMap(shiroFilterChainDefinition.getFilterChainMap());
+        Map<String, Filter> filters = new HashMap<>(1);
+        filters.put("jwt", new JwtShiroFilter());
+        filterFactoryBean.setFilters(filters);
+
+        return filterFactoryBean;
     }
 
     @Bean
@@ -68,7 +94,7 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SecurityManager securityManager(@Autowired Realm realm) {
+    public SessionsSecurityManager securityManager(@Autowired Realm realm) {
         DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager(realm);
         DefaultSubjectDAO subjectDAO = (DefaultSubjectDAO) defaultWebSecurityManager.getSubjectDAO();
         //禁用shiro session

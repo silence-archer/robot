@@ -27,8 +27,7 @@ public class SpringContextConfiguration {
 
     @Bean
     public SpringContextHelper getSpringContextHelper(){
-        SpringContextHelper springContextHelper = new SpringContextHelper();
-        return springContextHelper;
+        return new SpringContextHelper();
     }
 
 }
