@@ -1,6 +1,11 @@
 package com.silence.robot.shiro;
 
+import com.silence.robot.domain.UserInfo;
+import com.silence.robot.exception.BusinessException;
+import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TUserMapper;
+import com.silence.robot.token.JwtShiroToken;
+import com.silence.robot.utils.JwtUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.PasswordMatcher;
@@ -54,6 +59,11 @@ public class UserRealm extends AuthorizingRealm {
         return info;
     }
 
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return super.supports(token) || token instanceof JwtShiroToken;
+    }
+
     /**
      * 获取身份验证信息
      * @param authenticationToken
@@ -63,12 +73,22 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         logger.info("开始进行身份验证{}", authenticationToken.getPrincipal());
-        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-        // 从数据库获取对应用户名密码的用户
-        String password = userMapper.selectPassword(token.getUsername());
-        if (null == password) {
-            throw new AccountException("用户名不正确");
+        if (authenticationToken instanceof UsernamePasswordToken) {
+            UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+            // 从数据库获取对应用户名密码的用户
+            String password = userMapper.selectPassword(token.getUsername());
+            if (null == password) {
+                throw new BusinessException(ExceptionCode.LOGIN_ERROR);
+            }
+            return new SimpleAuthenticationInfo(token.getUsername(), password, getName());
         }
-        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+        return new SimpleAuthenticationInfo(authenticationToken.getPrincipal(), authenticationToken.getCredentials(), getName());
+    }
+
+    @Override
+    protected void assertCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) throws AuthenticationException {
+        if (token instanceof UsernamePasswordToken) {
+            super.assertCredentialsMatch(token, info);
+        }
     }
 }

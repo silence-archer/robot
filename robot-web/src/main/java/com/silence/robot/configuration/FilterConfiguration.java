@@ -24,6 +24,7 @@ public class FilterConfiguration {
         logger.info("FilterRegistrationBean >>>>>>>>>>>>>> myFilter");
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new MyFilter());
+        filterRegistrationBean.setOrder(Integer.MIN_VALUE);
         return filterRegistrationBean;
     }
 }
