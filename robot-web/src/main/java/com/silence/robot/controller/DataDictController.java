@@ -4,7 +4,7 @@ import com.silence.robot.domain.DataDictDto;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.DataDictService;
-import com.silence.robot.service.SubscribeConfigInfoService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +26,6 @@ public class DataDictController {
 
     @Resource
     private DataDictService dataDictService;
-    @Resource
-    private SubscribeConfigInfoService subscribeConfigInfoService;
 
     @GetMapping("/getDataDictList")
     public DataResponse<List<DataDictDto>> getDataDictList(@RequestParam Integer page, @RequestParam Integer limit) {
@@ -58,6 +56,7 @@ public class DataDictController {
     }
 
     @GetMapping("/deleteDataDict")
+    @RequiresRoles("roleNo0001")
     public DataResponse<?> deleteDataDict(@RequestParam String id) {
         dataDictService.deleteDataDict(id);
         return new DataResponse<>();

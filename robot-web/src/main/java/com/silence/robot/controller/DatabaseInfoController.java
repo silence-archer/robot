@@ -33,8 +33,8 @@ public class DatabaseInfoController {
     }
 
     @GetMapping("/deleteDatabaseInfo")
-    public DataResponse<?> deleteDatabaseInfo(@RequestParam String id) {
-        databaseInfoService.deleteDatabaseInfo(id);
+    public DataResponse<?> deleteDatabaseInfo(@RequestParam String businessType) {
+        databaseInfoService.deleteDatabaseInfo(businessType);
         return new DataResponse<>();
     }
 

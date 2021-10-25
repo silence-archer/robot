@@ -5,10 +5,8 @@ import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TUserMapper;
 import com.silence.robot.token.JwtShiroToken;
-import com.silence.robot.utils.JwtUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -33,9 +31,6 @@ public class UserRealm extends AuthorizingRealm {
     @Resource
     private TUserMapper userMapper;
 
-    @Resource
-    private PasswordMatcher credentialsMatcher;
-
     /**
      * 获取授权信息
      * @param principals
@@ -43,8 +38,8 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        logger.info("开始进行权限认证{}", principals.getRealmNames());
-        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getSession().getAttribute("userInfo");
+        String username = userInfo.getUsername();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         //获得该用户角色
         String role = userMapper.selectRole(username);

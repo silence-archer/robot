@@ -11,10 +11,8 @@ silence:
     allowCookie: false
     paths:
       - /login
-      - /getUser
       - /verifyCode
       - /mock
-      - /upload/**
       - /signature/*
   wechat:
     subscribe:

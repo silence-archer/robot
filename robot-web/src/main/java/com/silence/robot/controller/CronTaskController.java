@@ -12,8 +12,8 @@ package com.silence.robot.controller;
 
 import com.silence.robot.domain.CronTaskInfo;
 import com.silence.robot.dto.DataResponse;
-import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.CronTaskService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,16 +34,19 @@ public class CronTaskController {
     private CronTaskService cronTaskService;
 
     @PostMapping("/addCronTask")
+    @RequiresRoles("roleNo0001")
     public DataResponse<?> addCronTask(@RequestBody CronTaskInfo cronTaskInfo){
         cronTaskService.addCronTask(cronTaskInfo);
         return new DataResponse<>();
     }
     @PostMapping("/updateCronTask")
+    @RequiresRoles("roleNo0001")
     public DataResponse<?> updateCronTask(@RequestBody CronTaskInfo cronTaskInfo){
         cronTaskService.updateCronTask(cronTaskInfo);
         return new DataResponse<>();
     }
     @GetMapping("/deleteCronTask")
+    @RequiresRoles("roleNo0001")
     public DataResponse<?> deleteCronTask(@RequestParam String jobName){
         cronTaskService.deleteCronTask(jobName);
         return new DataResponse<>();

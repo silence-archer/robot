@@ -2,8 +2,6 @@ package com.silence.robot.configuration;
 
 import com.silence.robot.filter.JwtShiroFilter;
 import com.silence.robot.shiro.UserRealm;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -18,9 +16,11 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.mgt.DefaultWebSessionStorageEvaluator;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +34,11 @@ import java.util.Map;
  * @date 2021/9/22
  */
 @Configuration
+@EnableConfigurationProperties(SilenceConfigurationProperties.class)
 public class ShiroConfig {
+
+    @Resource
+    private SilenceConfigurationProperties properties;
 
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
@@ -51,8 +55,7 @@ public class ShiroConfig {
         // all other pPathMatchingFilteraths require a logged in user
         //比如/admins/user/**=authc表示需要认证才能使用，没有参数
         //比如/admins/**=anon 没有参数，表示可以匿名使用。
-        chainDefinition.addPathDefinition("/verifyCode", "anon");
-        chainDefinition.addPathDefinition("/login", "anon");
+        properties.getPaths().forEach(uri -> chainDefinition.addPathDefinition(uri, "anon"));
         chainDefinition.addPathDefinition("/**", "jwt");
         return chainDefinition;
     }

@@ -15,10 +15,10 @@ import com.silence.robot.domain.RoleInfo;
 import com.silence.robot.dto.DataRequest;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.RoleService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,18 +46,21 @@ public class RoleController {
     }
 
     @GetMapping("/deleteRole")
+    @RequiresRoles("roleNo0001")
     public DataResponse<?> deleteRole(@RequestParam String roleNo){
         roleService.deleteRole(roleNo);
         return new DataResponse<>();
     }
 
     @PostMapping("/addRole")
+    @RequiresRoles("roleNo0001")
     public DataResponse<?> addRole(@RequestBody DataRequest<List<MenuData>> request){
         roleService.addRole(request.getType(), request.getData());
         return new DataResponse<>();
     }
 
     @PostMapping("/modifyRole")
+    @RequiresRoles("roleNo0001")
     public DataResponse<?> modifyRole(@RequestBody DataRequest<List<MenuData>> request){
         roleService.modifyRole(request.getApiCd(), request.getType(), request.getData());
         return new DataResponse<>();
