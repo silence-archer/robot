@@ -8,7 +8,7 @@ import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.service.UserService;
 import com.silence.robot.utils.HttpUtils;
 import com.silence.robot.utils.JwtUtils;
-import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -66,21 +66,21 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("USER:ADD")
     public DataResponse<?> addUser(@RequestBody UserInfo userInfo){
         userService.addUser(userInfo);
         return new DataResponse<>();
     }
 
     @PostMapping("/updateUser")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("USER:UPDATE")
     public DataResponse<?> updateUser(@RequestBody UserInfo userInfo){
         userService.updateUser(userInfo);
         return new DataResponse<>();
     }
 
     @GetMapping("/deleteUser")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("USER:DELETE")
     public DataResponse<?> deleteUser(@RequestParam String id){
         userService.deleteUser(id);
         return new DataResponse<>();
@@ -95,7 +95,7 @@ public class UserController {
     }
 
     @GetMapping("/resetPassword")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("USER:UPDATE")
     public DataResponse<?> resetPassword(@RequestParam List<String> usernames){
 
         userService.resetPassword(usernames);

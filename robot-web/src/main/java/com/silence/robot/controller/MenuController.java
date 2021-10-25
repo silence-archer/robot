@@ -18,7 +18,7 @@ import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.service.MenuService;
 import com.silence.robot.utils.HttpUtils;
-import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,21 +43,21 @@ public class MenuController {
     private MenuService menuService;
 
     @PostMapping("/addMenuData")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("MENU:ADD")
     public DataResponse<?> addMenuData(@RequestBody MenuData menuData){
         menuService.addMenu(menuData);
         return new DataResponse<>();
     }
 
     @PostMapping("/deleteMenuData")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("MENU:DELETE")
     public DataResponse<?> deleteMenuData(@RequestBody MenuData menuData){
         menuService.deleteMenu(menuData);
         return new DataResponse<>();
     }
 
     @PostMapping("/updateMenuData")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("MENU:UPDATE")
     public DataResponse<?> updateMenuData(@RequestBody MenuData menuData){
         menuService.updateMenu(menuData);
         return new DataResponse<>();

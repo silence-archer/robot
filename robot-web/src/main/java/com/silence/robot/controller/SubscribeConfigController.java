@@ -4,7 +4,7 @@ import com.silence.robot.domain.RobotPage;
 import com.silence.robot.domain.SubscribeConfigDto;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.SubscribeConfigInfoService;
-import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -44,14 +44,14 @@ public class SubscribeConfigController {
     }
 
     @GetMapping("/deleteSubscribeConfig")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("SUBSCRIBE:DELETE")
     public DataResponse<?> deleteSubscribeConfig(@RequestParam String id) {
         subscribeConfigInfoService.deleteSubscribeConfig(id);
         return new DataResponse<>();
     }
 
     @GetMapping("/deleteBatchSubscribeConfig")
-    @RequiresRoles("roleNo0001")
+    @RequiresPermissions("SUBSCRIBE:DELETE")
     public DataResponse<?> deleteBatchSubscribeConfig(@RequestParam List<String> ids) {
         subscribeConfigInfoService.deleteBatchSubscribeConfig(ids);
         return new DataResponse<>();

@@ -49,7 +49,9 @@ public class UserRealm extends AuthorizingRealm {
         //设置该用户拥有的角色
         info.setRoles(set);
         Set<String> permissionSet = new HashSet<>();
-        permissionSet.add("USER:DELETE");
+        permissionSet.add("*:DELETE");
+        permissionSet.add("MENU:*");
+        permissionSet.add("ROLE:ADD,DELETE,UPDATE");
         info.setStringPermissions(permissionSet);
         return info;
     }
