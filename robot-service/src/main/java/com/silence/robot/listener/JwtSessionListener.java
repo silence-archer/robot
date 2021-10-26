@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class JwtSessionListener {
     private static final ConcurrentHashMap<String, String> IMAGE_CODE_MAP = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<String, String> TOKEN_MAP = new ConcurrentHashMap<>();
 
 
     public static void putImageCode(String imageCode) {
@@ -27,16 +26,5 @@ public class JwtSessionListener {
         IMAGE_CODE_MAP.remove(HttpUtils.getIpAddress());
     }
 
-    public static void putToken(String userId, String token) {
-        TOKEN_MAP.put(userId, token);
-    }
-
-    public static String getToken(String userId) {
-        return TOKEN_MAP.get(userId);
-    }
-
-    public static void removeUserInfo(String userId) {
-        TOKEN_MAP.remove(userId);
-    }
 
 }

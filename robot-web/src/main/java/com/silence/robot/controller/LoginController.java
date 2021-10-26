@@ -7,7 +7,6 @@ import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.service.LoginService;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.HttpUtils;
-import com.silence.robot.utils.JwtUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -53,9 +52,9 @@ public class LoginController {
         userInfo.setImageCode(null);
         userInfo.setImageWithVerifyCode(null);
         DataResponse<UserInfo> response = new DataResponse<>();
-        String token = JwtUtils.createToken(userInfo);
+        String token = subject.getSession().getId().toString();
         response.setToken(token);
-        HttpUtils.putUserInfo(userInfo, token);
+        HttpUtils.putUserInfo(userInfo);
         response.setData(userInfo);
         return response;
     }

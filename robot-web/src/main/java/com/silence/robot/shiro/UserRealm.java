@@ -4,7 +4,6 @@ import com.silence.robot.domain.UserInfo;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TUserMapper;
-import com.silence.robot.token.JwtShiroToken;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -49,16 +48,9 @@ public class UserRealm extends AuthorizingRealm {
         //设置该用户拥有的角色
         info.setRoles(set);
         Set<String> permissionSet = new HashSet<>();
-        permissionSet.add("*:DELETE");
-        permissionSet.add("MENU:*");
-        permissionSet.add("ROLE:ADD,DELETE,UPDATE");
+        permissionSet.add("*:ADD,DELETE,UPDATE");
         info.setStringPermissions(permissionSet);
         return info;
-    }
-
-    @Override
-    public boolean supports(AuthenticationToken token) {
-        return super.supports(token) || token instanceof JwtShiroToken;
     }
 
     /**
@@ -82,10 +74,4 @@ public class UserRealm extends AuthorizingRealm {
         return new SimpleAuthenticationInfo(authenticationToken.getPrincipal(), authenticationToken.getCredentials(), getName());
     }
 
-    @Override
-    protected void assertCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) throws AuthenticationException {
-        if (token instanceof UsernamePasswordToken) {
-            super.assertCredentialsMatch(token, info);
-        }
-    }
 }

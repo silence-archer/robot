@@ -130,33 +130,16 @@ public class HttpUtils {
     }
 
     public static UserInfo getUserInfo(){
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        UserInfo userInfo = null;
-        if (requestAttributes != null) {
-            HttpServletRequest request = requestAttributes.getRequest();
-            userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
-        }
-        return userInfo;
+
+        return (UserInfo) SecurityUtils.getSubject().getSession().getAttribute("userInfo");
     }
 
     public static void removeUserInfo(){
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            HttpServletRequest request = requestAttributes.getRequest();
-            UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userInfo");
-            JwtSessionListener.removeUserInfo(userInfo.getId());
-            SecurityUtils.getSubject().logout();
-        }
-
+        SecurityUtils.getSubject().logout();
     }
 
-    public static void putUserInfo(UserInfo userInfo, String token){
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            HttpServletRequest request = requestAttributes.getRequest();
-            request.getSession().setAttribute("userInfo", userInfo);
-        }
-        JwtSessionListener.putToken(userInfo.getId(), token);
+    public static void putUserInfo(UserInfo userInfo){
+        SecurityUtils.getSubject().getSession().setAttribute("userInfo", userInfo);
     }
 
     public static void putImageCode(String imageCode){
