@@ -11,7 +11,8 @@ public enum ConfigEnum {
     LOAN_DATE_ENUM("loan_date","交易系统日期"),
     DELICACY_ENUM("delicacy","每日菜单"),
     UPLOAD_PATH_ENUM("upload_path","上传文件路径"),
-    AUTO_INTERFACE_PATH_ENUM("auto_interface_path","自动生成接口文件路径");
+    AUTO_INTERFACE_PATH_ENUM("auto_interface_path","自动生成接口文件路径"),
+    ESB_URI_ENUM("esb_uri","esb请求路径");
 
     private final String name;
 
