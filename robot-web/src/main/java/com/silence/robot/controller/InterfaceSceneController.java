@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.domain.InterfaceSceneDto;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.dto.DataResponse;
+import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.service.InterfaceSceneService;
+import com.silence.robot.service.SubscribeConfigInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,8 @@ public class InterfaceSceneController {
 
     @Resource
     private InterfaceSceneService interfaceSceneService;
+    @Resource
+    private SubscribeConfigInfoService subscribeConfigInfoService;
     @GetMapping("/getInterfaceScene")
     public DataResponse<List<InterfaceSceneDto>> getInterfaceScene(@RequestParam Integer page, @RequestParam Integer limit) {
 
@@ -44,7 +48,15 @@ public class InterfaceSceneController {
 
     @GetMapping("/getSceneBySceneId")
     public DataResponse<JSONObject> getSceneBySceneId(@RequestParam String sceneId) {
-        return new DataResponse<>(interfaceSceneService.getSceneBySceneId(sceneId));
+        String configValue = subscribeConfigInfoService.getConfigValue(ConfigEnum.FREE_MARKER_VERSION_ENUM);
+        JSONObject scene;
+        if ("2.0".equals(configValue)) {
+            scene = interfaceSceneService.getSceneBySceneIdVersion2(sceneId);
+        }else {
+            scene = interfaceSceneService.getSceneBySceneId(sceneId);
+        }
+
+        return new DataResponse<>(scene);
     }
 
     @PostMapping("/addInterfaceScene")

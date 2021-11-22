@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.dto.DataRequest;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.dto.LoanDto;
+import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.service.LoanService;
+import com.silence.robot.service.SubscribeConfigInfoService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,9 @@ public class LoanController {
     @Resource
     private LoanService loanService;
 
+    @Resource
+    private SubscribeConfigInfoService subscribeConfigInfoService;
+
     @PostMapping("/loanTry")
     public DataResponse<BigDecimal> loanTryService(@RequestBody DataRequest<LoanDto> request){
         LoanDto loanDto = request.getData();
@@ -33,7 +38,13 @@ public class LoanController {
     @PostMapping("/loan")
     public DataResponse<JSONObject> loanService(@RequestBody DataRequest<JSONObject> request){
         JSONObject data = request.getData();
-        JSONObject body = loanService.executeLoan(request.getApiCd(), data);
+        String configValue = subscribeConfigInfoService.getConfigValue(ConfigEnum.FREE_MARKER_VERSION_ENUM);
+        JSONObject body = null;
+        if ("2.0".equals(configValue)) {
+            body = loanService.executeLoanVersion2(request.getApiCd(), data);
+        }else {
+            body = loanService.executeLoan(request.getApiCd(), data);
+        }
         return new DataResponse<>(body);
     }
 }

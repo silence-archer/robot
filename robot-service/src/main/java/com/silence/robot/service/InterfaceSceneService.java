@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.silence.robot.domain.InterfaceSceneDto;
 import com.silence.robot.domain.RobotPage;
+import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TInterfaceSceneMapper;
@@ -64,6 +65,35 @@ public class InterfaceSceneService {
 
         });
         JSONObject body = jsonObject.getJSONObject("body");
+        JSONObject result = getBody(body);
+        jsonObject.put("sysHead", sysHead);
+        jsonObject.put("body", result);
+        return jsonObject;
+    }
+
+    public JSONObject getSceneBySceneIdVersion2(String sceneId) {
+        TInterfaceScene interfaceScene = interfaceSceneMapper.selectBySceneId(sceneId);
+        if (interfaceScene == null) {
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(interfaceScene.getSceneValue());
+        JSONObject sysHead = jsonObject.getJSONObject("SYS_HEAD");
+        sysHead.forEach((s, o) -> {
+            sysHead.put(s, o);
+            if (CommonUtils.isNotEquals(s, "SEQ_NO")) {
+                sysHead.put(s, getConfigValue(o.toString()));
+            }
+
+        });
+        JSONObject body = jsonObject.getJSONObject("BODY");
+        CommonUtils.updateJsonArray(body, "scene");
+        JSONObject result = getBody(body);
+        jsonObject.put("SYS_HEAD", sysHead);
+        jsonObject.put("BODY", result);
+        return jsonObject;
+    }
+
+    private JSONObject getBody(JSONObject body) {
         JSONObject result = new JSONObject();
         body.forEach((s, o) -> {
             if (o instanceof List) {
@@ -79,7 +109,10 @@ public class InterfaceSceneService {
                         if (o1 instanceof List) {
                             throw new BusinessException(ExceptionCode.JSON_PARSE_ERROR);
                         }
+
                         jsonArrayObject.put(s1, getConfigValue(o1.toString()));
+
+
                     });
                     resultArray.add(jsonArrayObject);
                 }
@@ -87,9 +120,7 @@ public class InterfaceSceneService {
                 result.put(s, getConfigValue(o.toString()));
             }
         });
-        jsonObject.put("sysHead", sysHead);
-        jsonObject.put("body", result);
-        return jsonObject;
+        return result;
     }
 
     private String getConfigValue(String configName) {
@@ -98,8 +129,8 @@ public class InterfaceSceneService {
             configName = configName.replace("{{", "");
             configName = configName.replace("}}", "");
             if (CommonUtils.isEquals("$timestamp", configName)) {
-                configValue = System.currentTimeMillis()+"";
-            }else {
+                configValue = System.currentTimeMillis() + "";
+            } else {
                 configValue = subscribeConfigInfoService.getConfigValue(configName, HttpUtils.getLoginUserName());
             }
         }
@@ -137,9 +168,17 @@ public class InterfaceSceneService {
 
     private void checkJson(String sceneValue) {
         JSONObject jsonObject = JSONObject.parseObject(sceneValue);
-        if (CommonUtils.existEmpty(jsonObject.getJSONObject("sysHead"), jsonObject.getJSONObject("body"))) {
-            throw new BusinessException(ExceptionCode.JSON_TEXT_ERROR);
+        String configValue = subscribeConfigInfoService.getConfigValue(ConfigEnum.FREE_MARKER_VERSION_ENUM);
+        if ("2.0".equals(configValue)) {
+            if (CommonUtils.existEmpty(jsonObject.getJSONObject("SYS_HEAD"), jsonObject.getJSONObject("BODY"))) {
+                throw new BusinessException(ExceptionCode.JSON_TEXT_ERROR);
+            }
+        } else {
+            if (CommonUtils.existEmpty(jsonObject.getJSONObject("sysHead"), jsonObject.getJSONObject("body"))) {
+                throw new BusinessException(ExceptionCode.JSON_TEXT_ERROR);
+            }
         }
+
     }
 
 }

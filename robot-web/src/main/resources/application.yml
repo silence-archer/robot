@@ -13,6 +13,7 @@ silence:
       - /login
       - /verifyCode
       - /mock
+      - /mock/*
       - /signature/*
   wechat:
     subscribe:

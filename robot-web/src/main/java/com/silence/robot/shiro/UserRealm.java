@@ -51,7 +51,7 @@ public class UserRealm extends AuthorizingRealm {
         Set<String> permissionSet = new HashSet<>();
         permissionSet.add("*:DELETE");
         permissionSet.add("MENU:*");
-        permissionSet.add("ROLE:ADD,DELETE,UPDATE");
+        permissionSet.add("*:ADD,DELETE,UPDATE");
         info.setStringPermissions(permissionSet);
         return info;
     }

@@ -9,9 +9,13 @@ package com.silence.robot.enumeration;
 public enum AutoInterfaceEnum {
     //
     AUTO_INTERFACE_HTML("loan.html", "interface_html.ftl","输入界面"),
+    AUTO_INTERFACE_2_0_HTML("loan.html", "interface_2_0_html.ftl","输入界面"),
     AUTO_INTERFACE_JS("loan.js","interface_js.ftl","输入界面js"),
+    AUTO_INTERFACE_2_0_JS("loan.js","interface_2_0_js.ftl","输入界面js"),
     AUTO_INTERFACE_RESULT_HTML("result/result.html","interface_result_html.ftl","输出界面"),
+    AUTO_INTERFACE_2_0_RESULT_HTML("result/result.html","interface_2_0_result_html.ftl","输出界面"),
     AUTO_INTERFACE_RESULT_JS("result/result.js","interface_result_js.ftl","输出界面js"),
+    AUTO_INTERFACE_2_0_RESULT_JS("result/result.js","interface_2_0_result_js.ftl","输出界面js"),
     ;
 
 

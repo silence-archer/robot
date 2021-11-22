@@ -56,7 +56,7 @@ public class FreeMarkerService {
             if (split.length != 5) {
                 throw new BusinessException(ExceptionCode.QUERY_ERROR);
             }
-            if (CommonUtils.isEquals(split[2], "Array")) {
+            if (CommonUtils.isEqualsIgnoreCase(split[2], "Array")) {
                 if (stack.isEmpty()) {
                     stack.push(split[0]);
                     FreeMarkerArrayDto freeMarkerArrayDto = new FreeMarkerArrayDto();
@@ -75,7 +75,7 @@ public class FreeMarkerService {
 
             FreeMarkerBodyDto freeMarkerBodyDto = new FreeMarkerBodyDto();
             freeMarkerBodyDto.setType("input");
-            RobotPage<DataDictDto> robotPage = dataDictService.getDataDictList(split[0], 1, 1);
+            RobotPage<DataDictDto> robotPage = dataDictService.getDataDictList(split[0]);
             if (robotPage.getTotal() > 0) {
                 freeMarkerBodyDto.setType("select");
             }

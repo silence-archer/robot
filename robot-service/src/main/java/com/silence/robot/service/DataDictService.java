@@ -45,10 +45,15 @@ public class DataDictService {
         page = page == null ? 1 : page;
         limit = limit == null ? Integer.MAX_VALUE : limit;
         PageHelper.startPage(page, limit);
+        name = CommonUtils.underlineToHump(name);
         List<TDataDict> dataDicts = dataDictMapper.selectByName(name);
         PageInfo<TDataDict> pageInfo = new PageInfo<>(dataDicts);
         List<DataDictDto> dataDictDtos = BeanUtils.copyList(DataDictDto.class, dataDicts);
         return new RobotPage<>(pageInfo.getTotal(), dataDictDtos);
+    }
+
+    public RobotPage<DataDictDto> getDataDictList(String name) {
+        return getDataDictList(name, 1, 1);
     }
 
     public void addDataDict(DataDictDto dataDictDto) {

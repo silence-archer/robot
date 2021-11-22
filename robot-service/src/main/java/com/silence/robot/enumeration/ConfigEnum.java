@@ -12,7 +12,8 @@ public enum ConfigEnum {
     DELICACY_ENUM("delicacy","每日菜单"),
     UPLOAD_PATH_ENUM("upload_path","上传文件路径"),
     AUTO_INTERFACE_PATH_ENUM("auto_interface_path","自动生成接口文件路径"),
-    ESB_URI_ENUM("esb_uri","esb请求路径");
+    ESB_URI_ENUM("esb_uri","esb请求路径"),
+    FREE_MARKER_VERSION_ENUM("free_marker_version","生成界面版本");
 
     private final String name;
 

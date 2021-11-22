@@ -12,6 +12,8 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author silence
@@ -105,6 +107,35 @@ public class LoanService {
             return jsonObject.getJSONObject("body");
         }
         throw new BusinessException(retCode+ "-" + retMsg);
+
+    }
+
+    /**
+     * 模拟接口发送
+     *
+     * @param request
+     * @return com.alibaba.fastjson.JSONObject
+     * @author silence
+     * @date 2021/5/22 21:07
+     */
+    public JSONObject executeLoanVersion2(String uri, JSONObject request) {
+        CommonUtils.deleteJsonEmptyStr(request);
+        CommonUtils.updateJsonArray(request.getJSONObject("BODY"), "execute");
+        JSONObject sysHead = request.getJSONObject("SYS_HEAD");
+        sysHead.put("SEQ_NO", CommonUtils.getUuid());
+        sysHead.put("TRAN_TIMESTAMP", LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmssSSS")));
+        sysHead.put("TRAN_MODE", "ONLINE");
+        sysHead.put("USER_LANG", "CHINESE");
+        JSONObject jsonObject = HttpUtils.doPost("http://"+uri, request.toJSONString());
+        JSONObject sysHeadResult = jsonObject.getJSONObject("SYS_HEAD");
+        JSONArray rets = sysHeadResult.getJSONArray("RET");
+        JSONObject ret = rets.getJSONObject(0);
+        String retCode = ret.getString("RET_CODE");
+        String retMsg = ret.getString("RET_MSG");
+        if ("000000".equals(retCode)) {
+            return jsonObject.getJSONObject("BODY");
+        }
+        throw new BusinessException(retMsg);
 
     }
 

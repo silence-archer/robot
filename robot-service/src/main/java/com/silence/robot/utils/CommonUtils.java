@@ -37,7 +37,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈工具类〉
  *
  * @author silence
@@ -56,24 +56,24 @@ public class CommonUtils {
 
     public static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(4, 8, 2, TimeUnit.MINUTES, new ArrayBlockingQueue<>(300), new HandlerThreadFactory());
 
-    public static String getUuid(){
-        return UUID.randomUUID().toString().replaceAll("-","");
+    public static String getUuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public static boolean isEmpty(Object o){
-        if(o instanceof String){
+    public static boolean isEmpty(Object o) {
+        if (o instanceof String) {
             return ((String) o).isEmpty();
-        }else if(o instanceof List){
+        } else if (o instanceof List) {
             return ((List) o).size() == 0;
-        }else{
+        } else {
             return o == null;
         }
     }
 
     public static boolean isAllEmpty(Object... objects) {
-        if(objects != null) {
+        if (objects != null) {
             for (Object object : objects) {
-                if(isNotEmpty(object)) {
+                if (isNotEmpty(object)) {
                     return false;
                 }
             }
@@ -82,9 +82,9 @@ public class CommonUtils {
     }
 
     public static boolean existEmpty(Object... objects) {
-        if(objects != null) {
+        if (objects != null) {
             for (Object object : objects) {
-                if(isEmpty(object)) {
+                if (isEmpty(object)) {
                     return true;
                 }
             }
@@ -92,53 +92,54 @@ public class CommonUtils {
         return false;
     }
 
-    public static boolean isNotEmpty(Object o){
+    public static boolean isNotEmpty(Object o) {
         return !isEmpty(o);
     }
 
-    public static String getOsName(){
+    public static String getOsName() {
         String osName = System.getProperty("os.name");
-        if(osName.toLowerCase().contains("windows")){
-            osName =  "windows";
-        }else if(osName.toLowerCase().contains("mac")){
+        if (osName.toLowerCase().contains("windows")) {
+            osName = "windows";
+        } else if (osName.toLowerCase().contains("mac")) {
             osName = "mac";
-        }else if(osName.toLowerCase().contains("linux")){
+        } else if (osName.toLowerCase().contains("linux")) {
             osName = "linux";
         }
         return osName;
 
     }
 
-    public static String getCmdCharset(){
-        if("windows".equals(getOsName())){
+    public static String getCmdCharset() {
+        if ("windows".equals(getOsName())) {
             return "GBK";
-        }else{
+        } else {
             return "UTF-8";
         }
     }
 
 
-
-    public static String getStringDate(Date date){
+    public static String getStringDate(Date date) {
         return DATE_FORMAT.format(date);
     }
 
-    public static String strToMD5(String str){
-        str = str+"/"+SLAT;
+    public static String strToMD5(String str) {
+        str = str + "/" + SLAT;
         return DigestUtils.md5Hex(str.getBytes());
     }
 
     /**
      * sha1加密
+     *
      * @param data
      * @return
      */
-    public static String sha1(String data){
+    public static String sha1(String data) {
         return DigestUtils.sha1Hex(data);
     }
 
     /**
      * 集合去重
+     *
      * @param keyExtractor
      * @param <T>
      * @return
@@ -148,18 +149,18 @@ public class CommonUtils {
         return t -> seen.add(keyExtractor.apply(t));
     }
 
-    public static String checkCronExpr(String cronExpr){
+    public static String checkCronExpr(String cronExpr) {
         try {
             CronExpression cronExpression = new CronExpression(cronExpr);
             return cronExpression.getCronExpression();
         } catch (ParseException e) {
-            logger.error("cron表达式输入有误",e);
+            logger.error("cron表达式输入有误", e);
             throw new BusinessException(ExceptionCode.CRON_ERROR);
         }
 
     }
 
-    public static String arrayToString(String[] args){
+    public static String arrayToString(String[] args) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < args.length; i++) {
             sb.append(args[0]).append("|");
@@ -168,22 +169,22 @@ public class CommonUtils {
         return sb.toString();
     }
 
-    public static Integer toInteger(Object o){
-        if(o != null){
+    public static Integer toInteger(Object o) {
+        if (o != null) {
             return Integer.valueOf(o.toString());
         }
         return null;
     }
 
-    public static Long toLong(Object o){
-        if(o != null){
+    public static Long toLong(Object o) {
+        if (o != null) {
             return Long.valueOf(o.toString());
         }
         return null;
     }
 
-    public static String toString(Object o){
-        if(o != null){
+    public static String toString(Object o) {
+        if (o != null) {
             return o.toString();
         }
         return null;
@@ -194,13 +195,13 @@ public class CommonUtils {
         try {
             String databaseUrl = "";
             if (RobotConstants.DATABASE_TYPE_ORACLE.equals(type)) {
-                databaseUrl = "jdbc:oracle:thin:@"+url;
+                databaseUrl = "jdbc:oracle:thin:@" + url;
                 Class.forName("oracle.jdbc.driver.OracleDriver");
             } else if (RobotConstants.DATABASE_TYPE_MYSQL.equals(type)) {
-                databaseUrl = "jdbc:mysql://"+url;
+                databaseUrl = "jdbc:mysql://" + url;
                 Class.forName("com.mysql.cj.jdbc.Driver");
             } else if (RobotConstants.DATABASE_TYPE_SQLITE.equals(type)) {
-                databaseUrl = "jdbc:sqlite://"+url;
+                databaseUrl = "jdbc:sqlite://" + url;
                 Class.forName("org.sqlite.JDBC");
             }
 
@@ -213,7 +214,7 @@ public class CommonUtils {
                 int columnCount = resultSet.getMetaData().getColumnCount();
                 JSONObject jsonObject = new JSONObject();
                 for (int i = 0; i < columnCount; i++) {
-                    String columnName = resultSet.getMetaData().getColumnName(i+1);
+                    String columnName = resultSet.getMetaData().getColumnName(i + 1);
                     String columnValue = resultSet.getString(columnName);
                     if (CommonUtils.isNotEmpty(columnValue)) {
                         jsonObject.put(columnName, columnValue);
@@ -235,12 +236,12 @@ public class CommonUtils {
     public static String getPkQuerySql(String type, String tableName, String owner) {
         String pkQuerySql = "";
         if (RobotConstants.DATABASE_TYPE_ORACLE.equals(type)) {
-            tableName = "and a.table_name = '"+ tableName+"'";
-            owner = "and a.owner = '"+ owner+"'";
-            pkQuerySql = "select a.* from dba_cons_columns a left join dba_constraints b on a.constraint_name = b.constraint_name and a.owner = b.owner where b.constraint_type = 'P'"+tableName+owner;
+            tableName = "and a.table_name = '" + tableName + "'";
+            owner = "and a.owner = '" + owner + "'";
+            pkQuerySql = "select a.* from dba_cons_columns a left join dba_constraints b on a.constraint_name = b.constraint_name and a.owner = b.owner where b.constraint_type = 'P'" + tableName + owner;
 
         } else if (RobotConstants.DATABASE_TYPE_MYSQL.equals(type)) {
-            pkQuerySql = "SELECT column_name FROM INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` WHERE table_name='"+tableName+"' AND constraint_name='PRIMARY'";
+            pkQuerySql = "SELECT column_name FROM INFORMATION_SCHEMA.`KEY_COLUMN_USAGE` WHERE table_name='" + tableName + "' AND constraint_name='PRIMARY'";
         }
         return pkQuerySql;
     }
@@ -250,7 +251,7 @@ public class CommonUtils {
             return new RobotPage<>(0L, new ArrayList<>(0));
         }
         if (existEmpty(page, limit)) {
-            return new RobotPage<>((long)list.size(), list);
+            return new RobotPage<>((long) list.size(), list);
         }
         int fromIndex = (page - 1) * limit;
         int toIndex = fromIndex + limit;
@@ -261,7 +262,7 @@ public class CommonUtils {
             toIndex = list.size();
         }
         List<T> subList = list.subList(fromIndex, toIndex);
-        return new RobotPage<>((long)list.size(), subList);
+        return new RobotPage<>((long) list.size(), subList);
     }
 
     public static boolean isEqualsY(String str) {
@@ -274,6 +275,12 @@ public class CommonUtils {
         return str1.equals(str2);
     }
 
+    public static boolean isEqualsIgnoreCase(String str1, String str2) {
+        str1 = str1 == null ? "" : str1;
+        str2 = str2 == null ? "" : str2;
+        return str1.equalsIgnoreCase(str2);
+    }
+
     public static boolean isNotEquals(String str1, String str2) {
         return !isEquals(str1, str2);
     }
@@ -281,14 +288,53 @@ public class CommonUtils {
     public static void deleteJsonEmptyStr(Map<String, Object> jsonObject) {
         jsonObject.forEach((s, o) -> {
             if (o instanceof List) {
-                deleteJsonArrayEmptyStr((List<Object>) o);
-            }else if (o instanceof Map){
-                deleteJsonEmptyStr((Map<String, Object>) o);
-            }else {
-                if(CommonUtils.isEmpty(o)) {
+                List<Object> jsonArray = (List<Object>) o;
+                if (jsonArray.isEmpty()) {
+                    jsonObject.put(s, null);
+                }else {
+                    deleteJsonArrayEmptyStr(jsonArray);
+                }
+
+            } else if (o instanceof Map) {
+                Map<String, Object> objectMap = (Map<String, Object>) o;
+                if (objectMap.isEmpty()) {
+                    jsonObject.put(s, null);
+                }else {
+                    deleteJsonEmptyStr(objectMap);
+                }
+            } else {
+                if (CommonUtils.isEmpty(o)) {
                     jsonObject.put(s, null);
                 }
             }
+        });
+    }
+
+    public static void updateJsonArray(JSONObject jsonObject, String flag) {
+        Map<String, Object> result = new HashMap<>();
+        jsonObject.forEach((s, o) -> {
+            if (o instanceof List) {
+                List<Map<String, Object>> list = new ArrayList<>();
+                List<Object> jsonArray = (List<Object>) o;
+                jsonArray.forEach(o1 -> {
+                    Map<String, Object> map = (Map<String, Object>) o1;
+                    Map<String, Object> resultMap = new JSONObject(map.size());
+                    map.forEach((s1, o2) -> {
+                        if ("scene".equals(flag)) {
+                            resultMap.put(s+"$"+s1, o2);
+                        }else {
+                            resultMap.put(s1.split("\\$")[1], o2);
+                        }
+
+                    });
+                    list.add(resultMap);
+                });
+                result.put(s, list);
+            }
+        });
+        result.forEach((s, o) -> {
+            jsonObject.remove(s);
+            jsonObject.put(s, o);
         });
     }
 
@@ -296,14 +342,77 @@ public class CommonUtils {
         jsonArray.forEach(o -> {
             if (o instanceof List) {
                 deleteJsonArrayEmptyStr((JSONArray) o);
-            }else if (o instanceof Map){
+            } else if (o instanceof Map) {
                 deleteJsonEmptyStr((Map<String, Object>) o);
-            }else {
+            } else {
                 throw new BusinessException(ExceptionCode.JSON_TEXT_ERROR);
             }
         });
     }
 
+    /**
+     * 下划线转小驼峰
+     * @author silence
+     * @date 2021/11/15 11:25
+     * @param para
+     * @return java.lang.String
+     */
+    public static String underlineToHump(String para) {
+        if (CommonUtils.isEmpty(para)) {
+            return null;
+        }
+        para = para.toLowerCase();
+        StringBuilder result = new StringBuilder();
 
+        String[] array = para.split("_");
+        if (array.length == 1) {
+            return para;
+        }
 
+        for (String s : array) {
+            if (result.length() == 0) {
+                result.append(s.toLowerCase());
+
+            } else {
+                result.append(s.substring(0, 1).toUpperCase());
+
+                result.append(s.substring(1).toLowerCase());
+
+            }
+
+        }
+
+        return result.toString();
+
+    }
+
+    /**
+     * 小驼峰转小下划线
+     * @author silence
+     * @date 2021/11/15 11:25
+    * @param para
+    * @return java.lang.String
+     */
+    public static String humpToUnderline(String para) {
+        if (CommonUtils.isEmpty(para)) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder(para);
+        //偏移量，第i个下划线的位置是 当前的位置+ 偏移量(i-1),第一个下划线偏移量是0
+        int temp = 0;
+
+        for (int i = 0; i < para.length(); i++) {
+
+            if (Character.isUpperCase(para.charAt(i))) {
+                sb.insert(i + temp, "_");
+
+                temp += 1;
+
+            }
+
+        }
+
+        return sb.toString().toLowerCase();
+
+    }
 }
