@@ -15,7 +15,11 @@ dataDictService.getSceneService("scene","${name}");
 <#list arrays as array>
     <#list array.list as innerBody>
         <#if innerBody.type == 'select'>
-            dataDictService.getDataDictService("${innerBody.name}","${innerBody.name}");
+            <#list "${innerBody.name}"?split("$") as dictName>
+                <#if dictName?index == 1>
+                    dataDictService.getDataDictService("${dictName}","${"${innerBody.name}"?replace("$","\\\\$")}");
+                </#if>
+            </#list>
         </#if>
     </#list>
 </#list>

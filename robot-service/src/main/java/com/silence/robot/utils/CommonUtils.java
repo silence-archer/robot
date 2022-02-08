@@ -361,14 +361,15 @@ public class CommonUtils {
         if (CommonUtils.isEmpty(para)) {
             return null;
         }
-        para = para.toLowerCase();
-        StringBuilder result = new StringBuilder();
-
         String[] array = para.split("_");
         if (array.length == 1) {
-            return para;
+            if(isHump(para)) {
+                return para;
+            }else {
+                return para.toLowerCase();
+            }
         }
-
+        StringBuilder result = new StringBuilder();
         for (String s : array) {
             if (result.length() == 0) {
                 result.append(s.toLowerCase());
@@ -384,6 +385,24 @@ public class CommonUtils {
 
         return result.toString();
 
+    }
+
+    public static boolean isHump(String para) {
+        char[] chars = para.toCharArray();
+        boolean isUpper = false;
+        boolean isLower = false;
+        for (char c : chars) {
+            if(Character.isUpperCase(c)) {
+                isUpper = true;
+            }
+            if (Character.isLowerCase(c)) {
+                isLower = true;
+            }
+            if (isLower && isUpper) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

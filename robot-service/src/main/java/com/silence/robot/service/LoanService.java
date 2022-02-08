@@ -126,6 +126,14 @@ public class LoanService {
         sysHead.put("TRAN_TIMESTAMP", LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmssSSS")));
         sysHead.put("TRAN_MODE", "ONLINE");
         sysHead.put("USER_LANG", "CHINESE");
+        if ("1400".equals(sysHead.getString("MESSAGE_TYPE"))) {
+            JSONObject appHead = new JSONObject();
+            appHead.put("PGUP_OR_PGDN", "1");
+            appHead.put("TOTAL_NUM", Integer.MAX_VALUE+"");
+            appHead.put("CURRENT_NUM", "1");
+            appHead.put("TOTAL_FLAG", "E");
+            request.put("APP_HEAD", appHead);
+        }
         JSONObject jsonObject = HttpUtils.doPost("http://"+uri, request.toJSONString());
         JSONObject sysHeadResult = jsonObject.getJSONObject("SYS_HEAD");
         JSONArray rets = sysHeadResult.getJSONArray("RET");

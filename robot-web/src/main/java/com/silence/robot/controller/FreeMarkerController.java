@@ -67,7 +67,6 @@ public class FreeMarkerController {
 
     private void getInterfaceVersion2(FreeMarkerDto inputFreeMarkerDto, FreeMarkerDto outputFreeMarkerDto, AutoInterfaceDto autoInterfaceDto) {
         updateInterfaceArray(inputFreeMarkerDto.getArrays());
-        updateInterfaceArray(outputFreeMarkerDto.getArrays());
         getFreeMarker(AutoInterfaceEnum.AUTO_INTERFACE_2_0_HTML.getValue(), freeMarkerService.getFileName(autoInterfaceDto.getTranCode(), AutoInterfaceEnum.AUTO_INTERFACE_HTML), inputFreeMarkerDto);
         getFreeMarker(AutoInterfaceEnum.AUTO_INTERFACE_2_0_JS.getValue(), freeMarkerService.getFileName(autoInterfaceDto.getTranCode(), AutoInterfaceEnum.AUTO_INTERFACE_JS), inputFreeMarkerDto);
         getFreeMarker(AutoInterfaceEnum.AUTO_INTERFACE_2_0_RESULT_HTML.getValue(), freeMarkerService.getFileName(autoInterfaceDto.getTranCode(), AutoInterfaceEnum.AUTO_INTERFACE_RESULT_HTML), outputFreeMarkerDto);
