@@ -278,7 +278,6 @@ public class XmlUtils {
                             mapList = new ArrayList();
 
                             mapList.add(obj);
-                            //mapList.add(iter.getText());
 
                             if (hasAttributes) {
                                 attrMap.put("#text", iter.getText());
@@ -293,7 +292,6 @@ public class XmlUtils {
                         }
                         if (obj instanceof List) {
                             mapList = (List) obj;
-                            //mapList.add(iter.getText());
 
                             if (hasAttributes) {
                                 attrMap.put("#text", iter.getText());
@@ -309,7 +307,7 @@ public class XmlUtils {
 
                         map.put(iter.getName(), mapList);
 
-                    } else {//map.put(iter.getName(), iter.getText());
+                    } else {
 
                         if (hasAttributes) {
                             attrMap.put("#text", iter.getText());
@@ -378,7 +376,7 @@ public class XmlUtils {
 
             doc.add(root);
 
-            map2xml((Map) entry.getValue(), root);//System.out.println(doc.asXML());//System.out.println(formatXml(doc));
+            map2xml((Map) entry.getValue(), root);
 
             return doc;
 
@@ -406,7 +404,7 @@ public class XmlUtils {
 
                 body.addAttribute(key.substring(1, key.length()), value.toString());
 
-            } else if (key.equals("#text")) { //有属性时的文本
+            } else if ("#text".equals(key)) { //有属性时的文本
 
                 body.setText(value.toString());
 
@@ -417,7 +415,8 @@ public class XmlUtils {
                     Object obj;
                     for (Object o : list) {
 
-                        obj = o;//list里是map或String，不会存在list里直接是list的，
+                        //list里是map或String，不会存在list里直接是list的，
+                        obj = o;
 
                         if (obj instanceof Map) {
                             Element subElement = body.addElement(key);
@@ -442,7 +441,6 @@ public class XmlUtils {
                 }
 
             }
-            //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
 
         }
 
@@ -475,7 +473,6 @@ public class XmlUtils {
         //格式化输出格式
 
         OutputFormat format = OutputFormat.createPrettyPrint();
-        //format.setEncoding("UTF-8");
 
         StringWriter writer = new StringWriter();
         //格式化输出流

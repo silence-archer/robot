@@ -189,7 +189,7 @@ public class FtpUtils {
         FTPClient ftpClient = null;
         log.info("根据ip-{}端口-{}用户名-{}密码-{}查找远程文件路径{}远程文件名{}删除>>>>>>", ftpConfig.getHost(), ftpConfig.getPort(), ftpConfig.getUsername(), ftpConfig.getPassword(), remotePath, remoteFile);
         try {
-            ftpClient = getFTPClient(ftpConfig);
+            ftpClient = getFtpClient(ftpConfig);
             if (ftpClient == null) {
                 throw new IllegalStateException("登录ftp服务器失败");
             }
@@ -245,7 +245,7 @@ public class FtpUtils {
         boolean result = false;
         log.info("根据ip-{}端口-{}用户名-{}密码-{}查找远程文件路径{}远程文件名{}>>>>>", ftpConfig.getHost(), ftpConfig.getPort(), ftpConfig.getUsername(), ftpConfig.getPassword(), remotePath, remoteFile);
         try {
-            ftpClient = getFTPClient(ftpConfig);
+            ftpClient = getFtpClient(ftpConfig);
             if (ftpClient == null) {
                 throw new IllegalStateException("登录ftp服务器失败");
             }
@@ -303,7 +303,7 @@ public class FtpUtils {
         FTPClient ftpClient = null;
         log.info("根据ip-{}端口-{}用户名-{}密码-{}本地文件路径{}远程文件路径{}下载文件>>>>>>>>", ftpConfig.getHost(), ftpConfig.getPort(), ftpConfig.getUsername(), ftpConfig.getPassword(), localPath, remotePath);
         try {
-            ftpClient = getFTPClient(ftpConfig);
+            ftpClient = getFtpClient(ftpConfig);
             if (ftpClient == null) {
                 throw new RuntimeException("登录ftp服务器失败");
             }
@@ -375,7 +375,7 @@ public class FtpUtils {
         FTPClient ftpClient = null;
         log.info("根据ip-{}端口-{}用户名-{}密码-{}远程文件路径{}远程文件名{}本地文件路径{}本地文件名{}下载文件>>>>>>>", ftpConfig.getHost(), ftpConfig.getPort(), ftpConfig.getUsername(), ftpConfig.getPassword(), remotePath, remoteFile, localPath, localFile);
         try {
-            ftpClient = getFTPClient(ftpConfig);
+            ftpClient = getFtpClient(ftpConfig);
             if (ftpClient == null) {
                 throw new RuntimeException("登录ftp服务器失败");
             }
@@ -411,7 +411,7 @@ public class FtpUtils {
         FTPClient ftpClient = null;
         log.info("根据ip-{}端口-{}用户名-{}密码-{}远程文件路径{}远程文件名{}>>>>>>>", ftpConfig.getHost(), ftpConfig.getPort(), ftpConfig.getUsername(), ftpConfig.getPassword(), remotePath, remoteFile);
         try {
-            ftpClient = getFTPClient(ftpConfig);
+            ftpClient = getFtpClient(ftpConfig);
             if (ftpClient == null) {
                 throw new RuntimeException("登录ftp服务器失败");
             }
@@ -537,7 +537,7 @@ public class FtpUtils {
         FileInputStream in = null;
         log.error("根据ip-{}端口-{}用户名-{}密码-{}远程文件路径{}远程文件名{}本地文件路径{}本地文件名{}上传文件>>>>>", ftpConfig.getHost(), ftpConfig.getPort(), ftpConfig.getUsername(), ftpConfig.getPassword(), remotePath, remoteFile, localPath, localFile);
         try {
-            ftpClient = getFTPClient(ftpConfig);
+            ftpClient = getFtpClient(ftpConfig);
             if (ftpClient == null) {
                 throw new RuntimeException("登录ftp服务器失败");
             }
@@ -610,7 +610,7 @@ public class FtpUtils {
      * @author silence
      * @date 2019年8月24日 下午1:49:27
      */
-    private static FTPClient getFTPClient(FtpConfig ftpConfig) throws IOException {
+    private static FTPClient getFtpClient(FtpConfig ftpConfig) throws IOException {
         FTPClient ftpClient = new FTPClient();
         boolean result = true;
         ftpClient.connect(ftpConfig.getHost(), ftpConfig.getPort());

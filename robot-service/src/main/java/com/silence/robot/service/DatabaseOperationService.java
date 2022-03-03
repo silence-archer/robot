@@ -152,7 +152,7 @@ public class DatabaseOperationService {
                 destPk.put(pkName, pkValue);
             });
             if(origMap.containsKey(destPk.toJSONString())) {
-                getJSONDiff(origMap.get(destPk.toJSONString()), destObject);
+                getJsonDiff(origMap.get(destPk.toJSONString()), destObject);
             }
             destMap.put(destPk.toJSONString(), destObject);
 
@@ -176,7 +176,7 @@ public class DatabaseOperationService {
         return list;
     }
 
-    private void getJSONDiff(JSONObject origObject, JSONObject destObject) {
+    private void getJsonDiff(JSONObject origObject, JSONObject destObject) {
         Iterator<Map.Entry<String, Object>> origIterator = origObject.entrySet().iterator();
 
         while (origIterator.hasNext()) {

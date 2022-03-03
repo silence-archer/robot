@@ -48,11 +48,7 @@ public class CommonUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
     public static final String SLAT = "&%5123***&&%%$$#@";
-
-    public static final String JOB_PACKAGE_NAME = "com.silence.robot.job.";
 
     public static final ThreadPoolExecutor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(4, 8, 2, TimeUnit.MINUTES, new ArrayBlockingQueue<>(300), new HandlerThreadFactory());
 
@@ -119,10 +115,10 @@ public class CommonUtils {
 
 
     public static String getStringDate(Date date) {
-        return DATE_FORMAT.format(date);
+        return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date);
     }
 
-    public static String strToMD5(String str) {
+    public static String strToMd5(String str) {
         str = str + "/" + SLAT;
         return DigestUtils.md5Hex(str.getBytes());
     }

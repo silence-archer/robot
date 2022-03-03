@@ -6,7 +6,9 @@ package com.silence.robot.enumeration;
  */
 public enum DataSourceTypeEnum {
 
+    //读库
     READ("read","读库"),
+    //写库
     WRITE("write","写库"),
     ;
 

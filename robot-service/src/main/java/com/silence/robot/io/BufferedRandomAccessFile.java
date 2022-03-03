@@ -51,7 +51,7 @@ public final class BufferedRandomAccessFile extends RandomAccessFile {
     /**
      * dirty_ can be cleared by e.g. seek, so track sync separately
      */
-    private boolean hitEOF;
+    private boolean hirEof;
     /**
      * disk position
      */
@@ -142,7 +142,7 @@ public final class BufferedRandomAccessFile extends RandomAccessFile {
         this.lo = this.curr = this.hi = 0;
         this.buff = (size > BUFF_SZ) ? new byte[size] : new byte[BUFF_SZ];
         this.maxHi = BUFF_SZ;
-        this.hitEOF = false;
+        this.hirEof = false;
         this.diskPos = 0L;
     }
 
@@ -206,7 +206,7 @@ public final class BufferedRandomAccessFile extends RandomAccessFile {
             cnt += n;
             rem -= n;
         }
-        if (cnt < 0 && (this.hitEOF = true)) {
+        if (cnt < 0 && (this.hirEof = true)) {
             // make sure buffer that wasn't read is initialized with -1
             Arrays.fill(this.buff, cnt, this.buff.length, (byte) 0xff);
         }
@@ -263,7 +263,7 @@ public final class BufferedRandomAccessFile extends RandomAccessFile {
         if (this.curr >= this.hi) {
             // test for EOF
             // if (this.hi < this.maxHi) return -1;
-            if (this.hitEOF) {
+            if (this.hirEof) {
                 return -1;
             }
 
@@ -289,7 +289,7 @@ public final class BufferedRandomAccessFile extends RandomAccessFile {
         if (this.curr >= this.hi) {
             // test for EOF
             // if (this.hi < this.maxHi) return -1;
-            if (this.hitEOF) {
+            if (this.hirEof) {
                 return -1;
             }
 
@@ -309,7 +309,7 @@ public final class BufferedRandomAccessFile extends RandomAccessFile {
     @Override
     public void write(int b) throws IOException {
         if (this.curr >= this.hi) {
-            if (this.hitEOF && this.hi < this.maxHi) {
+            if (this.hirEof && this.hi < this.maxHi) {
                 // at EOF -- bump "hi"
                 this.hi++;
             } else {
@@ -349,7 +349,7 @@ public final class BufferedRandomAccessFile extends RandomAccessFile {
      */
     private int writeAtMost(byte[] b, int off, int len) throws IOException {
         if (this.curr >= this.hi) {
-            if (this.hitEOF && this.hi < this.maxHi) {
+            if (this.hirEof && this.hi < this.maxHi) {
                 // at EOF -- bump "hi"
                 this.hi = this.maxHi;
             } else {

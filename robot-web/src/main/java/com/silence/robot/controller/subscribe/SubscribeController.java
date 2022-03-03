@@ -14,7 +14,6 @@ import com.silence.robot.domain.subscribe.SubscribeMsgInfo;
 import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
-import com.silence.robot.mapper.TSubscribeConfigInfoMapper;
 import com.silence.robot.service.HelloService;
 import com.silence.robot.service.SubscribeConfigInfoService;
 import com.silence.robot.utils.CommonUtils;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,7 +72,7 @@ public class SubscribeController {
         logger.info("接收到用户发送的消息为{}",xmlMsg);
         SubscribeMsgInfo subscribeMsgInfo = FileUtils.convertXmlStrToObject(xmlMsg, SubscribeMsgInfo.class);
         String txt;
-        if(subscribeMsgInfo.getContent().equals("今天吃什么")){
+        if("今天吃什么".equals(subscribeMsgInfo.getContent())){
             txt = subscribeConfigInfoService.getConfigValue(ConfigEnum.DELICACY_ENUM);
         }else{
             txt = helloService.hello(subscribeMsgInfo.getContent());

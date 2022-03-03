@@ -10,8 +10,7 @@
  */
 package com.silence.robot.domain;
 
-import com.silence.robot.domain.InstantMessaging.InstantMsgMineDto;
-import com.silence.robot.domain.InstantMessaging.InstantMsgTalkDto;
+import com.silence.robot.domain.instant.messaging.InstantMsgTalkDto;
 
 /**
  * 〈一句话功能简述〉<br> 

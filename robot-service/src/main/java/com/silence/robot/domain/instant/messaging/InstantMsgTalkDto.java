@@ -8,9 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package com.silence.robot.domain.InstantMessaging;
-
-import com.silence.robot.domain.InstantMessaging.InstantMsgMineDto;
+package com.silence.robot.domain.instant.messaging;
 
 /**
  * 〈一句话功能简述〉<br> 

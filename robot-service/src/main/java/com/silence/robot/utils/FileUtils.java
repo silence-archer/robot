@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONReader;
 import com.silence.robot.domain.FileDto;
 import com.silence.robot.io.BufferedRandomAccessFile;
+import com.silence.robot.thread.HandlerThreadFactory;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class FileUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
-    public static final ThreadPoolExecutor FILE_READ_POOL = new ThreadPoolExecutor(8, 16, 3, TimeUnit.SECONDS, new LinkedBlockingDeque<>(32));
+    public static final ThreadPoolExecutor FILE_READ_POOL = new ThreadPoolExecutor(8, 16, 3, TimeUnit.SECONDS, new LinkedBlockingDeque<>(32), new HandlerThreadFactory());
 
     public static final String DEFAULT_CMD_LOG_URL = FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "/robot/";
 

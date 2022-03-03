@@ -49,7 +49,7 @@ public class MenuService {
     public void addMenu(MenuData menuData){
         TMenu menu = new TMenu();
         menu.setMenuName("未命名");
-        if(menuData.getId().equals("1")){
+        if("1".equals(menuData.getId())){
             menu.setMenuLevel(1);
             menu.setMenuNo(getMenuNo(menu.getMenuLevel(), ""));
         }else{

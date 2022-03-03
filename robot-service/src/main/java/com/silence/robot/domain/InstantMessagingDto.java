@@ -10,9 +10,9 @@
  */
 package com.silence.robot.domain;
 
-import com.silence.robot.domain.InstantMessaging.InstantMsgFriendDto;
-import com.silence.robot.domain.InstantMessaging.InstantMsgGroupDto;
-import com.silence.robot.domain.InstantMessaging.InstantMsgMineDto;
+import com.silence.robot.domain.instant.messaging.InstantMsgFriendDto;
+import com.silence.robot.domain.instant.messaging.InstantMsgGroupDto;
+import com.silence.robot.domain.instant.messaging.InstantMsgMineDto;
 
 import java.util.List;
 

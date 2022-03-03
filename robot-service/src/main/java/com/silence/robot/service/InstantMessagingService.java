@@ -11,17 +11,15 @@
 package com.silence.robot.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.silence.robot.domain.instant.messaging.InstantMsgFriendDto;
+import com.silence.robot.domain.instant.messaging.InstantMsgGroupDto;
+import com.silence.robot.domain.instant.messaging.InstantMsgMineDto;
+import com.silence.robot.domain.instant.messaging.InstantMsgTalkDto;
 import com.silence.robot.domain.*;
-import com.silence.robot.domain.InstantMessaging.InstantMsgFriendDto;
-import com.silence.robot.domain.InstantMessaging.InstantMsgGroupDto;
-import com.silence.robot.domain.InstantMessaging.InstantMsgMineDto;
-import com.silence.robot.domain.InstantMessaging.InstantMsgTalkDto;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.*;
 import com.silence.robot.model.*;
-import com.silence.robot.utils.CommonUtils;
-import com.silence.robot.utils.FileUtils;
 import com.silence.robot.websocket.WebSocketServer;
 import org.springframework.stereotype.Service;
 
@@ -144,7 +142,7 @@ public class InstantMessagingService {
         InstantMsgTalkOutJsonDto instantMsgTalkOutJsonDto = new InstantMsgTalkOutJsonDto();
         instantMsgTalkOutJsonDto.setType("chatMessage");
         instantMsgTalkOutJsonDto.setData(out);
-        if(to.getId().equals("admin")){
+        if("admin".equals(to.getId())){
             TulingRequestInfo requestInfo = new TulingRequestInfo();
             requestInfo.setTxt(mine.getContent());
             TulingResponseInfo hello = helloService.hello(requestInfo);
@@ -155,8 +153,6 @@ public class InstantMessagingService {
             out.setContent(mine.getContent());
             out.setUsername(mine.getUsername());
             out.setAvatar(mine.getAvatar());
-//            out.setId(mine.getId());
-//            out.setType(mine.getType());
             String s = JSONObject.toJSONString(instantMsgTalkOutJsonDto);
             //将消息发送给对方
             WebSocketServer.sendInfo(s, to.getId(), mine.getId());
@@ -203,7 +199,7 @@ public class InstantMessagingService {
     }
 
     public void addFriendOrGroup(InstantMsgMineDto instantMsgMineDto){
-        if(instantMsgMineDto.getType().equals("friend")){
+        if("friend".equals(instantMsgMineDto.getType())){
 
         }
     }

@@ -86,7 +86,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @author oe_machaohui
      * @date 2020/5/29 17:05
      */
-    public static String mapToStringForJDDC(Map<String, Object> map) {
+    public static String mapToStringForOne(Map<String, Object> map) {
         StringBuilder stringBuilder = new StringBuilder();
         map.forEach((s, o) -> {
             stringBuilder.append(s).append(":").append(o).append("|");
@@ -118,10 +118,10 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @author oe_machaohui
      * @date 2020/5/29 17:53
      */
-    public static String beanToStringForJDDC(Object o) {
+    public static String beanToStringForOne(Object o) {
         String s = JSONObject.toJSONString(o);
         LinkedHashMap<String, Object> map = JSON.parseObject(s, LinkedHashMap.class, Feature.OrderedField);
-        return mapToStringForJDDC(map);
+        return mapToStringForOne(map);
     }
 
     /**

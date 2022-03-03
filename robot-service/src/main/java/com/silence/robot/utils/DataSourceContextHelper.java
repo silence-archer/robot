@@ -9,20 +9,20 @@ import com.silence.robot.enumeration.DataSourceTypeEnum;
  */
 public class DataSourceContextHelper {
 
-    private static final ThreadLocal<DataSourceTypeEnum> local = new ThreadLocal<>();
+    private static final ThreadLocal<DataSourceTypeEnum> LOCAL = new ThreadLocal<>();
     /**
      * 设置当前线程的数据库类型为读库
      * @date 2020/5/29 23:10
      */
     public static void read() {
-        local.set(DataSourceTypeEnum.READ);
+        LOCAL.set(DataSourceTypeEnum.READ);
     }
     /**
      * 设置当前线程的数据库类型为写库
      * @date 2020/5/29 23:15
      */
     public static void write() {
-        local.set(DataSourceTypeEnum.WRITE);
+        LOCAL.set(DataSourceTypeEnum.WRITE);
     }
     /**
      * 获取当前线程的数据库类型
@@ -30,13 +30,13 @@ public class DataSourceContextHelper {
      * @date 2020/5/29 23:16
      */
     public static DataSourceTypeEnum get() {
-        return local.get();
+        return LOCAL.get();
     }
     /**
      * 清除当前线程的局部变量
      * @date 2020/5/29 23:18
      */
     public static void clear() {
-        local.remove();
+        LOCAL.remove();
     }
 }

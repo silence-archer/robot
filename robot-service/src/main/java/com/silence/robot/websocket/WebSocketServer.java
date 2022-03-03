@@ -48,7 +48,7 @@ public class WebSocketServer {
      */
     private static int onlineCount = 0;
 
-    private static final Boolean lock = false;
+    private static final Boolean LOCK = false;
 
     /**
      * 接收sid
@@ -140,19 +140,19 @@ public class WebSocketServer {
     }
 
     public static void addOnlineCount(){
-        synchronized (lock){
+        synchronized (LOCK){
             onlineCount++;
         }
     }
 
     public static void subOnlineCount(){
-        synchronized (lock){
+        synchronized (LOCK){
             onlineCount--;
         }
     }
 
     public static int getOnlineCount(){
-        synchronized (lock){
+        synchronized (LOCK){
             return onlineCount;
         }
     }

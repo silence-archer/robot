@@ -175,7 +175,6 @@ public class SvnOperateService {
                         throw new BusinessException(ExceptionCode.QUERY_ERROR);
                     }
                     //暂时手动删除避免误删
-//                        new Thread(() -> FileUtils.delFolder(infos.get(0).getLocalUrl()));
                     tSvnInfoMapper.deleteByPrimaryKey(infos.get(0).getId());
                 }
             } else {

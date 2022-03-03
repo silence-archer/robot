@@ -30,7 +30,7 @@ public class ImageService {
         graphics2d.setFont(new Font("微软雅黑", Font.BOLD, 30));
         Random random = new Random();
 
-        String word = getItemID(length);
+        String word = getItemId(length);
         //保存到session
         userInfo.setImageCode(word);
         // 定义x坐标
@@ -71,11 +71,11 @@ public class ImageService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        byte[] bytes = baos.toByteArray();//转换成字节
-//        BASE64Encoder encoder = new BASE64Encoder();
-//        String pngBase64 = encoder.encodeBuffer(bytes).trim();
+        //转换成字节
+        byte[] bytes = baos.toByteArray();
         String pngBase64 = Base64.getEncoder().encodeToString(bytes);
-        pngBase64 = pngBase64.replaceAll("\n", "").replaceAll("\r", "");//删除 \r\n
+        //删除 \r\n
+        pngBase64 = pngBase64.replaceAll("\n", "").replaceAll("\r", "");
         userInfo.setImageWithVerifyCode(pngBase64);
         return userInfo;
 
@@ -85,11 +85,9 @@ public class ImageService {
 
         Random ran = new Random();
 
-        Color color = new Color(ran.nextInt(256),
+        return new Color(ran.nextInt(256),
 
                 ran.nextInt(256), ran.nextInt(256));
-
-        return color;
     }
 
     /**
@@ -101,7 +99,7 @@ public class ImageService {
      * @param n 需要生成的长度
      * @return
      */
-    private String getItemID(int n) {
+    private String getItemId(int n) {
         String val = "";
         Random random = new Random();
         for (int i = 0; i < n; i++) {

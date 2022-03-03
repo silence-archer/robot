@@ -1,7 +1,5 @@
 package com.silence.robot.domain;
 
-import com.alibaba.fastjson.JSONObject;
-
 import java.io.Serializable;
 
 
@@ -171,7 +169,4 @@ public class UserInfo implements Serializable {
         this.ipAddr = ipAddr;
     }
 
-    public String toJSONString() {
-        return JSONObject.toJSONString(this);
-    }
 }
