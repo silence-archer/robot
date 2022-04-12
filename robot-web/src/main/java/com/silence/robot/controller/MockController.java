@@ -3,6 +3,7 @@ package com.silence.robot.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.domain.MockInfo;
 import com.silence.robot.domain.MockRequestInfo;
+import com.silence.robot.domain.MockResponseInfo;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.enumeration.ConfigEnum;
@@ -75,6 +76,11 @@ public class MockController {
     @PostMapping("/mock")
     public JSONObject mock(@RequestBody MockRequestInfo mockRequestInfo){
         return mockService.mock(mockRequestInfo);
+    }
+
+    @PostMapping("/mock/bob")
+    public MockResponseInfo mockBob(@RequestBody MockRequestInfo mockRequestInfo){
+        return mockService.mockBob(mockRequestInfo);
     }
 
     @PostMapping("/mock/esb")

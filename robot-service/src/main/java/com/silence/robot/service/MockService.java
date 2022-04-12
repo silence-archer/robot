@@ -5,14 +5,15 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.silence.robot.domain.MockInfo;
 import com.silence.robot.domain.MockRequestInfo;
+import com.silence.robot.domain.MockResponseInfo;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.mapper.TMockInfoMapper;
 import com.silence.robot.model.TMockInfo;
 import com.silence.robot.utils.BeanUtils;
+import com.silence.robot.utils.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -83,5 +84,24 @@ public class MockService {
             }
         });
         return output.get();
+    }
+
+    public MockResponseInfo mockBob(MockRequestInfo mockRequestInfo) {
+        String uri = mockRequestInfo.getUri();
+        String module = mockRequestInfo.getModule();
+        String username = mockRequestInfo.getUsername();
+        logger.info("本次挡板请求的uri为[{}],模块为[{}],用户id为[{}]", uri, module, username);
+        TMockInfo mockInfo = new TMockInfo();
+        mockInfo.setMockModule(module);
+        mockInfo.setMockUrl(uri);
+        mockInfo.setCreateUser(username);
+        List<TMockInfo> tMockInfos = mockInfoMapper.selectByQueryDto(mockInfo);
+        MockResponseInfo mockResponseInfo = new MockResponseInfo();
+        mockResponseInfo.setMockSuccess(false);
+        if (CommonUtils.isNotEmpty(tMockInfos)) {
+            mockResponseInfo.setMockSuccess(true);
+            mockResponseInfo.setResponseXml(tMockInfos.get(0).getMockOutput());
+        }
+        return mockResponseInfo;
     }
 }

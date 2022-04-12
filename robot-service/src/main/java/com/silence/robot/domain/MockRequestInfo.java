@@ -13,6 +13,7 @@ public class MockRequestInfo {
     private String module;
 
     private JSONObject request;
+    private String username;
 
     public String getUri() {
         return uri;
@@ -38,12 +39,11 @@ public class MockRequestInfo {
         this.module = module;
     }
 
-    @Override
-    public String toString() {
-        return "MockRequestInfo{" +
-                "uri='" + uri + '\'' +
-                ", module='" + module + '\'' +
-                ", request=" + request +
-                '}';
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

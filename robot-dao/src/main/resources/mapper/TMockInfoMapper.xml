@@ -102,6 +102,43 @@
         </if>
       </where>
   </select>
+    <select id="selectByQueryDto" parameterType="com.silence.robot.model.TMockInfo" resultMap="BaseResultMap">
+      select ID, MOCK_URL, MOCK_NAME, MOCK_MODULE, MOCK_INPUT, MOCK_OUTPUT, CREATE_TIME, CREATE_USER, UPDATE_TIME,
+      UPDATE_USER
+      from t_mock_info
+      <where>
+        <if test="mockModule != null and mockModule != '' ">
+          AND MOCK_MODULE = #{mockModule,jdbcType=VARCHAR}
+        </if>
+        <if test="mockInput != null and mockInput != '' ">
+          AND MOCK_INPUT = #{mockInput,jdbcType=VARCHAR}
+        </if>
+        <if test="mockUrl != null and mockUrl != '' ">
+          AND MOCK_URL = #{mockUrl,jdbcType=VARCHAR}
+        </if>
+        <if test="mockName != null and mockName != '' ">
+          AND MOCK_NAME = #{mockName,jdbcType=VARCHAR}
+        </if>
+        <if test="mockOutput != null and mockOutput != '' ">
+          AND MOCK_OUTPUT = #{mockOutput,jdbcType=VARCHAR}
+        </if>
+        <if test="mockOutput != null and mockOutput != '' ">
+          AND MOCK_OUTPUT = #{mockOutput,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+          AND CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createUser != null and createUser != '' ">
+          AND CREATE_USER = #{createUser,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null">
+          AND UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUser != null and updateUser != '' ">
+          AND UPDATE_USER = #{updateUser,jdbcType=VARCHAR}
+        </if>
+      </where>
+    </select>
 
 
 </mapper>
