@@ -20,6 +20,8 @@ public class TMockInfo {
 
     private String mockOutput;
 
+    private String mockStatus;
+
 
     private Date createTime;
 
@@ -112,6 +114,14 @@ public class TMockInfo {
         this.updateUser = updateUser;
     }
 
+    public String getMockStatus() {
+        return mockStatus;
+    }
+
+    public void setMockStatus(String mockStatus) {
+        this.mockStatus = mockStatus;
+    }
+
     @Override
     public String toString() {
         return "TMockInfo{" +
@@ -121,6 +131,7 @@ public class TMockInfo {
                 ", mockUrl='" + mockUrl + '\'' +
                 ", mockInput='" + mockInput + '\'' +
                 ", mockOutput='" + mockOutput + '\'' +
+                ", mockStatus='" + mockStatus + '\'' +
                 ", createTime=" + createTime +
                 ", createUser='" + createUser + '\'' +
                 ", updateTime=" + updateTime +

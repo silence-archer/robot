@@ -132,6 +132,7 @@ create table t_mock_info
     MOCK_MODULE varchar(20) null comment '挡板模块',
     MOCK_INPUT varchar(4000) null comment '挡板入参',
     MOCK_OUTPUT varchar(4000) null comment '挡板出参',
+    MOCK_STATUS varchar(4000) null comment '挡板状态0-有效1-失效',
     CREATE_USER varchar(64) null comment '创建人',
     CREATE_TIME datetime null comment '创建时间',
     UPDATE_USER varchar(64) null comment '更新人',

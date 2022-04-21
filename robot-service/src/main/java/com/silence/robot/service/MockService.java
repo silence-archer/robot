@@ -99,7 +99,7 @@ public class MockService {
         MockResponseInfo mockResponseInfo = new MockResponseInfo();
         mockResponseInfo.setMockSuccess(false);
         if (CommonUtils.isNotEmpty(tMockInfos)) {
-            mockResponseInfo.setMockSuccess(true);
+            mockResponseInfo.setMockSuccess(CommonUtils.isEquals(tMockInfos.get(0).getMockStatus(), "0"));
             mockResponseInfo.setResponseXml(tMockInfos.get(0).getMockOutput());
         }
         return mockResponseInfo;
