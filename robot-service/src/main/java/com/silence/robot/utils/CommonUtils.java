@@ -36,6 +36,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import javax.naming.CommunicationException;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈工具类〉
@@ -206,6 +208,11 @@ public class CommonUtils {
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getResultSet();
+            if(resultSet == null) {
+                preparedStatement.close();
+                conn.close();
+                return null;
+            }
             while (resultSet.next()) {
                 int columnCount = resultSet.getMetaData().getColumnCount();
                 JSONObject jsonObject = new JSONObject();
@@ -227,6 +234,38 @@ public class CommonUtils {
         }
         logger.debug("sql语句执行结果>>>>>>>[{}]", list);
         return list;
+    }
+
+    public static void executeBatchSql(String type, List<String> sqls, String url, String user, String password) {
+        try {
+            String databaseUrl = "";
+            if (RobotConstants.DATABASE_TYPE_ORACLE.equals(type)) {
+                databaseUrl = "jdbc:oracle:thin:@" + url;
+                Class.forName("oracle.jdbc.driver.OracleDriver");
+            } else if (RobotConstants.DATABASE_TYPE_MYSQL.equals(type)) {
+                databaseUrl = "jdbc:mysql://" + url;
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } else if (RobotConstants.DATABASE_TYPE_SQLITE.equals(type)) {
+                databaseUrl = "jdbc:sqlite://" + url;
+                Class.forName("org.sqlite.JDBC");
+            }
+
+            Connection conn = DriverManager.getConnection(databaseUrl, user, password);
+            PreparedStatement preparedStatement = null;
+            for (String sql : sqls) {
+                if(CommonUtils.isNotEmpty(sql)) {
+                    logger.debug("开始执行自定义sql>>>>>>>[{}]", sql);
+                    preparedStatement = conn.prepareStatement(sql);
+                    preparedStatement.execute();
+                }
+            }
+            assert preparedStatement != null;
+            preparedStatement.close();
+            conn.close();
+        } catch (Exception e) {
+            logger.error("数据库链接失败", e);
+            throw new BusinessException(ExceptionCode.DATABASE_CONNECT_ERROR);
+        }
     }
 
     public static String getPkQuerySql(String type, String tableName, String owner) {

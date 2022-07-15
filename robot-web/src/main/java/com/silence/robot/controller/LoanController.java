@@ -47,4 +47,9 @@ public class LoanController {
         }
         return new DataResponse<>(body);
     }
+
+    @PostMapping("/loan306")
+    public DataResponse<JSONObject> loan306Service(@RequestBody JSONObject request){
+        return new DataResponse<>(loanService.executeLoanVersion306(request));
+    }
 }

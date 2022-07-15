@@ -7,5 +7,10 @@ spring:
     hikari:
       maximum-pool-size: 10
       connection-timeout: 30000
+  redis:
+    host: 192.168.56.10
 sqlite:
-  url: D:\JetBrains\IntelliJ IDEA 2020.1\bin\identifier.sqlite
+  url: D:\test\robot.db
+silence:
+  loan:
+    dayCutPath: D:\test\dayCut\

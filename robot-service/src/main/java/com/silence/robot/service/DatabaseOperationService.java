@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.constants.RobotConstants;
 import com.silence.robot.domain.DataDiffDetailDto;
 import com.silence.robot.domain.DataDiffDto;
+import com.silence.robot.enumeration.BusinessTypeEnum;
+import com.silence.robot.enumeration.DataSourceTypeEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TDataDictMapper;
@@ -11,12 +13,21 @@ import com.silence.robot.mapper.TDatabaseInfoMapper;
 import com.silence.robot.model.TDataDict;
 import com.silence.robot.model.TDatabaseInfo;
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.DateUtils;
+import com.silence.robot.utils.FileUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
+import java.io.File;
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 数据库操作服务
@@ -35,7 +46,10 @@ public class DatabaseOperationService {
 
     @Resource
     private TDataDictMapper dataDictMapper;
-
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+    @Value("${silence.loan.dayCutPath}")
+    private String dayCutPath;
     public List<DataDiffDto> getDiffParams(String origBusinessType, String destBusinessType) {
 
         TDatabaseInfo origDatabaseInfo = databaseInfoMapper.selectByBusinessType(origBusinessType);
@@ -197,8 +211,28 @@ public class DatabaseOperationService {
 
     }
 
+    public void loan306DayCut(String date, String dbType) {
+        dayCut(date, "dayCut.sql", dbType);
+    }
 
+    public void loan306DayCutInit(String date, String dbType) {
+        dayCut(date, "dayCutInit.sql", dbType);
+    }
 
-
-
+    private void dayCut(String date, String fileName, String dbType) {
+        for (BusinessTypeEnum value : BusinessTypeEnum.getByDbType(dbType)) {
+            TDatabaseInfo databaseInfo = databaseInfoMapper.selectByBusinessType(value.getCode());
+            if(CommonUtils.isEmpty(databaseInfo)) {
+                throw new BusinessException(ExceptionCode.NO_EXIST);
+            }
+            String content = FileUtils.getFileContent(dayCutPath+value.getDbType()+ File.separator+value.getBusinessKind()+File.separator+fileName);
+            content = content.replace("${tranDate}", date).replace("${lastTranDate}", Objects.requireNonNull(
+                DateUtils.addDay(date, -1))).replace("${nextTranDate}", Objects.requireNonNull(DateUtils.addDay(date, 1))).replace(";","");
+            if(CommonUtils.isNotEmpty(content)) {
+                List<String> sqls = Arrays.asList(content.split("\r\n"));
+                CommonUtils.executeBatchSql(databaseInfo.getType(), sqls, databaseInfo.getUrl(), databaseInfo.getUser(), databaseInfo.getPassword());
+            }
+        }
+        stringRedisTemplate.delete(Objects.requireNonNull(stringRedisTemplate.keys("*")));
+    }
 }

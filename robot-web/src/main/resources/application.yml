@@ -15,6 +15,8 @@ silence:
       - /mock
       - /mock/*
       - /signature/*
+      - /loan306
+      - /loan306/**
   wechat:
     subscribe:
       api: https://api.weixin.qq.com/cgi-bin/token

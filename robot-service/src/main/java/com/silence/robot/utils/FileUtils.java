@@ -805,6 +805,16 @@ public class FileUtils {
         return count;
     }
 
+    public static List<String> getFileContentLine(String filename) {
+        List<String> lines = null;
+        try {
+            lines = Files.readAllLines(Paths.get(filename));
+        } catch (IOException e) {
+            logger.error("{}获取文件", filename, e);
+        }
+        return lines;
+    }
+
     /**
      *
      * <获取分割文件处理器>

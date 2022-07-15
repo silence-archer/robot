@@ -49,5 +49,17 @@ public class DatabaseOperationController {
         return dataResponse;
     }
 
+    @GetMapping("/loan306/dayCutInit")
+    public DataResponse<?> loan306DayCutInit(@RequestParam String date, @RequestParam String dbType) {
+        databaseOperationService.loan306DayCutInit(date, dbType);
+        return new DataResponse<>();
+    }
+
+    @GetMapping("/loan306/dayCut")
+    public DataResponse<?> loan306DayCut(@RequestParam String date, @RequestParam String dbType) {
+        databaseOperationService.loan306DayCut(date, dbType);
+        return new DataResponse<>();
+    }
+
 
 }

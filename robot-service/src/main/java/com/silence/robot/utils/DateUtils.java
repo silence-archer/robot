@@ -65,4 +65,22 @@ public class DateUtils {
         return instance.getTime();
     }
 
+    public static String addDay(String dateStr, int day) {
+        if (CommonUtils.isEmpty(dateStr)) {
+            return null;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(dateStr);
+        } catch (ParseException e) {
+            logger.error("{}日期转化失败", dateStr, e);
+        }
+        Calendar instance = Calendar.getInstance();
+        assert date != null;
+        instance.setTime(date);
+        instance.add(Calendar.DAY_OF_MONTH, day);
+        return simpleDateFormat.format(instance.getTime());
+    }
+
 }

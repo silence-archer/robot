@@ -7,13 +7,20 @@ import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.HttpUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author silence
@@ -145,6 +152,48 @@ public class LoanService {
         }
         throw new BusinessException(retMsg);
 
+    }
+
+    public JSONObject executeLoanVersion306(JSONObject request) {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        assert servletRequestAttributes != null;
+        String apiCd = servletRequestAttributes.getRequest()
+            .getHeader("apiCd");
+        String ipAddr = servletRequestAttributes.getRequest()
+            .getHeader("ipAddr");
+        String port = servletRequestAttributes.getRequest()
+            .getHeader("port");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("thread_tag", "thread_tag");
+        JSONObject jsonObject = new JSONObject();
+        JSONObject requestObject = new JSONObject();
+        requestObject.put("ask","ASSET");
+        requestObject.put("answer","ASSET");
+        requestObject.put("serialNo",System.currentTimeMillis()+"");
+        requestObject.put("serviceScene","UNKNOWN");
+        requestObject.put("idemSerialNo",System.currentTimeMillis()+"");
+        requestObject.put("transDateTime", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        requestObject.put("inboundIdemSerialNo",System.currentTimeMillis()+"");
+        requestObject.put("inboundTransDateTime",LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        requestObject.put("tenantId","000");
+        requestObject.put("channelNo","001");
+        requestObject.put("sign",System.currentTimeMillis()+"");
+        String loan306Header = subscribeConfigInfoService.getConfigValue("loan306_header", null);
+        jsonObject.put(loan306Header, requestObject.toJSONString());
+        JSONObject userObject = new JSONObject();
+        userObject.put("authId","123");
+        userObject.put("token",System.currentTimeMillis()+"");
+        userObject.put("organId","10");
+        userObject.put("organName","根机构");
+        userObject.put("operatorId","123");
+        userObject.put("operatorName","测试柜员");
+        String loan306UserHeader = subscribeConfigInfoService.getConfigValue("loan306_user_header", null);
+        jsonObject.put(loan306UserHeader, userObject.toJSONString());
+        headers.put("thread_context", Base64.getEncoder().encodeToString(jsonObject.toJSONString().getBytes(
+            StandardCharsets.UTF_8)));
+        JSONObject args0 = new JSONObject();
+        args0.put("args0", request.toJSONString());
+        return HttpUtils.doPost("http://" + ipAddr + ":" + port + apiCd , headers, args0.toJSONString());
     }
 
 }
