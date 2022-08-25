@@ -5,7 +5,6 @@ import com.silence.robot.constants.RobotConstants;
 import com.silence.robot.domain.DataDiffDetailDto;
 import com.silence.robot.domain.DataDiffDto;
 import com.silence.robot.enumeration.BusinessTypeEnum;
-import com.silence.robot.enumeration.DataSourceTypeEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TDataDictMapper;
@@ -25,9 +24,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 数据库操作服务
@@ -40,7 +37,6 @@ public class DatabaseOperationService {
 
     private final Logger logger = LoggerFactory.getLogger(DatabaseOperationService.class);
 
-
     @Resource
     private TDatabaseInfoMapper databaseInfoMapper;
 
@@ -50,58 +46,61 @@ public class DatabaseOperationService {
     private StringRedisTemplate stringRedisTemplate;
     @Value("${silence.loan.dayCutPath}")
     private String dayCutPath;
+
     public List<DataDiffDto> getDiffParams(String origBusinessType, String destBusinessType) {
 
         TDatabaseInfo origDatabaseInfo = databaseInfoMapper.selectByBusinessType(origBusinessType);
         TDatabaseInfo destDatabaseInfo = databaseInfoMapper.selectByBusinessType(destBusinessType);
-        if(CommonUtils.isEmpty(origDatabaseInfo) || CommonUtils.isEmpty(destDatabaseInfo)) {
+        if (CommonUtils.isEmpty(origDatabaseInfo) || CommonUtils.isEmpty(destDatabaseInfo)) {
             throw new BusinessException(ExceptionCode.NO_EXIST);
         }
 
         List<TDataDict> dataDicts = dataDictMapper.selectByName(RobotConstants.PARAMETER_TABLE);
         List<DataDiffDto> list = new ArrayList<>();
-        dataDicts.parallelStream().forEach(dataDict -> {
+        dataDicts.parallelStream()
+            .forEach(dataDict -> {
 
-            String sql = "select * from "+dataDict.getEnumName();
+                String sql = "select * from " + dataDict.getEnumName();
 
-            List<JSONObject> origList = CommonUtils.getResultSetByDataBase(origDatabaseInfo.getType(), sql, origDatabaseInfo.getUrl(), origDatabaseInfo.getUser(), origDatabaseInfo.getPassword());
-            List<JSONObject> destList = CommonUtils.getResultSetByDataBase(destDatabaseInfo.getType(), sql, destDatabaseInfo.getUrl(), destDatabaseInfo.getUser(), destDatabaseInfo.getPassword());
+                List<JSONObject> origList = CommonUtils.getResultSetByDataBase(origDatabaseInfo.getType(), sql,
+                    origDatabaseInfo.getUrl(), origDatabaseInfo.getUser(), origDatabaseInfo.getPassword());
+                List<JSONObject> destList = CommonUtils.getResultSetByDataBase(destDatabaseInfo.getType(), sql,
+                    destDatabaseInfo.getUrl(), destDatabaseInfo.getUser(), destDatabaseInfo.getPassword());
 
-            Iterator<JSONObject> origIterator = origList.iterator();
-            while (origIterator.hasNext()) {
-                JSONObject origObject = origIterator.next();
-                Iterator<JSONObject> destIterator = destList.iterator();
-                while (destIterator.hasNext()) {
-                    JSONObject destObject = destIterator.next();
-                    if (origObject.equals(destObject)) {
-                        logger.debug("开始对比，原值{}, 目标值{}", origObject, destObject);
-                        logger.debug("比对成功>>>>>>>>>>>>");
-                        destIterator.remove();
-                        origIterator.remove();
+                Iterator<JSONObject> origIterator = origList.iterator();
+                while (origIterator.hasNext()) {
+                    JSONObject origObject = origIterator.next();
+                    Iterator<JSONObject> destIterator = destList.iterator();
+                    while (destIterator.hasNext()) {
+                        JSONObject destObject = destIterator.next();
+                        if (origObject.equals(destObject)) {
+                            logger.debug("开始对比，原值{}, 目标值{}", origObject, destObject);
+                            logger.debug("比对成功>>>>>>>>>>>>");
+                            destIterator.remove();
+                            origIterator.remove();
+                        }
                     }
                 }
-            }
-            if (CommonUtils.isNotEmpty(origList) || CommonUtils.isNotEmpty(destList)) {
-                logger.debug("原数据大小[{}], 目标数据大小[{}]", origList.size(), destList.size());
-                DataDiffDto dataDiffDto = new DataDiffDto();
-                dataDiffDto.setRunScript(sql);
-                dataDiffDto.setEnumDesc(dataDict.getEnumDesc());
-                dataDiffDto.setOrigValue(origList.toString());
-                dataDiffDto.setDestValue(destList.toString());
-                dataDiffDto.setEnumName(dataDict.getEnumName());
-                dataDiffDto.setDataName(dataDict.getName());
-                dataDiffDto.setBusinessType(origBusinessType);
-                list.add(dataDiffDto);
-            }
+                if (CommonUtils.isNotEmpty(origList) || CommonUtils.isNotEmpty(destList)) {
+                    logger.debug("原数据大小[{}], 目标数据大小[{}]", origList.size(), destList.size());
+                    DataDiffDto dataDiffDto = new DataDiffDto();
+                    dataDiffDto.setRunScript(sql);
+                    dataDiffDto.setEnumDesc(dataDict.getEnumDesc());
+                    dataDiffDto.setOrigValue(origList.toString());
+                    dataDiffDto.setDestValue(destList.toString());
+                    dataDiffDto.setEnumName(dataDict.getEnumName());
+                    dataDiffDto.setDataName(dataDict.getName());
+                    dataDiffDto.setBusinessType(origBusinessType);
+                    list.add(dataDiffDto);
+                }
 
-        });
+            });
         return list;
     }
 
-
     public List<DataDiffDto> getDiffData(String destBusinessType) {
         TDatabaseInfo destDatabaseInfo = databaseInfoMapper.selectByBusinessType(destBusinessType);
-        if(CommonUtils.isEmpty(destDatabaseInfo)) {
+        if (CommonUtils.isEmpty(destDatabaseInfo)) {
             throw new BusinessException(ExceptionCode.NO_EXIST);
         }
 
@@ -111,21 +110,23 @@ public class DatabaseOperationService {
 
             String sql = dataDict.getEnumName();
 
-            List<JSONObject> destList = CommonUtils.getResultSetByDataBase(destDatabaseInfo.getType(), sql, destDatabaseInfo.getUrl(), destDatabaseInfo.getUser(), destDatabaseInfo.getPassword());
-            destList.get(0).forEach((s, o) -> {
-                if (!o.equals(dataDict.getRemark())) {
-                    DataDiffDto dataDiffDto = new DataDiffDto();
-                    dataDiffDto.setRunScript(sql);
-                    dataDiffDto.setEnumDesc(dataDict.getEnumDesc());
-                    dataDiffDto.setOrigValue(dataDict.getRemark());
-                    dataDiffDto.setDestValue(o.toString());
-                    dataDiffDto.setEnumName(dataDict.getEnumName());
-                    dataDiffDto.setDataName(dataDict.getName());
-                    dataDiffDto.setBusinessType(destBusinessType);
-                    list.add(dataDiffDto);
-                }
+            List<JSONObject> destList = CommonUtils.getResultSetByDataBase(destDatabaseInfo.getType(), sql,
+                destDatabaseInfo.getUrl(), destDatabaseInfo.getUser(), destDatabaseInfo.getPassword());
+            destList.get(0)
+                .forEach((s, o) -> {
+                    if (!o.equals(dataDict.getRemark())) {
+                        DataDiffDto dataDiffDto = new DataDiffDto();
+                        dataDiffDto.setRunScript(sql);
+                        dataDiffDto.setEnumDesc(dataDict.getEnumDesc());
+                        dataDiffDto.setOrigValue(dataDict.getRemark());
+                        dataDiffDto.setDestValue(o.toString());
+                        dataDiffDto.setEnumName(dataDict.getEnumName());
+                        dataDiffDto.setDataName(dataDict.getName());
+                        dataDiffDto.setBusinessType(destBusinessType);
+                        list.add(dataDiffDto);
+                    }
 
-            });
+                });
 
         });
         return list;
@@ -134,17 +135,19 @@ public class DatabaseOperationService {
     public List<DataDiffDetailDto> getDiffDetail(DataDiffDto dataDiffDto) {
         List<DataDiffDetailDto> list = new ArrayList<>();
         TDatabaseInfo databaseInfo = databaseInfoMapper.selectByBusinessType(dataDiffDto.getBusinessType());
-        String[] split = dataDiffDto.getEnumName().split("\\.");
+        String[] split = dataDiffDto.getEnumName()
+            .split("\\.");
         String tableName = "";
         String owner = "";
         if (split.length > 1) {
             tableName = split[1];
             owner = split[0];
-        }else {
+        } else {
             tableName = split[0];
         }
         String pkSql = CommonUtils.getPkQuerySql(databaseInfo.getType(), tableName, owner);
-        List<JSONObject> pkList = CommonUtils.getResultSetByDataBase(databaseInfo.getType(), pkSql, databaseInfo.getUrl(), databaseInfo.getUser(), databaseInfo.getPassword());
+        List<JSONObject> pkList = CommonUtils.getResultSetByDataBase(databaseInfo.getType(), pkSql,
+            databaseInfo.getUrl(), databaseInfo.getUser(), databaseInfo.getPassword());
         List<JSONObject> origArray = JSONObject.parseArray(dataDiffDto.getOrigValue(), JSONObject.class);
         List<JSONObject> destArray = JSONObject.parseArray(dataDiffDto.getDestValue(), JSONObject.class);
         Map<String, JSONObject> origMap = new HashMap<>(origArray.size());
@@ -165,7 +168,7 @@ public class DatabaseOperationService {
                 String pkValue = destObject.getString(pkName);
                 destPk.put(pkName, pkValue);
             });
-            if(origMap.containsKey(destPk.toJSONString())) {
+            if (origMap.containsKey(destPk.toJSONString())) {
                 getJsonDiff(origMap.get(destPk.toJSONString()), destObject);
             }
             destMap.put(destPk.toJSONString(), destObject);
@@ -175,8 +178,9 @@ public class DatabaseOperationService {
             DataDiffDetailDto dataDiffDetailDto = new DataDiffDetailDto();
             dataDiffDetailDto.setPrimalKey(s);
             dataDiffDetailDto.setOrigDetailValue(jsonObject.toJSONString());
-            if(destMap.containsKey(s)) {
-                dataDiffDetailDto.setDestDetailValue(destMap.get(s).toJSONString());
+            if (destMap.containsKey(s)) {
+                dataDiffDetailDto.setDestDetailValue(destMap.get(s)
+                    .toJSONString());
                 destMap.remove(s);
             }
             list.add(dataDiffDetailDto);
@@ -191,17 +195,21 @@ public class DatabaseOperationService {
     }
 
     private void getJsonDiff(JSONObject origObject, JSONObject destObject) {
-        Iterator<Map.Entry<String, Object>> origIterator = origObject.entrySet().iterator();
+        Iterator<Map.Entry<String, Object>> origIterator = origObject.entrySet()
+            .iterator();
 
         while (origIterator.hasNext()) {
             Map.Entry<String, Object> origNext = origIterator.next();
             String origKey = origNext.getKey();
-            String origValue = origNext.getValue().toString();
-            Iterator<Map.Entry<String, Object>> destIterator = destObject.entrySet().iterator();
+            String origValue = origNext.getValue()
+                .toString();
+            Iterator<Map.Entry<String, Object>> destIterator = destObject.entrySet()
+                .iterator();
             while (destIterator.hasNext()) {
                 Map.Entry<String, Object> destNext = destIterator.next();
                 String destKey = destNext.getKey();
-                String destValue = destNext.getValue().toString();
+                String destValue = destNext.getValue()
+                    .toString();
                 if (origKey.equals(destKey) && origValue.equals(destValue)) {
                     origIterator.remove();
                     destIterator.remove();
@@ -211,28 +219,50 @@ public class DatabaseOperationService {
 
     }
 
-    public void loan306DayCut(String date, String dbType) {
-        dayCut(date, "dayCut.sql", dbType);
-    }
-
-    public void loan306DayCutInit(String date, String dbType) {
-        dayCut(date, "dayCutInit.sql", dbType);
-    }
-
-    private void dayCut(String date, String fileName, String dbType) {
-        for (BusinessTypeEnum value : BusinessTypeEnum.getByDbType(dbType)) {
-            TDatabaseInfo databaseInfo = databaseInfoMapper.selectByBusinessType(value.getCode());
-            if(CommonUtils.isEmpty(databaseInfo)) {
-                throw new BusinessException(ExceptionCode.NO_EXIST);
-            }
-            String content = FileUtils.getFileContent(dayCutPath+value.getDbType()+ File.separator+value.getBusinessKind()+File.separator+fileName);
-            content = content.replace("${tranDate}", date).replace("${lastTranDate}", Objects.requireNonNull(
-                DateUtils.addDay(date, -1))).replace("${nextTranDate}", Objects.requireNonNull(DateUtils.addDay(date, 1))).replace(";","");
-            if(CommonUtils.isNotEmpty(content)) {
-                List<String> sqls = Arrays.asList(content.split("\r\n"));
-                CommonUtils.executeBatchSql(databaseInfo.getType(), sqls, databaseInfo.getUrl(), databaseInfo.getUser(), databaseInfo.getPassword());
+    public void loan306DayCut(String date, String dbType, String businessType) {
+        if (CommonUtils.isAllEmpty(dbType, businessType)) {
+            throw new BusinessException(ExceptionCode.EMPTY_ERROR);
+        }
+        if (CommonUtils.isNotEmpty(businessType)) {
+            dayCut(date, "dayCut.sql", businessType);
+        } else {
+            for (BusinessTypeEnum value : BusinessTypeEnum.getByDbType(dbType)) {
+                dayCut(date, "dayCut.sql", value.getCode());
             }
         }
         stringRedisTemplate.delete(Objects.requireNonNull(stringRedisTemplate.keys("*")));
+
+    }
+
+    public void loan306DayCutInit(String date, String dbType, String businessType) {
+        if (CommonUtils.isAllEmpty(dbType, businessType)) {
+            throw new BusinessException(ExceptionCode.EMPTY_ERROR);
+        }
+        if (CommonUtils.isNotEmpty(businessType)) {
+            dayCut(date, "dayCutInit.sql", businessType);
+        } else {
+            for (BusinessTypeEnum value : BusinessTypeEnum.getByDbType(dbType)) {
+                dayCut(date, "dayCutInit.sql", value.getCode());
+            }
+        }
+        stringRedisTemplate.delete(Objects.requireNonNull(stringRedisTemplate.keys("*")));
+    }
+
+    private void dayCut(String date, String fileName, String businessType) {
+
+        TDatabaseInfo databaseInfo = databaseInfoMapper.selectByBusinessType(businessType);
+        if (CommonUtils.isEmpty(databaseInfo)) {
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        String content = FileUtils.getFileContent(dayCutPath + businessType + File.separator + fileName);
+        content = content.replace("${tranDate}", date)
+            .replace("${lastTranDate}", Objects.requireNonNull(DateUtils.addDay(date, -1)))
+            .replace("${nextTranDate}", Objects.requireNonNull(DateUtils.addDay(date, 1)))
+            .replace(";", "");
+        if (CommonUtils.isNotEmpty(content)) {
+            List<String> sqls = Arrays.asList(content.split("\r\n"));
+            CommonUtils.executeBatchSql(databaseInfo.getType(), sqls, databaseInfo.getUrl(), databaseInfo.getUser(),
+                databaseInfo.getPassword());
+        }
     }
 }
