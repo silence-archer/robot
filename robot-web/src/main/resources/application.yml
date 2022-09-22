@@ -43,6 +43,10 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 1000MB
+  mail:
+    host: smtp.qq.com
+    username: 1048037315@qq.com
+    password: ENC(ieofcDmncxOTOCCckODKsSIxoFEbtHx0fdUiWYLEZ0s=)
 logging:
   level:
     root: info

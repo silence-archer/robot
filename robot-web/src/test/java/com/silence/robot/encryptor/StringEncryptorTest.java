@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -30,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -44,7 +47,7 @@ import java.util.stream.Stream;
 //我们在测试使用 websocket的时候需要启动一个完整的服务器，而使用这个注解就是说每次测试都会选用一个随即可用的端口模拟启动一个完整的服务器
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("h2")
+@ActiveProfiles("sqlite")
 public class StringEncryptorTest {
 
     @Resource
@@ -56,18 +59,38 @@ public class StringEncryptorTest {
     @Value("${spring.datasource.username:mzh}")
     private String username;
 
-    @Value("${spring.datasource.password:19930927}")
+    @Value("${spring.mail.password}")
     private String password;
     @Value("${silence.subscribe.token}")
     private String token;
+    @Resource
+    private JavaMailSender javaMailSender;
 
     @Test
     public void encry(){
 
-        String mzh = jasyptStringEncryptor.encrypt("silence");
+        String mzh = jasyptStringEncryptor.encrypt("mzh");
         System.out.println(mzh);
         System.out.println(username);
         System.out.println(password);
         System.out.println(token);
+    }
+
+    @Test
+    public void sendMail() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        //邮件发件人
+        message.setFrom("1048037315@qq.com");
+        //邮件收件人 1或多个
+        message.setTo("123456@139.com");
+        //邮件主题
+        message.setSubject("测试");
+        //邮件内容
+        message.setText("测试");
+        //邮件发送时间
+        message.setSentDate(new Date());
+
+        javaMailSender.send(message);
+
     }
 }
