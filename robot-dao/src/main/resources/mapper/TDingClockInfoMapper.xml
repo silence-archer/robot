@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silence.robot.mapper.TDingClockInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.silence.robot.model.TDingClockInfo">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="projectId" column="project_id" jdbcType="INTEGER"/>
+        <result property="ruleId" column="rule_id" jdbcType="INTEGER"/>
+        <result property="addrId" column="addr_id" jdbcType="INTEGER"/>
+        <result property="apprUserId" column="appr_user_id" jdbcType="INTEGER"/>
+        <result property="deptId" column="dept_id" jdbcType="INTEGER"/>
+        <result property="workReportType" column="work_report_type" jdbcType="VARCHAR"/>
+        <result property="longitude" column="longitude" jdbcType="VARCHAR"/>
+        <result property="latitude" column="latitude" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="imagePath" column="image_path" jdbcType="VARCHAR"/>
+        <result property="atcity" column="atcity" jdbcType="VARCHAR"/>
+        <result property="pbflag" column="pbflag" jdbcType="VARCHAR"/>
+        <result property="beforeup" column="beforeup" jdbcType="VARCHAR"/>
+        <result property="itcode" column="itcode" jdbcType="VARCHAR"/>
+        <result property="sbuId" column="sbu_id" jdbcType="VARCHAR"/>
+        <result property="openId" column="open_id" jdbcType="VARCHAR"/>
+        <result property="mailAddress" column="mail_address" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,user_id,project_id,
+        rule_id,addr_id,appr_user_id,
+        dept_id,work_report_type,longitude,
+        latitude,address,image_path,
+        atcity,pbflag,beforeup,
+        itcode,sbu_id,open_id,
+        mail_address,status,username,
+            create_user,create_time,
+        update_user,update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ding_clock_info
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ding_clock_info
+    </select>
+    <select id="selectByItcode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ding_clock_info
+        where itcode = #{itcode,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByStatus" parameterType="java.lang.String" resultType="com.silence.robot.model.TDingClockInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ding_clock_info
+        where status = #{status,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from t_ding_clock_info
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.silence.robot.model.TDingClockInfo">
+        insert into t_ding_clock_info (id, user_id, project_id,
+                                       rule_id, addr_id, appr_user_id,
+                                       dept_id, work_report_type, longitude,
+                                       latitude, address, image_path,
+                                       atcity, pbflag, beforeup,
+                                       itcode, sbu_id, open_id,
+                                       mail_address, status,username,create_user, create_time,
+                                       update_user, update_time)
+        values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER},
+                #{ruleId,jdbcType=INTEGER}, #{addrId,jdbcType=INTEGER}, #{apprUserId,jdbcType=INTEGER},
+                #{deptId,jdbcType=INTEGER},
+                #{workReportType,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR},
+                #{address,jdbcType=VARCHAR},
+                #{imagePath,jdbcType=VARCHAR}, #{atcity,jdbcType=VARCHAR}, #{pbflag,jdbcType=VARCHAR},
+                #{beforeup,jdbcType=VARCHAR},
+                #{itcode,jdbcType=VARCHAR}, #{sbuId,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR},
+                #{mailAddress,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+                #{createUser,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.silence.robot.model.TDingClockInfo">
+        insert into t_ding_clock_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="projectId != null">
+                project_id,
+            </if>
+            <if test="ruleId != null">
+                rule_id,
+            </if>
+            <if test="addrId != null">
+                addr_id,
+            </if>
+            <if test="apprUserId != null">
+                appr_user_id,
+            </if>
+            <if test="deptId != null">
+                dept_id,
+            </if>
+            <if test="workReportType != null">
+                work_report_type,
+            </if>
+            <if test="longitude != null">
+                longitude,
+            </if>
+            <if test="latitude != null">
+                latitude,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="imagePath != null">
+                image_path,
+            </if>
+            <if test="atcity != null">
+                atcity,
+            </if>
+            <if test="pbflag != null">
+                pbflag,
+            </if>
+            <if test="beforeup != null">
+                beforeup,
+            </if>
+            <if test="itcode != null">
+                itcode,
+            </if>
+            <if test="sbuId != null">
+                sbu_id,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="mailAddress != null">
+                mail_address,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="ruleId != null">
+                #{ruleId,jdbcType=INTEGER},
+            </if>
+            <if test="addrId != null">
+                #{addrId,jdbcType=INTEGER},
+            </if>
+            <if test="apprUserId != null">
+                #{apprUserId,jdbcType=INTEGER},
+            </if>
+            <if test="deptId != null">
+                #{deptId,jdbcType=INTEGER},
+            </if>
+            <if test="workReportType != null">
+                #{workReportType,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null">
+                #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null">
+                #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="imagePath != null">
+                #{imagePath,jdbcType=VARCHAR},
+            </if>
+            <if test="atcity != null">
+                #{atcity,jdbcType=VARCHAR},
+            </if>
+            <if test="pbflag != null">
+                #{pbflag,jdbcType=VARCHAR},
+            </if>
+            <if test="beforeup != null">
+                #{beforeup,jdbcType=VARCHAR},
+            </if>
+
+            <if test="itcode != null">
+                #{itcode,jdbcType=VARCHAR},
+            </if>
+            <if test="sbuId != null">
+                #{sbuId,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="mailAddress != null">
+                #{mailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.silence.robot.model.TDingClockInfo">
+        update t_ding_clock_info
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="ruleId != null">
+                rule_id = #{ruleId,jdbcType=INTEGER},
+            </if>
+            <if test="addrId != null">
+                addr_id = #{addrId,jdbcType=INTEGER},
+            </if>
+            <if test="apprUserId != null">
+                appr_user_id = #{apprUserId,jdbcType=INTEGER},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId,jdbcType=INTEGER},
+            </if>
+            <if test="workReportType != null">
+                work_report_type = #{workReportType,jdbcType=VARCHAR},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="imagePath != null">
+                image_path = #{imagePath,jdbcType=VARCHAR},
+            </if>
+            <if test="atcity != null">
+                atcity = #{atcity,jdbcType=VARCHAR},
+            </if>
+            <if test="pbflag != null">
+                pbflag = #{pbflag,jdbcType=VARCHAR},
+            </if>
+            <if test="beforeup != null">
+                beforeup = #{beforeup,jdbcType=VARCHAR},
+            </if>
+
+            <if test="itcode != null">
+                itcode = #{itcode,jdbcType=VARCHAR},
+            </if>
+            <if test="sbuId != null">
+                sbu_id = #{sbuId,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                open_id = #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="mailAddress != null">
+                mail_address = #{mailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.silence.robot.model.TDingClockInfo">
+        update t_ding_clock_info
+        set
+        user_id = #{userId,jdbcType=INTEGER},
+            project_id = #{projectId,jdbcType=INTEGER},
+            rule_id = #{ruleId,jdbcType=INTEGER},
+            addr_id = #{addrId,jdbcType=INTEGER},
+            appr_user_id = #{apprUserId,jdbcType=INTEGER},
+            dept_id = #{deptId,jdbcType=INTEGER},
+            work_report_type = #{workReportType,jdbcType=VARCHAR},
+            longitude = #{longitude,jdbcType=VARCHAR},
+            latitude = #{latitude,jdbcType=VARCHAR},
+            address = #{address,jdbcType=VARCHAR},
+            image_path = #{imagePath,jdbcType=VARCHAR},
+            atcity = #{atcity,jdbcType=VARCHAR},
+            pbflag = #{pbflag,jdbcType=VARCHAR},
+            beforeup = #{beforeup,jdbcType=VARCHAR},
+            itcode = #{itcode,jdbcType=VARCHAR},
+            sbu_id = #{sbuId,jdbcType=VARCHAR},
+            open_id = #{openId,jdbcType=VARCHAR},
+            mail_address = #{mailAddress,jdbcType=VARCHAR},
+        status = #{status,jdbcType=VARCHAR},
+        username = #{username,jdbcType=VARCHAR},
+            create_user = #{createUser,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_user = #{updateUser,jdbcType=VARCHAR},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

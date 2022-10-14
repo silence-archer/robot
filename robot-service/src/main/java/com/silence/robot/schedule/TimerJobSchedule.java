@@ -10,11 +10,15 @@
  */
 package com.silence.robot.schedule;
 
+import com.silence.robot.clock.MailSendService;
+import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.job.RobotQuartzJob;
 import com.silence.robot.mapper.TCronTaskMapper;
 import com.silence.robot.model.TCronTask;
+import com.silence.robot.service.SubscribeConfigInfoService;
+
 import org.quartz.*;
 import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.triggers.CronTriggerImpl;
@@ -45,6 +49,11 @@ public class TimerJobSchedule {
 
     @Resource
     private Scheduler scheduler;
+    @Resource
+    private MailSendService mailSendService;
+
+    @Resource
+    private SubscribeConfigInfoService subscribeConfigInfoService;
 
     @PostConstruct
     public void load() {
@@ -99,8 +108,7 @@ public class TimerJobSchedule {
             }else{
                 logger.info("该定时任务{}不存在quartz调度中，无需再停止",jobName);
             }
-
-
+            mailSendService.send("定时任务", jobName+"定时任务已经停止运行", subscribeConfigInfoService.getConfigValue(ConfigEnum.MAIL_ADDRESS));
         } catch (SchedulerException e) {
             logger.error("定时任务{},停止失败",jobName, e);
             throw new BusinessException(ExceptionCode.SCHEDULER_STOP_ERROR);

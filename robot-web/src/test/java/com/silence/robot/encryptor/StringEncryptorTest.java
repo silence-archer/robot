@@ -10,6 +10,7 @@
  */
 package com.silence.robot.encryptor;
 
+import com.silence.robot.clock.MailSendService;
 import com.silence.robot.mapper.TUserMapper;
 import com.silence.robot.model.TUser;
 import com.silence.robot.service.UserService;
@@ -64,7 +65,7 @@ public class StringEncryptorTest {
     @Value("${silence.subscribe.token}")
     private String token;
     @Resource
-    private JavaMailSender javaMailSender;
+    private MailSendService mailSendService;
 
     @Test
     public void encry(){
@@ -78,19 +79,9 @@ public class StringEncryptorTest {
 
     @Test
     public void sendMail() {
-        SimpleMailMessage message = new SimpleMailMessage();
-        //邮件发件人
-        message.setFrom("1048037315@qq.com");
-        //邮件收件人 1或多个
-        message.setTo("123456@139.com");
-        //邮件主题
-        message.setSubject("测试");
-        //邮件内容
-        message.setText("测试");
-        //邮件发送时间
-        message.setSentDate(new Date());
 
-        javaMailSender.send(message);
 
+        mailSendService.send("测试", "", "@139.com");
+        System.out.println("111111111");
     }
 }
