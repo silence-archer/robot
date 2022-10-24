@@ -11,6 +11,8 @@
 package com.silence.robot.controller;
 
 import com.silence.robot.domain.CronTaskInfo;
+import com.silence.robot.domain.RobotPage;
+import com.silence.robot.domain.clock.DingClockDto;
 import com.silence.robot.dto.DataResponse;
 import com.silence.robot.service.CronTaskService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -53,9 +55,11 @@ public class CronTaskController {
     }
 
     @GetMapping("/queryCronTask")
-    public DataResponse<List<CronTaskInfo>> queryCronTask(){
-        List<CronTaskInfo> taskInfos = cronTaskService.queryCronTask();
-        return new DataResponse<>(taskInfos);
+    public DataResponse<List<CronTaskInfo>> queryCronTask(@RequestParam Integer page, @RequestParam Integer limit){
+        RobotPage<CronTaskInfo> taskInfos = cronTaskService.queryCronTask(page, limit);
+        DataResponse<List<CronTaskInfo>> dataResponse = new DataResponse<>(taskInfos.getList());
+        dataResponse.setCount(taskInfos.getTotal());
+        return dataResponse;
     }
 
 

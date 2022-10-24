@@ -50,7 +50,7 @@ public class HttpUtils {
     private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
     public static JSONObject doPost(String uri, Map<String, String> headers, String bodys) {
-
+        logger.info("post请求路径{}, 请求头{}, 请求体{}",uri, headers, bodys);
         HttpPost request = new HttpPost(uri);
         headers.forEach(request::setHeader);
         HttpEntity httpEntity = new StringEntity(bodys, ContentType.APPLICATION_JSON);
@@ -60,6 +60,11 @@ public class HttpUtils {
 
     public static JSONObject doPost(String uri, String bodys) {
         return doPost(uri, new HashMap<>(0), bodys);
+    }
+
+    public static JSONObject doGet(String uri) {
+        logger.info("get请求路径{}",uri);
+        return httpClientExecute(new HttpGet(uri));
     }
 
 
@@ -73,7 +78,9 @@ public class HttpUtils {
             logger.error("使用流失败",e);
             throw new BusinessException(ExceptionCode.HTTP_REQUEST_ERROR);
         }
-        return FileUtils.getJsonMap(content);
+        JSONObject jsonMap = FileUtils.getJsonMap(content);
+        logger.info("请求响应信息{}", jsonMap);
+        return jsonMap;
     }
 
     public static CloseableHttpResponse httpClientExecuteByStream(HttpRequestBase request) {

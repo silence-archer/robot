@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -33,10 +34,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import javax.naming.CommunicationException;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -191,20 +191,8 @@ public class CommonUtils {
     public static List<JSONObject> getResultSetByDataBase(String type, String sql, String url, String user, String password) {
         List<JSONObject> list = new ArrayList<>();
         try {
-            String databaseUrl = "";
-            if (RobotConstants.DATABASE_TYPE_ORACLE.equals(type)) {
-                databaseUrl = "jdbc:oracle:thin:@" + url;
-                Class.forName("oracle.jdbc.driver.OracleDriver");
-            } else if (RobotConstants.DATABASE_TYPE_MYSQL.equals(type)) {
-                databaseUrl = "jdbc:mysql://" + url;
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } else if (RobotConstants.DATABASE_TYPE_SQLITE.equals(type)) {
-                databaseUrl = "jdbc:sqlite://" + url;
-                Class.forName("org.sqlite.JDBC");
-            }
-
+            Connection conn = initDatabaseConnection(type, url, user, password);
             logger.debug("开始执行自定义sql>>>>>>>[{}]", sql);
-            Connection conn = DriverManager.getConnection(databaseUrl, user, password);
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getResultSet();
@@ -236,21 +224,54 @@ public class CommonUtils {
         return list;
     }
 
+    public static Connection initDatabaseConnection(String type, String url, String user, String password)
+    throws ClassNotFoundException, SQLException {
+        String databaseUrl = "";
+        if (RobotConstants.DATABASE_TYPE_ORACLE.equals(type)) {
+            databaseUrl = "jdbc:oracle:thin:@" + url;
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+        } else if (RobotConstants.DATABASE_TYPE_MYSQL.equals(type)) {
+            databaseUrl = "jdbc:mysql://" + url;
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } else if (RobotConstants.DATABASE_TYPE_SQLITE.equals(type)) {
+            databaseUrl = "jdbc:sqlite://" + url;
+            Class.forName("org.sqlite.JDBC");
+        }
+        return DriverManager.getConnection(databaseUrl, user, password);
+    }
+
+    public static void executeInsertSql(Connection connection, String tableName, List<JSONObject> list) {
+        try {
+            final PreparedStatement[] preparedStatement = {null};
+            list.forEach(jsonObject -> {
+                AtomicReference<String> columnNames = new AtomicReference<>("");
+                AtomicReference<Object> values = new AtomicReference<>("");
+                jsonObject.forEach((s, o) -> {
+                    columnNames.set(columnNames + s + ",");
+                    values.set(values + o.toString() + ",");
+                });
+                String sql = "insert into " + tableName + "(" + columnNames + ") values(" + values + ")";
+                logger.debug("开始执行自定义sql>>>>>>>[{}]", sql);
+                try {
+                    preparedStatement[0] = connection.prepareStatement(sql);
+                    preparedStatement[0].execute(sql);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+            preparedStatement[0].close();
+            connection.close();
+        } catch (Exception e) {
+            logger.error("数据库链接失败", e);
+            throw new BusinessException(ExceptionCode.DATABASE_CONNECT_ERROR);
+        }
+    }
+
     public static void executeBatchSql(String type, List<String> sqls, String url, String user, String password) {
         try {
-            String databaseUrl = "";
-            if (RobotConstants.DATABASE_TYPE_ORACLE.equals(type)) {
-                databaseUrl = "jdbc:oracle:thin:@" + url;
-                Class.forName("oracle.jdbc.driver.OracleDriver");
-            } else if (RobotConstants.DATABASE_TYPE_MYSQL.equals(type)) {
-                databaseUrl = "jdbc:mysql://" + url;
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } else if (RobotConstants.DATABASE_TYPE_SQLITE.equals(type)) {
-                databaseUrl = "jdbc:sqlite://" + url;
-                Class.forName("org.sqlite.JDBC");
-            }
 
-            Connection conn = DriverManager.getConnection(databaseUrl, user, password);
+            Connection conn = initDatabaseConnection(type, url, user, password);
             PreparedStatement preparedStatement = null;
             for (String sql : sqls) {
                 if(CommonUtils.isNotEmpty(sql)) {
@@ -468,5 +489,9 @@ public class CommonUtils {
 
         return sb.toString().toLowerCase();
 
+    }
+
+    public static void main(String[] args) {
+        
     }
 }

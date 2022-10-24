@@ -40,6 +40,7 @@ public enum ExceptionCode {
     NO_EXIST_PARAM(100031,"当前用户[%s]对应的杂类参数[%s]不存在"),
     TOKEN_VERIFY_ERROR(100032,"token检查失败"),
     TOKEN_PARSE_ERROR(100033,"token解析失败"),
+    SCHEDULER_RESTART_CHECK_ERROR(100034,"当前定时任务已执行成功，无需重试"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private final int code;

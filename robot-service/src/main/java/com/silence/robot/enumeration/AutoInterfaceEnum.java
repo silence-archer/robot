@@ -16,6 +16,7 @@ public enum AutoInterfaceEnum {
     AUTO_INTERFACE_2_0_RESULT_HTML("result/result.html","interface_2_0_result_html.ftl","输出界面"),
     AUTO_INTERFACE_RESULT_JS("result/result.js","interface_result_js.ftl","输出界面js"),
     AUTO_INTERFACE_2_0_RESULT_JS("result/result.js","interface_2_0_result_js.ftl","输出界面js"),
+    COMMEMORATING("commemorating.html","commemorating.ftl","纪念页面"),
     ;
 
 

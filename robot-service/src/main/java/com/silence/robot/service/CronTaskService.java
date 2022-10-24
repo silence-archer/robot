@@ -10,11 +10,16 @@
  */
 package com.silence.robot.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.silence.robot.domain.CronTaskInfo;
+import com.silence.robot.domain.RobotPage;
+import com.silence.robot.domain.clock.DingClockDto;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TCronTaskMapper;
 import com.silence.robot.model.TCronTask;
+import com.silence.robot.model.TDingClockInfo;
 import com.silence.robot.schedule.TimerJobSchedule;
 import com.silence.robot.utils.BeanUtils;
 import com.silence.robot.utils.CommonUtils;
@@ -98,9 +103,13 @@ public class CronTaskService {
     }
 
 
-    public List<CronTaskInfo> queryCronTask(){
+    public RobotPage<CronTaskInfo> queryCronTask(Integer page, Integer limit){
+        page = page == null ? 1 : page;
+        limit = limit == null ? Integer.MAX_VALUE : limit;
+        PageHelper.startPage(page, limit);
         List<TCronTask> cronTasks = cronTaskMapper.selectAll();
-        List<CronTaskInfo> taskInfos = BeanUtils.copyList(CronTaskInfo.class, cronTasks);
-        return taskInfos;
+        PageInfo<TCronTask> pageInfo = new PageInfo<>(cronTasks);
+        List<CronTaskInfo> cronTaskInfos = BeanUtils.copyList(CronTaskInfo.class, cronTasks);
+        return new RobotPage<>(pageInfo.getTotal(), cronTaskInfos);
     }
 }

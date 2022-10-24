@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -81,6 +84,12 @@ public class DateUtils {
         instance.setTime(date);
         instance.add(Calendar.DAY_OF_MONTH, day);
         return simpleDateFormat.format(instance.getTime());
+    }
+
+    public static LocalDate convert(Date date) {
+        Instant instant = date.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        return instant.atZone(zoneId).toLocalDate();
     }
 
 }

@@ -13,6 +13,10 @@ public class RobotConstants {
     public static final String DATABASE_TYPE_ORACLE = "oracle";
     public static final String DATABASE_TYPE_MYSQL = "mysql";
     public static final String DATABASE_TYPE_SQLITE = "sqlite";
+    public static final String YES = "Y";
+    public static final String NO = "N";
+
+
 
 
 }
