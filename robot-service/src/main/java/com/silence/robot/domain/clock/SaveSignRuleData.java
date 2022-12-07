@@ -1,7 +1,7 @@
 package com.silence.robot.domain.clock;
 
 
-public class SaveSignRuleDate  {
+public class SaveSignRuleData {
 
     private Integer userId;
 
@@ -34,6 +34,16 @@ public class SaveSignRuleDate  {
     private String itcode;
 
     private String sbuId;
+
+    private String initSignDate;
+
+    public String getInitSignDate() {
+        return initSignDate;
+    }
+
+    public void setInitSignDate(String initSignDate) {
+        this.initSignDate = initSignDate;
+    }
 
     public Integer getUserId() {
         return userId;

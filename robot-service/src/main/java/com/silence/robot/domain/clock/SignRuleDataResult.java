@@ -2,7 +2,7 @@ package com.silence.robot.domain.clock;
 
 import java.util.List;
 
-public class SignRuleDateResult {
+public class SignRuleDataResult {
 
     private String msg;
 

@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -15,8 +16,8 @@ import javax.annotation.Resource;
 
 import com.alibaba.fastjson.JSONObject;
 import com.silence.robot.domain.clock.DingClockDto;
-import com.silence.robot.domain.clock.SaveSignRuleDate;
-import com.silence.robot.domain.clock.SignRuleDateResult;
+import com.silence.robot.domain.clock.SaveSignRuleData;
+import com.silence.robot.domain.clock.SignRuleDataResult;
 import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.service.SubscribeConfigInfoService;
@@ -53,27 +54,27 @@ public class SchedulingClickService {
     }
 
     public void onceRun(DingClockDto bootStrap) {
-        SaveSignRuleDate saveSignRuleDate = new SaveSignRuleDate();
-        BeanUtils.copyProperties(bootStrap,saveSignRuleDate);
+        SaveSignRuleData saveSignRuleData = new SaveSignRuleData();
+        BeanUtils.copyProperties(bootStrap, saveSignRuleData);
         String addressUrl = subscribeConfigInfoService.getConfigValue(ConfigEnum.DING_CLOCK_ADDRESS);
         String getCardUrl = subscribeConfigInfoService.getConfigValue(ConfigEnum.DING_CLOCK_GET_CARD);
         String getOpenIdUrl = subscribeConfigInfoService.getConfigValue(ConfigEnum.DING_CLOCK_GET_OPEN_ID);
         String getWaitDetailUrl = subscribeConfigInfoService.getConfigValue(ConfigEnum.DING_CLOCK_GET_WAIT_DEAL);
-        String getSignRuleDateUrl = subscribeConfigInfoService.getConfigValue(ConfigEnum.DING_CLOCK_GET_SIGN_RULE_DATE);
-        String saveSignRuleDateUrl = subscribeConfigInfoService.getConfigValue(ConfigEnum.DING_CLOCK_SAVE_SIGN_RULE_DATE);
+        String getSignRuleDataUrl = subscribeConfigInfoService.getConfigValue(ConfigEnum.DING_CLOCK_GET_SIGN_RULE_DATE);
+        String saveSignRuleDataUrl = subscribeConfigInfoService.getConfigValue(ConfigEnum.DING_CLOCK_SAVE_SIGN_RULE_DATE);
         if(null != bootStrap.getOpenId() && !"".equals(bootStrap.getOpenId()
             .trim())){
             HttpUtils.doGet(addressUrl+getCardUrl+bootStrap.getUserId().toString());
             HttpUtils.doGet(addressUrl+getWaitDetailUrl+bootStrap.getUserId().toString());
-            JSONObject result1 = HttpUtils.doGet(addressUrl+getSignRuleDateUrl+bootStrap.getOpenId());
-            SignRuleDateResult signRuleDateResult = result1.toJavaObject(SignRuleDateResult.class);
-            if (null != signRuleDateResult){
-                saveSignRuleDate(signRuleDateResult, saveSignRuleDate);
+            JSONObject result1 = HttpUtils.doGet(addressUrl+getSignRuleDataUrl+bootStrap.getOpenId());
+            SignRuleDataResult signRuleDataResult = result1.toJavaObject(SignRuleDataResult.class);
+            if (null != signRuleDataResult){
+                saveSignRuleDate(signRuleDataResult, saveSignRuleData);
             }
         }
-        checkDto(saveSignRuleDate);
-        log.info(saveSignRuleDate.toString());
-        JSONObject result = HttpUtils.doPost(saveSignRuleDateUrl, JSONObject.toJSONString(saveSignRuleDate));
+        checkDto(saveSignRuleData);
+        log.info(saveSignRuleData.toString());
+        JSONObject result = HttpUtils.doPost(saveSignRuleDataUrl, JSONObject.toJSONString(saveSignRuleData));
         if(!"true".equals(result.get("success")
             .toString())){
             log.error("打卡失败");
@@ -83,20 +84,21 @@ public class SchedulingClickService {
     }
 
 
-    private void saveSignRuleDate(SignRuleDateResult signRuleDateResult , SaveSignRuleDate saveSignRuleDate ){
+    private void saveSignRuleDate(SignRuleDataResult signRuleDataResult, SaveSignRuleData saveSignRuleData){
 
-        saveSignRuleDate.setUserId(signRuleDateResult.getData().getEmployeeId());
-        saveSignRuleDate.setProjectId(signRuleDateResult.getData().getProjectId());
-        saveSignRuleDate.setRuleId(signRuleDateResult.getData().getID());
-        saveSignRuleDate.setAddrId(signRuleDateResult.getData().getAddRessList().get(0).getId());
-        saveSignRuleDate.setApprUserId(signRuleDateResult.getData().getApprUserId());
-        saveSignRuleDate.setDeptId(signRuleDateResult.getData().getDeptId());
-        saveSignRuleDate.setWorkReportType("1");
-        saveSignRuleDate.setPbflag("0");
-        saveSignRuleDate.setImagePath("");
-        saveSignRuleDate.setBeforeup(signRuleDateResult.getData().getBEFOREUP());
-        saveSignRuleDate.setItcode(signRuleDateResult.getData().getLoginname());
-        saveSignRuleDate.setSbuId(signRuleDateResult.getData().getSbuid());
+        saveSignRuleData.setUserId(signRuleDataResult.getData().getEmployeeId());
+        saveSignRuleData.setProjectId(signRuleDataResult.getData().getProjectId());
+        saveSignRuleData.setRuleId(signRuleDataResult.getData().getID());
+        saveSignRuleData.setAddrId(signRuleDataResult.getData().getAddRessList().get(0).getId());
+        saveSignRuleData.setApprUserId(signRuleDataResult.getData().getApprUserId());
+        saveSignRuleData.setDeptId(signRuleDataResult.getData().getDeptId());
+        saveSignRuleData.setWorkReportType("1");
+        saveSignRuleData.setPbflag("0");
+        saveSignRuleData.setImagePath("");
+        saveSignRuleData.setBeforeup(signRuleDataResult.getData().getBEFOREUP());
+        saveSignRuleData.setItcode(signRuleDataResult.getData().getLoginname());
+        saveSignRuleData.setSbuId(signRuleDataResult.getData().getSbuid());
+        saveSignRuleData.setInitSignDate(LocalDate.now().toString());
     }
 
     private void checkDto(Object object) {
