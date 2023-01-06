@@ -1,6 +1,7 @@
 package com.silence.robot.aop;
 
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.HttpUtils;
 import com.silence.robot.utils.TraceUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

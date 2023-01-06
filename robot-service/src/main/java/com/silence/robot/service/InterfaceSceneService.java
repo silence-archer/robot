@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.silence.robot.context.GlobalContext;
+import com.silence.robot.domain.InterfaceSceneDropdownDto;
 import com.silence.robot.domain.InterfaceSceneDto;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.enumeration.ConfigEnum;
@@ -19,7 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 挡板服务
@@ -50,7 +55,7 @@ public class InterfaceSceneService {
         return new RobotPage<>(pageInfo.getTotal(), BeanUtils.copyList(InterfaceSceneDto.class, interfaceScenes));
     }
 
-    public JSONObject getSceneBySceneId(String sceneId) {
+    public JSONObject getSceneBySceneIdVersion3(String sceneId) {
         TInterfaceScene interfaceScene = interfaceSceneMapper.selectBySceneId(sceneId);
         if (interfaceScene == null) {
             throw new BusinessException(ExceptionCode.NO_EXIST);
@@ -91,6 +96,28 @@ public class InterfaceSceneService {
         jsonObject.put("SYS_HEAD", sysHead);
         jsonObject.put("BODY", result);
         return jsonObject;
+    }
+
+    public String getSceneBySceneIdVersion217(String sceneId) {
+        TInterfaceScene interfaceScene = interfaceSceneMapper.selectBySceneId(sceneId);
+        if (interfaceScene == null) {
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        String sceneValue = interfaceScene.getSceneValue();
+        StringBuilder stringBuilder = new StringBuilder();
+        int start = 0, end = 0;
+        while (sceneValue.contains("{{")) {
+            end = sceneValue.indexOf("{{");
+            stringBuilder.append(sceneValue, start, end);
+            start = end+2;
+            end = sceneValue.indexOf("}}");
+            stringBuilder.append(GlobalContext.getHttpClientContext(sceneValue.substring(start, end)));
+            sceneValue = sceneValue.substring(end+2);
+            start = 0;
+        }
+        stringBuilder.append(sceneValue);
+        return stringBuilder.toString();
+
     }
 
     private JSONObject getBody(JSONObject body) {
@@ -167,13 +194,14 @@ public class InterfaceSceneService {
     }
 
     private void checkJson(String sceneValue) {
-        JSONObject jsonObject = JSONObject.parseObject(sceneValue);
         String configValue = subscribeConfigInfoService.getConfigValue(ConfigEnum.FREE_MARKER_VERSION_ENUM);
         if ("2.0".equals(configValue)) {
+            JSONObject jsonObject = JSONObject.parseObject(sceneValue);
             if (CommonUtils.existEmpty(jsonObject.getJSONObject("SYS_HEAD"), jsonObject.getJSONObject("BODY"))) {
                 throw new BusinessException(ExceptionCode.JSON_TEXT_ERROR);
             }
-        } else {
+        } else if ("3.0".equals(configValue)) {
+            JSONObject jsonObject = JSONObject.parseObject(sceneValue);
             if (CommonUtils.existEmpty(jsonObject.getJSONObject("sysHead"), jsonObject.getJSONObject("body"))) {
                 throw new BusinessException(ExceptionCode.JSON_TEXT_ERROR);
             }
@@ -181,4 +209,31 @@ public class InterfaceSceneService {
 
     }
 
+    public List<InterfaceSceneDropdownDto> getSceneTranCode() {
+        List<InterfaceSceneDropdownDto> list = new ArrayList<>();
+        interfaceSceneMapper.selectAll().stream().collect(Collectors.groupingBy(TInterfaceScene::getTranCode)).forEach((s, tInterfaceScenes) -> {
+            InterfaceSceneDropdownDto interfaceSceneDropdownDto = new InterfaceSceneDropdownDto();
+            interfaceSceneDropdownDto.setTitle(tInterfaceScenes.get(0).getTranDesc());
+            interfaceSceneDropdownDto.setId(s);
+            interfaceSceneDropdownDto.setType("group");
+            List<InterfaceSceneDropdownDto> child = tInterfaceScenes.stream().map(tInterfaceScene -> {
+                InterfaceSceneDropdownDto dropdownDto = new InterfaceSceneDropdownDto();
+                dropdownDto.setType("normal");
+                dropdownDto.setId(tInterfaceScene.getSceneId());
+                dropdownDto.setTitle(tInterfaceScene.getSceneDesc());
+                return dropdownDto;
+            }).collect(Collectors.toList());
+            interfaceSceneDropdownDto.setChild(child);
+            list.add(interfaceSceneDropdownDto);
+        });
+        return list;
+    }
+
+    public JSONObject getSceneBySceneId(String sceneId) {
+        TInterfaceScene interfaceScene = interfaceSceneMapper.selectBySceneId(sceneId);
+        if (interfaceScene == null) {
+            throw new BusinessException(ExceptionCode.NO_EXIST);
+        }
+        return JSONObject.parseObject(JSONObject.toJSONString(interfaceScene));
+    }
 }

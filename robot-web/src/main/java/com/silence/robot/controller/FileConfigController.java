@@ -31,7 +31,7 @@ public class FileConfigController {
         return new DataResponse<>();
     }
 
-    @GetMapping("/deleteFileConfig")
+    @GetMapping("/deleteLogConfig")
     public DataResponse<?> deleteFileConfig(@RequestParam String id) {
         fileConfigService.deleteFileConfig(id);
         return new DataResponse<>();

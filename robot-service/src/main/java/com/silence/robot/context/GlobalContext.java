@@ -3,6 +3,7 @@ package com.silence.robot.context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +20,7 @@ public class GlobalContext {
     private final static Logger logger = LoggerFactory.getLogger(GlobalContext.class);
     private static final Map<String, AtomicInteger> USER_OPERATION_LOCK = new ConcurrentHashMap<>();
     private static final Map<String, AtomicBoolean> USER_PROGRESS_LOCK = new ConcurrentHashMap<>();
+    private static final ThreadLocal<Map<String, Object>> HTTP_CLIENT_CONTEXT = new ThreadLocal<>();
 
     public static void getUserOperationLock(String username) {
         AtomicBoolean atomicBoolean = USER_PROGRESS_LOCK.get(username);
@@ -83,5 +85,18 @@ public class GlobalContext {
         logger.info("{}开始释放锁>>>>>>", username);
         USER_OPERATION_LOCK.remove(username);
     }
+
+    public static void initHttpClientContext() {
+        HTTP_CLIENT_CONTEXT.set(new HashMap<>());
+    }
+    public static void setHttpClientContext(String key, String value) {
+        Map<String, Object> map = HTTP_CLIENT_CONTEXT.get();
+        map.put(key, value);
+    }
+
+    public static Object getHttpClientContext(String key) {
+        return HTTP_CLIENT_CONTEXT.get().get(key);
+    }
+
 
 }

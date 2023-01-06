@@ -35,7 +35,12 @@
     <include refid="Base_Column_List" />
     from t_file_config
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <select id="selectByBusinessType" resultType="com.silence.robot.model.TFileConfig">
+        select
+        <include refid="Base_Column_List" />
+        from t_file_config where business_type = #{businessType}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from t_file_config
     where id = #{id,jdbcType=VARCHAR}
   </delete>

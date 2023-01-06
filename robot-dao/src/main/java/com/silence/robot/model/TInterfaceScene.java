@@ -7,7 +7,7 @@ import java.util.Date;
  * t_interface_scene
  * @author 
  */
-public class TInterfaceScene implements Serializable {
+public class TInterfaceScene {
     /**
      * 物理主键
      */
@@ -17,11 +17,20 @@ public class TInterfaceScene implements Serializable {
      * 交易码
      */
     private String tranCode;
+    /**
+     * 交易描述
+     */
+    private String tranDesc;
 
     /**
      * 场景编号
      */
     private String sceneId;
+
+    /**
+     * 场景类型
+     */
+    private String sceneType;
 
     /**
      * 场景描述
@@ -53,7 +62,13 @@ public class TInterfaceScene implements Serializable {
      */
     private String updateUser;
 
-    private static final long serialVersionUID = 1L;
+    public String getSceneType() {
+        return sceneType;
+    }
+
+    public void setSceneType(String sceneType) {
+        this.sceneType = sceneType;
+    }
 
     public String getId() {
         return id;
@@ -93,6 +108,14 @@ public class TInterfaceScene implements Serializable {
 
     public void setSceneValue(String sceneValue) {
         this.sceneValue = sceneValue;
+    }
+
+    public String getTranDesc() {
+        return tranDesc;
+    }
+
+    public void setTranDesc(String tranDesc) {
+        this.tranDesc = tranDesc;
     }
 
     public Date getCreateTime() {

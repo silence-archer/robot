@@ -2,10 +2,13 @@ package com.silence.robot.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.silence.robot.context.GlobalContext;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.utils.CommonUtils;
 import com.silence.robot.utils.HttpUtils;
+import com.silence.robot.utils.TraceUtils;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -196,4 +199,22 @@ public class LoanService {
         return HttpUtils.doPost("http://" + ipAddr + ":" + port + apiCd , headers, args0.toJSONString());
     }
 
+    public JSONObject executeLoan217(String remoteIp, Integer remotePort, String tranCode, String sceneValue) {
+        String loan306Header = subscribeConfigInfoService.getConfigValue("loan306_header", null);
+        Map<String, String> headers = new HashMap<>();
+        String loanHeader = "ask=923" + "&" + "answer=923" + "&" + "serialNo=I" + GlobalContext.getHttpClientContext(
+            "serial_no") + "&" + "idemSerialNo=" + GlobalContext.getHttpClientContext("serial_no") + "&"
+            + "serviceScene=10" + "&" + "transDateTime=" + GlobalContext.getHttpClientContext("date") + "&"
+            + "tenantId=000" + "&" + "channelNo=001" + "&" + "sign=" + "S" + GlobalContext.getHttpClientContext(
+            "serial_no");
+        headers.put(loan306Header, loanHeader);
+        String loan306UserHeader = subscribeConfigInfoService.getConfigValue("loan306_user_header", null);
+        String loanUserHeader = "authId=927" + "&" + "token=T" + GlobalContext.getHttpClientContext("serial_no") + "&"
+            + "operatorId=927" + "&" + "operatorName=archer" + "&" + "organId=" + GlobalContext.getHttpClientContext(
+            "organ_id") + "&" + "organName=silence";
+        headers.put(loan306UserHeader, loanUserHeader);
+
+        return HttpUtils.doPost("http://" + remoteIp + ":" + remotePort + tranCode , headers, sceneValue);
+
+    }
 }

@@ -19,4 +19,5 @@ public interface TDataDictMapper {
     int updateByPrimaryKey(TDataDict record);
 
     List<TDataDict> selectByName(String name);
+    TDataDict selectByNameAndEnumName(String name, String enumName);
 }

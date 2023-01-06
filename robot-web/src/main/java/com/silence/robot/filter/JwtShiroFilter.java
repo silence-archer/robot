@@ -26,7 +26,6 @@ public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
     private final Logger logger = LoggerFactory.getLogger(JwtShiroFilter.class);
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
-        logger.info("开始创建shiro认证token>>>>>>>>>>>>>>>>>>");
         HttpServletRequest httpRequest = WebUtils.toHttp(request);
         return new JwtShiroToken(httpRequest.getHeader("token"));
     }

@@ -12,6 +12,7 @@ public interface TFileConfigMapper {
     int insertSelective(TFileConfig record);
 
     TFileConfig selectByPrimaryKey(String id);
+    TFileConfig selectByBusinessType(String businessType);
     List<TFileConfig> selectAll();
 
     int updateByPrimaryKeySelective(TFileConfig record);

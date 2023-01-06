@@ -29,7 +29,6 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
-        logger.info("当前使用token为{}", token);
         if (CommonUtils.isEmpty(token)) {
             throw new BusinessException(ExceptionCode.SESSION_ERROR);
         }

@@ -20,10 +20,13 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -49,17 +52,25 @@ public class HttpUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
-    public static JSONObject doPost(String uri, Map<String, String> headers, String bodys) {
+    public static JSONObject doPost(String uri, Map<String, String> headers, String bodys, Map<String, String> cookies) {
         logger.info("post请求路径{}, 请求头{}, 请求体{}",uri, headers, bodys);
         HttpPost request = new HttpPost(uri);
         headers.forEach(request::setHeader);
         HttpEntity httpEntity = new StringEntity(bodys, ContentType.APPLICATION_JSON);
         request.setEntity(httpEntity);
-        return httpClientExecute(request);
+        return httpClientExecute(request, cookies);
     }
 
     public static JSONObject doPost(String uri, String bodys) {
-        return doPost(uri, new HashMap<>(0), bodys);
+        return doPost(uri, new HashMap<>(0), bodys, new HashMap<>(0));
+    }
+
+    public static JSONObject doPost(String uri, Map<String, String> headers, String bodys) {
+        return doPost(uri, headers, bodys, new HashMap<>(0));
+    }
+
+    public static JSONObject doPost(String uri, Map<String, String> cookies) {
+        return doPost(uri, new HashMap<>(0), "", cookies);
     }
 
     public static JSONObject doGet(String uri) {
@@ -68,12 +79,15 @@ public class HttpUtils {
     }
 
 
-
-
     public static JSONObject httpClientExecute(HttpRequestBase request) {
+
+        return httpClientExecute(request, new HashMap<>(0));
+    }
+
+    public static JSONObject httpClientExecute(HttpRequestBase request, Map<String, String> cookies) {
         InputStream content = null;
         try {
-            content = httpClientExecuteByStream(request).getEntity().getContent();
+            content = httpClientExecuteByStream(request, cookies).getEntity().getContent();
         } catch (Exception e) {
             logger.error("使用流失败",e);
             throw new BusinessException(ExceptionCode.HTTP_REQUEST_ERROR);
@@ -84,11 +98,23 @@ public class HttpUtils {
     }
 
     public static CloseableHttpResponse httpClientExecuteByStream(HttpRequestBase request) {
+
+        return httpClientExecuteByStream(request, new HashMap<>(0));
+    }
+    public static CloseableHttpResponse httpClientExecuteByStream(HttpRequestBase request, Map<String, String> cookies) {
         InputStream content = null;
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse httpResponse = null;
         try {
-            httpClient = HttpClientBuilder.create().build();
+            BasicCookieStore cookieStore = new BasicCookieStore();
+            cookies.forEach((s, s2) -> {
+                BasicClientCookie cookie = new BasicClientCookie(s, s2);
+                cookie.setPath("/");
+                cookie.setVersion(0);
+                cookie.setDomain(request.getURI().getHost());
+                cookieStore.addCookie(cookie);
+            });
+            httpClient = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
             httpResponse = httpClient.execute(request);
             int stat = httpResponse.getStatusLine().getStatusCode();
             if (stat != 200) {

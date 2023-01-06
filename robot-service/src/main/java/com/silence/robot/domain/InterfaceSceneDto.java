@@ -20,9 +20,19 @@ public class InterfaceSceneDto {
     private String tranCode;
 
     /**
+     * 交易描述
+     */
+    private String tranDesc;
+
+    /**
      * 场景编号
      */
     private String sceneId;
+
+    /**
+     * 场景类型
+     */
+    private String sceneType;
 
     /**
      * 场景描述
@@ -54,7 +64,13 @@ public class InterfaceSceneDto {
      */
     private String updateUser;
 
-    private static final long serialVersionUID = 1L;
+    public String getTranDesc() {
+        return tranDesc;
+    }
+
+    public void setTranDesc(String tranDesc) {
+        this.tranDesc = tranDesc;
+    }
 
     public String getId() {
         return id;
@@ -94,6 +110,14 @@ public class InterfaceSceneDto {
 
     public void setSceneValue(String sceneValue) {
         this.sceneValue = sceneValue;
+    }
+
+    public String getSceneType() {
+        return sceneType;
+    }
+
+    public void setSceneType(String sceneType) {
+        this.sceneType = sceneType;
     }
 
     public Date getCreateTime() {

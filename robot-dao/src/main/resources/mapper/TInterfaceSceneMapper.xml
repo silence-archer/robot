@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="com.silence.robot.model.TInterfaceScene">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="tran_code" jdbcType="VARCHAR" property="tranCode" />
+    <result column="tran_desc" jdbcType="VARCHAR" property="tranDesc" />
+    <result column="scene_type" jdbcType="VARCHAR" property="sceneType" />
     <result column="scene_id" jdbcType="VARCHAR" property="sceneId" />
     <result column="scene_desc" jdbcType="VARCHAR" property="sceneDesc" />
     <result column="scene_value" jdbcType="VARCHAR" property="sceneValue" />
@@ -13,7 +15,7 @@
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, tran_code, scene_id, scene_desc, scene_value, create_time, create_user, update_time, 
+    id, tran_code, tran_desc, scene_id, scene_type, scene_desc, scene_value, create_time, create_user, update_time,
     update_user
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -51,12 +53,12 @@
     </foreach>
   </delete>
   <insert id="insert" parameterType="com.silence.robot.model.TInterfaceScene">
-    insert into t_interface_scene (id, tran_code, scene_id, 
-      scene_desc, scene_value, create_time, 
+    insert into t_interface_scene (id, tran_code, tran_desc, scene_id,
+    scene_type,scene_desc, scene_value, create_time,
       create_user, update_time, update_user
       )
-    values (#{id,jdbcType=VARCHAR}, #{tranCode,jdbcType=VARCHAR}, #{sceneId,jdbcType=VARCHAR}, 
-      #{sceneDesc,jdbcType=VARCHAR}, #{sceneValue,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=VARCHAR}, #{tranCode,jdbcType=VARCHAR}, #{tranDesc,jdbcType=VARCHAR},#{sceneId,jdbcType=VARCHAR},
+            #{sceneType,jdbcType=VARCHAR},#{sceneDesc,jdbcType=VARCHAR}, #{sceneValue,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
       #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}
       )
   </insert>
@@ -69,9 +71,15 @@
       <if test="tranCode != null">
         tran_code,
       </if>
+        <if test="tranDesc != null">
+            tran_desc,
+        </if>
       <if test="sceneId != null">
         scene_id,
       </if>
+        <if test="sceneType != null">
+            scene_type,
+        </if>
       <if test="sceneDesc != null">
         scene_desc,
       </if>
@@ -98,9 +106,15 @@
       <if test="tranCode != null">
         #{tranCode,jdbcType=VARCHAR},
       </if>
+        <if test="tranDesc != null">
+            #{tranDesc,jdbcType=VARCHAR},
+        </if>
       <if test="sceneId != null">
         #{sceneId,jdbcType=VARCHAR},
       </if>
+        <if test="sceneType != null">
+            #{sceneType,jdbcType=VARCHAR},
+        </if>
       <if test="sceneDesc != null">
         #{sceneDesc,jdbcType=VARCHAR},
       </if>
@@ -127,9 +141,15 @@
       <if test="tranCode != null">
         tran_code = #{tranCode,jdbcType=VARCHAR},
       </if>
+        <if test="tranDesc != null">
+            tran_desc = #{tranDesc,jdbcType=VARCHAR},
+        </if>
       <if test="sceneId != null">
         scene_id = #{sceneId,jdbcType=VARCHAR},
       </if>
+        <if test="sceneType != null">
+            scene_type = #{sceneType,jdbcType=VARCHAR},
+        </if>
       <if test="sceneDesc != null">
         scene_desc = #{sceneDesc,jdbcType=VARCHAR},
       </if>
@@ -154,7 +174,9 @@
   <update id="updateByPrimaryKey" parameterType="com.silence.robot.model.TInterfaceScene">
     update t_interface_scene
     set tran_code = #{tranCode,jdbcType=VARCHAR},
+        tran_desc = #{tranDesc,jdbcType=VARCHAR},
       scene_id = #{sceneId,jdbcType=VARCHAR},
+      scene_type = #{sceneType,jdbcType=VARCHAR},
       scene_desc = #{sceneDesc,jdbcType=VARCHAR},
       scene_value = #{sceneValue,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

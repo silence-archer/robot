@@ -16,6 +16,8 @@ import com.silence.robot.constants.RobotConstants;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
+import com.silence.robot.mapper.TDatabaseInfoMapper;
+import com.silence.robot.model.TDatabaseInfo;
 import com.silence.robot.thread.HandlerThreadFactory;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.quartz.CronExpression;
@@ -188,6 +190,10 @@ public class CommonUtils {
         return null;
     }
 
+    public static List<JSONObject> getResultSetByDataBase(TDatabaseInfo databaseInfo, String sql) {
+        return getResultSetByDataBase(databaseInfo.getType(), sql, databaseInfo.getUrl(), databaseInfo.getUser(), databaseInfo.getPassword());
+    }
+
     public static List<JSONObject> getResultSetByDataBase(String type, String sql, String url, String user, String password) {
         List<JSONObject> list = new ArrayList<>();
         try {
@@ -266,6 +272,10 @@ public class CommonUtils {
             logger.error("数据库链接失败", e);
             throw new BusinessException(ExceptionCode.DATABASE_CONNECT_ERROR);
         }
+    }
+
+    public static void executeBatchSql(TDatabaseInfo databaseInfo, List<String> sqls) {
+        executeBatchSql(databaseInfo.getType(), sqls, databaseInfo.getUrl(), databaseInfo.getUser(), databaseInfo.getPassword());
     }
 
     public static void executeBatchSql(String type, List<String> sqls, String url, String user, String password) {

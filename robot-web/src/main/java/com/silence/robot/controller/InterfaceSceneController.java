@@ -1,6 +1,7 @@
 package com.silence.robot.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.silence.robot.domain.InterfaceSceneDropdownDto;
 import com.silence.robot.domain.InterfaceSceneDto;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.dto.DataResponse;
@@ -46,13 +47,21 @@ public class InterfaceSceneController {
         return dataResponse;
     }
 
+    @GetMapping("/getSceneTranCode")
+    public DataResponse<List<InterfaceSceneDropdownDto>> getSceneTranCode() {
+
+        return new DataResponse<>(interfaceSceneService.getSceneTranCode());
+    }
+
     @GetMapping("/getSceneBySceneId")
     public DataResponse<JSONObject> getSceneBySceneId(@RequestParam String sceneId) {
         String configValue = subscribeConfigInfoService.getConfigValue(ConfigEnum.FREE_MARKER_VERSION_ENUM);
         JSONObject scene;
         if ("2.0".equals(configValue)) {
             scene = interfaceSceneService.getSceneBySceneIdVersion2(sceneId);
-        }else {
+        }else if ("3.0".equals(configValue)){
+            scene = interfaceSceneService.getSceneBySceneIdVersion3(sceneId);
+        } else {
             scene = interfaceSceneService.getSceneBySceneId(sceneId);
         }
 

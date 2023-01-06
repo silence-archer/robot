@@ -26,7 +26,12 @@
       where name = #{name,jdbcType=VARCHAR}
     </if>
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <select id="selectByNameAndEnumName" resultType="com.silence.robot.model.TDataDict">
+        select
+        <include refid="Base_Column_List" />
+        from t_data_dict where name = #{name,jdbcType=VARCHAR} and enum_name = #{enumName,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from t_data_dict
     where id = #{id,jdbcType=VARCHAR}
   </delete>

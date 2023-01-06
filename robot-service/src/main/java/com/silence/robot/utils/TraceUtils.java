@@ -6,6 +6,9 @@
  */
 package com.silence.robot.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.MDC;
 
 /**
@@ -15,14 +18,17 @@ import org.slf4j.MDC;
  */
 public class TraceUtils {
 
-    private static final InheritableThreadLocal<String> STRING_INHERITABLE_THREAD_LOCAL = new InheritableThreadLocal<>();
+    private static final InheritableThreadLocal<Map<String, String>> STRING_INHERITABLE_THREAD_LOCAL = new InheritableThreadLocal<>();
     private static final String TRACE_ID = "TRACE_ID";
     private static final String LOCAL_ID = "LOCAL_ID";
+    private static final String USERNAME = "USERNAME";
 
     public static void begin(){
         String uuid = CommonUtils.getUuid();
+        Map<String, String> map = new HashMap<>();
+        map.put(TRACE_ID, uuid);
+        STRING_INHERITABLE_THREAD_LOCAL.set(map);
         MDC.put(TRACE_ID, uuid);
-        STRING_INHERITABLE_THREAD_LOCAL.set(uuid);
     }
 
     public static void begin(String traceId, String localId){
@@ -40,7 +46,14 @@ public class TraceUtils {
     }
 
     public static String getParentTraceId(){
-        return STRING_INHERITABLE_THREAD_LOCAL.get();
+        return STRING_INHERITABLE_THREAD_LOCAL.get().get(TRACE_ID);
+    }
+    public static String getParentLoginUsername() {
+        return STRING_INHERITABLE_THREAD_LOCAL.get().get(USERNAME);
+    }
+
+    public static void setParentLoginUsername(String username) {
+        STRING_INHERITABLE_THREAD_LOCAL.get().put(USERNAME, username);
     }
 
     public static String getLocalId(){
