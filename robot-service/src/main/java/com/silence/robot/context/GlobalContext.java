@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.silence.robot.utils.TraceUtils;
+
 /**
  * TODO
  *
@@ -88,6 +90,7 @@ public class GlobalContext {
 
     public static void initHttpClientContext() {
         HTTP_CLIENT_CONTEXT.set(new HashMap<>());
+        setHttpClientContext("createUser", TraceUtils.getParentLoginUsername());
     }
     public static void setHttpClientContext(String key, String value) {
         Map<String, Object> map = HTTP_CLIENT_CONTEXT.get();

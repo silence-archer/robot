@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+import io.lettuce.core.RedisClient;
+
 /**
  * 数据库配置类操作
  *
@@ -30,7 +32,12 @@ public class DatabaseInfoService {
     private TDatabaseInfoMapper databaseInfoMapper;
 
     public void addDatabaseInfo(DatabaseInfoDto databaseInfoDto) {
-        CommonUtils.getResultSetByDataBase(databaseInfoDto.getType(), "select 1 from dual", databaseInfoDto.getUrl(), databaseInfoDto.getUser(), databaseInfoDto.getPassword());
+        if (databaseInfoDto.getType().equals("redis")) {
+            RedisClient redisClient = RedisClient.create(databaseInfoDto.getUrl());
+            redisClient.shutdown();
+        }else {
+            CommonUtils.getResultSetByDataBase(databaseInfoDto.getType(), "select 1 from dual", databaseInfoDto.getUrl(), databaseInfoDto.getUser(), databaseInfoDto.getPassword());
+        }
         TDatabaseInfo databaseInfo = BeanUtils.copy(TDatabaseInfo.class, databaseInfoDto);
         databaseInfoMapper.insert(databaseInfo);
     }
