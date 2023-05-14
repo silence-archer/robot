@@ -42,6 +42,7 @@ public enum ExceptionCode {
     TOKEN_PARSE_ERROR(100033,"token解析失败"),
     SCHEDULER_RESTART_CHECK_ERROR(100034,"当前定时任务已执行成功，无需重试"),
     DAY_END_BATCH_PROCESS_ERROR(100035,"日终批处理执行失败"),
+    BALANCE_ERROR(100036,"账户余额不足"),
     VERIFY_ERROR(100003,"验证码输入错误");
 
     private final int code;
