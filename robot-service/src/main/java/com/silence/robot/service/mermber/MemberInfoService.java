@@ -72,6 +72,7 @@ public class MemberInfoService {
 
     public void deleteMemberInfo(String memberName) {
         memberInfoMapper.deleteByMemberName(memberName);
+        memberTransDetailService.deleteMemberTransDetail(memberName);
     }
     public MemberInfoDto queryByMemberName(String memberName) {
 

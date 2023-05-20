@@ -45,8 +45,8 @@ public class MemberTransDetailService {
         memberTransDetailMapper.updateByPrimaryKey(memberTransDetail);
     }
 
-    public void deleteMemberTransDetail(String id) {
-        memberTransDetailMapper.deleteByPrimaryKey(id);
+    public void deleteMemberTransDetail(String memberName) {
+        memberTransDetailMapper.deleteByMemberName(memberName);
     }
 
     public RobotPage<MemberTransDetailDto> queryAllMemberTransDetail(Integer page, Integer limit) {

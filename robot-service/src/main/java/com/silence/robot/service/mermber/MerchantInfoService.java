@@ -1,6 +1,7 @@
 package com.silence.robot.service.mermber;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -18,6 +19,8 @@ import com.silence.robot.model.TBusinessInfo;
 import com.silence.robot.model.TMerchantInfo;
 import com.silence.robot.service.SequenceService;
 import com.silence.robot.utils.BeanUtils;
+import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.HttpUtils;
 
 /**
  *
@@ -56,7 +59,11 @@ public class MerchantInfoService {
         List<TMerchantInfo> merchantInfos = merchantInfoMapper.selectAll();
         PageInfo<TMerchantInfo> pageInfo = new PageInfo<>(merchantInfos);
         List<MerchantInfoDto> merchantInfoDtos = BeanUtils.copyList(MerchantInfoDto.class, merchantInfos);
-        return new RobotPage<>(pageInfo.getTotal(), merchantInfoDtos);
+        List<MerchantInfoDto> collect = merchantInfoDtos.stream()
+            .filter(merchantInfoDto -> CommonUtils.isEquals(merchantInfoDto.getMerchantOperator(),
+                HttpUtils.getLoginUserName()))
+            .collect(Collectors.toList());
+        return new RobotPage<>(pageInfo.getTotal(), CommonUtils.isEmpty(collect) ? merchantInfoDtos : collect);
     }
 
     public RobotPage<MerchantInfoDto> queryByCondition(String merchantDesc, Integer page, Integer limit) {

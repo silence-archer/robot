@@ -24,6 +24,7 @@ import com.silence.robot.model.TUser;
 import com.silence.robot.model.TUserTalkInfo;
 import com.silence.robot.utils.BeanUtils;
 import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.HttpUtils;
 import com.silence.robot.utils.SpringContextHelper;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -64,7 +66,21 @@ public class UserService {
 
     public List<UserInfo> getUserInfo(){
         List<TUser> userList = userMapper.selectAll();
+        if (HttpUtils.getUserInfo() != null) {
+            switch (HttpUtils.getUserInfo().getRoleNo()) {
+                case "roleNo0011":
+                    userList = userList.stream().filter(user -> CommonUtils.isEquals("roleNo0012", user.getRoleNo())).collect(
+                        Collectors.toList());
+                    break;
+                case "roleNo0012":
+                    userList = userList.stream().filter(user -> CommonUtils.isEquals("roleNo0013", user.getRoleNo())).collect(
+                        Collectors.toList());
+                    break;
+                default:
+                    break;
 
+            }
+        }
         return appendUserInfo(userList);
 
     }

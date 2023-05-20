@@ -49,4 +49,6 @@ public interface TMemberTransDetailMapper {
     int updateByPrimaryKey(TMemberTransDetail record);
 
     List<TMemberTransDetail> selectByCondition(@Param("collect") List<String> collect);
+
+    void deleteByMemberName(String memberName);
 }

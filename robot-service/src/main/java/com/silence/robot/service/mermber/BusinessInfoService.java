@@ -1,6 +1,7 @@
 package com.silence.robot.service.mermber;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -18,6 +19,8 @@ import com.silence.robot.model.TBusinessInfo;
 import com.silence.robot.model.TCronTaskProcLog;
 import com.silence.robot.service.SequenceService;
 import com.silence.robot.utils.BeanUtils;
+import com.silence.robot.utils.CommonUtils;
+import com.silence.robot.utils.HttpUtils;
 
 /**
  *
@@ -60,7 +63,11 @@ public class BusinessInfoService {
         List<TBusinessInfo> businessInfos = businessInfoMapper.selectAll();
         PageInfo<TBusinessInfo> pageInfo = new PageInfo<>(businessInfos);
         List<BusinessInfoDto> businessInfoDtos = BeanUtils.copyList(BusinessInfoDto.class, businessInfos);
-        return new RobotPage<>(pageInfo.getTotal(), businessInfoDtos);
+        List<BusinessInfoDto> collect = businessInfoDtos.stream()
+            .filter(businessInfoDto -> CommonUtils.isEquals(businessInfoDto.getBusinessOperator(),
+                HttpUtils.getLoginUserName()))
+            .collect(Collectors.toList());
+        return new RobotPage<>(pageInfo.getTotal(), CommonUtils.isEmpty(collect) ? businessInfoDtos : collect);
     }
 
     public RobotPage<BusinessInfoDto> queryBusinessInfoByBusinessDesc(String businessDesc, Integer page, Integer limit) {
