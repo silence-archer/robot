@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.silence.robot.clock.MailSendService;
 import com.silence.robot.domain.RobotPage;
 import com.silence.robot.domain.member.BusinessInfoDto;
 import com.silence.robot.domain.member.MemberInfoDto;
@@ -38,6 +39,8 @@ public class MemberInfoService {
     private TMemberInfoMapper memberInfoMapper;
     @Resource
     private MemberTransDetailService memberTransDetailService;
+    @Resource
+    private MailSendService mailSendService;
 
     public void addMemberInfo(MemberInfoDto memberInfoDto) {
         memberInfoDto.setMemberBalance(BigDecimal.ZERO);
@@ -68,6 +71,7 @@ public class MemberInfoService {
         memberInfoMapper.updateBalance(memberInfo);
         memberTransDetailDto.setId(null);
         memberTransDetailService.addMemberTransDetail(memberTransDetailDto);
+        mailSendService.send("动账通知", memberTransDetailDto.toString(), "659885050@qq.com");
     }
 
     public void deleteMemberInfo(String memberName) {
