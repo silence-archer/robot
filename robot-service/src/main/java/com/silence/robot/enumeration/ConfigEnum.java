@@ -24,6 +24,7 @@ public enum ConfigEnum {
     ESB_URI_ENUM("esb_uri","esb请求路径"),
     FREE_MARKER_VERSION_ENUM("free_marker_version","生成界面版本"),
     COMMEMORATING_PATH_ENUM("commemorating_path","纪念界面路径"),
+    MEMBER_MAIL_ADDRESS("member_mail_address","会员管理邮件地址"),
     ;
 
     private final String name;

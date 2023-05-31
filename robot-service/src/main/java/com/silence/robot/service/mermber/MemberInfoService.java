@@ -16,12 +16,14 @@ import com.silence.robot.domain.RobotPage;
 import com.silence.robot.domain.member.BusinessInfoDto;
 import com.silence.robot.domain.member.MemberInfoDto;
 import com.silence.robot.domain.member.MemberTransDetailDto;
+import com.silence.robot.enumeration.ConfigEnum;
 import com.silence.robot.exception.BusinessException;
 import com.silence.robot.exception.ExceptionCode;
 import com.silence.robot.mapper.TMemberInfoMapper;
 import com.silence.robot.model.TBusinessInfo;
 import com.silence.robot.model.TMemberInfo;
 import com.silence.robot.service.SequenceService;
+import com.silence.robot.service.SubscribeConfigInfoService;
 import com.silence.robot.utils.BeanUtils;
 
 /**
@@ -41,6 +43,9 @@ public class MemberInfoService {
     private MemberTransDetailService memberTransDetailService;
     @Resource
     private MailSendService mailSendService;
+
+    @Resource
+    private SubscribeConfigInfoService subscribeConfigInfoService;
 
     public void addMemberInfo(MemberInfoDto memberInfoDto) {
         memberInfoDto.setMemberBalance(BigDecimal.ZERO);
@@ -71,7 +76,8 @@ public class MemberInfoService {
         memberInfoMapper.updateBalance(memberInfo);
         memberTransDetailDto.setId(null);
         memberTransDetailService.addMemberTransDetail(memberTransDetailDto);
-        mailSendService.send("动账通知", memberTransDetailDto.toString(), "659885050@qq.com");
+        String configValue = subscribeConfigInfoService.getConfigValue(ConfigEnum.MEMBER_MAIL_ADDRESS);
+        mailSendService.send("动账通知", memberTransDetailDto.toString(), configValue);
     }
 
     public void deleteMemberInfo(String memberName) {
