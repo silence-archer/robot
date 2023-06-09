@@ -19,7 +19,7 @@ import java.util.*;
  * XML工具类
  *
  * @author silence
- * @date 2021/8/22
+ * @since 2021/8/22
  */
 public class XmlUtils {
     private static final Logger logger = LoggerFactory.getLogger(XmlUtils.class);
@@ -43,7 +43,7 @@ public class XmlUtils {
      * @param fileName
      * @return com.alibaba.fastjson.JSONObject
      * @author silence
-     * @date 2021/8/23 9:58
+     * @since 2021/8/23 9:58
      */
     public static JSONObject xmlToJsonByPath(String filePath, String fileName) {
         String xmlStr = FileUtils.readAllContents(filePath, fileName);
@@ -57,7 +57,7 @@ public class XmlUtils {
      * @param path
      * @return com.alibaba.fastjson.JSONObject
      * @author silence
-     * @date 2021/8/23 9:58
+     * @since 2021/8/23 9:58
      */
     public static JSONObject xmlToJsonByPath(Path path) {
         String xmlStr = FileUtils.readAllContents(path);

@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 线程工厂用来将任务附着给线程，并给该线程绑定一个异常处理器
  *
  * @author silence
- * @date 2021/4/26
+ * @since 2021/4/26
  */
 public class HandlerThreadFactory implements ThreadFactory {
     private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);

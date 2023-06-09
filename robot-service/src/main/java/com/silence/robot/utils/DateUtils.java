@@ -15,7 +15,7 @@ import java.util.Date;
  * 日期工具类
  *
  * @author silence
- * @date 2021/4/10
+ * @since 2021/4/10
  */
 public class DateUtils {
 
@@ -24,7 +24,7 @@ public class DateUtils {
     /**
      * 字符串转日期
      * @author silence
-     * @date 2021/4/10 2:51
+     * @since 2021/4/10 2:51
      * @param date yyyy-MM-dd HH:mm:ss.SSS
      * @return java.util.Date
      */
@@ -44,7 +44,7 @@ public class DateUtils {
     /**
      * 字符串转日期
      * @author silence
-     * @date 2021/4/10 2:51
+     * @since 2021/4/10 2:51
      * @param date yyyy-MM-dd HH:mm:ss
      * @return java.util.Date
      */

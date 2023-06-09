@@ -84,7 +84,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @param map 转化对象
      * @return 文件格式字符串
      * @author oe_machaohui
-     * @date 2020/5/29 17:05
+     * @since 2020/5/29 17:05
      */
     public static String mapToStringForOne(Map<String, Object> map) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -100,7 +100,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @param map 转化对象
      * @return 文件格式字符串
      * @author oe_jiazaoyang
-     * @date 2020/7/9 16:46
+     * @since 2020/7/9 16:46
      */
     public static String mapToStringForYeh(Map<String, Object> map) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -116,7 +116,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @param o 转化对象
      * @return 文件格式字符串
      * @author oe_machaohui
-     * @date 2020/5/29 17:53
+     * @since 2020/5/29 17:53
      */
     public static String beanToStringForOne(Object o) {
         String s = JSONObject.toJSONString(o);
@@ -129,7 +129,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @param o 转化对象
      * @return 件格式字符串
      * @author oe_machaohui
-     * @date 2020/7/9 16:43
+     * @since 2020/7/9 16:43
      */
     public static String beanToStringForYeh(Object o) {
         String s = JSONObject.toJSONString(o);
@@ -145,7 +145,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @param <T> 泛型
      * @return 文件内容转换类
      * @author oe_machaohui
-     * @date 2020/6/2 15:06
+     * @since 2020/6/2 15:06
      */
     public static <T> T stringToObject(String str, Class<T> clazz, FileFormatEnum fileFormatEnum) {
         T parseObject = null;
@@ -169,7 +169,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @param clazz DTO类型
      * @return DTO对象
      * @author oe_machaohui
-     * @date 2020/6/2 17:11
+     * @since 2020/6/2 17:11
      */
     public static <T> T verticalSeparatorToObject(String str, Class<T> clazz, String splitStr) {
         try {
@@ -205,7 +205,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @param clazz DTO类型
      * @return DTO对象
      * @author oe_machaohui
-     * @date 2020/6/2 17:11
+     * @since 2020/6/2 17:11
      */
     public static <T> T verticalSeparatorToObjectForSkip(String str, Class<T> clazz, String splitStr) {
         try {

@@ -4,7 +4,7 @@ package com.silence.robot.enumeration;
  * silence
  *
  * @author silence
- * @date 2021/1/3
+ * @since 2021/1/3
  */
 public enum FtpTypeEnum {
 

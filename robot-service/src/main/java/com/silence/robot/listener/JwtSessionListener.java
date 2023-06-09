@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * TODO
  *
  * @author silence
- * @date 2021/9/13
+ * @since 2021/9/13
  */
 public class JwtSessionListener {
     private static final ConcurrentHashMap<String, String> IMAGE_CODE_MAP = new ConcurrentHashMap<>();

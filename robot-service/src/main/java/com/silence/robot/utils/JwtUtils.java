@@ -16,7 +16,7 @@ import java.util.Date;
  * JWT工具类
  *
  * @author silence
- * @date 2021/9/12
+ * @since 2021/9/12
  */
 public class JwtUtils {
 

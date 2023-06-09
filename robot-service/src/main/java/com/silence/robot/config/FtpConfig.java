@@ -4,7 +4,7 @@ package com.silence.robot.config;
  * ftp 配置
  *
  * @author silence
- * @date 2021/1/3
+ * @since 2021/1/3
  */
 public class FtpConfig {
     private String ftpType;

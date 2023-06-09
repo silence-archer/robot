@@ -4,7 +4,7 @@ package com.silence.robot.domain;
  * 查询日志条件DTO
  *
  * @author silence
- * @date 2021/2/4
+ * @since 2021/2/4
  */
 public class QueryLogFileDto {
     /**

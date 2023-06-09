@@ -1,7 +1,7 @@
 /**
  * @title ParameterInterceptor.java
  * @author oe_machaohui
- * @date 2020/3/26 18:20
+ * @since 2020/3/26 18:20
  * @copyright 2020 XXX有限公司版权所有
  */
 package com.silence.robot.interceptor;
@@ -26,7 +26,7 @@ import java.util.Properties;
 /**
  * mybatis 插入更新操作拦截器
  * @author oe_machaohui
- * @date 2020/3/26 18:20
+ * @since 2020/3/26 18:20
  */
 @Intercepts({@Signature(type= Executor.class, method = "update", args = {MappedStatement.class, Object.class})})
 public class ParameterInterceptor implements Interceptor {

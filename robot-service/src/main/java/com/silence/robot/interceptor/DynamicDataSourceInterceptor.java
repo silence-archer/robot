@@ -16,7 +16,7 @@ import java.util.Properties;
 /**
  * 动态数据切换拦截器
  * @author silence
- * @date 2020/5/29 23:57
+ * @since 2020/5/29 23:57
  */
 @Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
 @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})})

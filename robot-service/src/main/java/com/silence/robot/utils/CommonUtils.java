@@ -419,7 +419,7 @@ public class CommonUtils {
     /**
      * 下划线转小驼峰
      * @author silence
-     * @date 2021/11/15 11:25
+     * @since 2021/11/15 11:25
      * @param para
      * @return java.lang.String
      */
@@ -474,7 +474,7 @@ public class CommonUtils {
     /**
      * 小驼峰转小下划线
      * @author silence
-     * @date 2021/11/15 11:25
+     * @since 2021/11/15 11:25
     * @param para
     * @return java.lang.String
      */

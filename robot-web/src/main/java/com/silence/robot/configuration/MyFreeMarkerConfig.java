@@ -22,7 +22,7 @@ import java.nio.file.StandardCopyOption;
  * freemarker 配置
  *
  * @author silence
- * @date 2021/9/5
+ * @since 2021/9/5
  */
 @Configuration
 public class MyFreeMarkerConfig {

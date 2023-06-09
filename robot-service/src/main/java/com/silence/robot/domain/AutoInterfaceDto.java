@@ -4,7 +4,7 @@ package com.silence.robot.domain;
  * TODO
  *
  * @author silence
- * @date 2021/9/6
+ * @since 2021/9/6
  */
 public class AutoInterfaceDto {
     private String tranCode;

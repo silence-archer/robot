@@ -4,7 +4,7 @@ package com.silence.robot.domain;
  * eureka注册中心Dto
  *
  * @author silence
- * @date 2020/12/12
+ * @since 2020/12/12
  */
 public class EurekaManageDto {
     private String name;

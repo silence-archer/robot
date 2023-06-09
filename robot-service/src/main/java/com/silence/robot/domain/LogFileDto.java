@@ -6,7 +6,7 @@ import java.util.Date;
  * 文件配置DTO
  *
  * @author silence
- * @date 2021/2/4
+ * @since 2021/2/4
  */
 public class LogFileDto {
     /**

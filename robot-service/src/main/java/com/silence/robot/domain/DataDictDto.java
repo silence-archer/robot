@@ -6,7 +6,7 @@ import com.alibaba.fastjson.annotation.JSONField;
  * 数据字典对象
  *
  * @author silence
- * @date 2021/5/4
+ * @since 2021/5/4
  */
 public class DataDictDto {
 

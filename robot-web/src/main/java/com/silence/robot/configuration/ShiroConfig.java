@@ -31,7 +31,7 @@ import java.util.Map;
  * TODO
  *
  * @author silence
- * @date 2021/9/22
+ * @since 2021/9/22
  */
 @Configuration
 @EnableConfigurationProperties(SilenceConfigurationProperties.class)

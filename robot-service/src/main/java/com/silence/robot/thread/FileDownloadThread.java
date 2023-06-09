@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
  * 文件下载线程执行类
  *
  * @author silence
- * @date 2021/2/20
+ * @since 2021/2/20
  */
 public class FileDownloadThread implements Runnable{
 

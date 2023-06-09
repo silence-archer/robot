@@ -22,7 +22,7 @@ import io.lettuce.core.RedisClient;
  * 数据库配置类操作
  *
  * @author silence
- * @date 2021/2/3
+ * @since 2021/2/3
  */
 @Service
 public class DatabaseInfoService {

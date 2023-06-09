@@ -1,7 +1,7 @@
 /**
  * @title TraceUtils.java
  * @author oe_machaohui
- * @date 2020/4/8 17:33
+ * @since 2020/4/8 17:33
  * @copyright 2020 XXX有限公司版权所有
  */
 package com.silence.robot.utils;
@@ -14,7 +14,7 @@ import org.slf4j.MDC;
 /**
  * @author oe_machaohui
  * @description 日志流水赋值
- * @date 2020/4/8 17:33
+ * @since 2020/4/8 17:33
  */
 public class TraceUtils {
 

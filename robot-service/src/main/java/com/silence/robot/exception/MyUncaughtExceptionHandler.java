@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
  * 定义符合线程异常处理器规范的异常处理器
  *
  * @author silence
- * @date 2021/4/26
+ * @since 2021/4/26
  */
 public class MyUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler{
 

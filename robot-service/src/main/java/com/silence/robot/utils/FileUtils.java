@@ -665,7 +665,7 @@ public class FileUtils {
      * <合并子文件>
      *
      * @author mazhaohui
-     * @date 2020年1月9日 下午6:18:00
+     * @since 2020年1月9日 下午6:18:00
      * @param paths
      * @param resultPath
      * @return
@@ -710,7 +710,7 @@ public class FileUtils {
      * <按顺序合并子文件>
      *
      * @author mazhaohui
-     * @date 2020年1月9日 下午8:07:22
+     * @since 2020年1月9日 下午8:07:22
      * @param fileName
      * @param filePath
      * @param size
@@ -733,7 +733,7 @@ public class FileUtils {
      * <写文件>
      *
      * @author mazhaohui
-     * @date 2020年3月5日 下午4:40:50
+     * @since 2020年3月5日 下午4:40:50
      * @param filePath
      * @param fileName
      * @param content
@@ -757,7 +757,7 @@ public class FileUtils {
      * <删除对应目录下所有文件及子文件-对应并发写文件>
      *
      * @author mazhaohui
-     * @date 2020年3月3日 下午2:17:04
+     * @since 2020年3月3日 下午2:17:04
      * @param filePath
      * @param fileName
      * @return
@@ -789,7 +789,7 @@ public class FileUtils {
      * <获取文件行数>
      *
      * @author mazhaohui
-     * @date 2020年3月5日 下午3:15:25
+     * @since 2020年3月5日 下午3:15:25
      * @param filePath
      * @param fileName
      * @return
@@ -820,7 +820,7 @@ public class FileUtils {
      * <获取分割文件处理器>
      *
      * @author mazhaohui
-     * @date 2020年3月6日 上午11:15:31
+     * @since 2020年3月6日 上午11:15:31
      * @param filePath
      * @param fileName
      * @return
@@ -842,7 +842,7 @@ public class FileUtils {
      * <切割文件>
      *
      * @author mazhaohui
-     * @date 2020年3月6日 下午1:59:37
+     * @since 2020年3月6日 下午1:59:37
      * @param accessFile
      * @param maxSize
      * @return
@@ -921,7 +921,7 @@ public class FileUtils {
      * <根据偏移量读取文件>
      *
      * @author mazhaohui
-     * @date 2020年3月6日 下午2:13:39
+     * @since 2020年3月6日 下午2:13:39
      * @param accessFile
      * @param startPos
      * @param endPos

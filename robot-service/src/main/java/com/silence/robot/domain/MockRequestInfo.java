@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
  * 挡板请求
  *
  * @author silence
- * @date 2020/9/27
+ * @since 2020/9/27
  */
 public class MockRequestInfo {
     private String uri;

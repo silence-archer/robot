@@ -6,7 +6,7 @@ import org.apache.shiro.authc.AuthenticationToken;
  * TODO
  *
  * @author silence
- * @date 2021/10/13
+ * @since 2021/10/13
  */
 public class JwtShiroToken implements AuthenticationToken {
 

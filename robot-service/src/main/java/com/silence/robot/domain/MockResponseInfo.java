@@ -4,7 +4,7 @@ package com.silence.robot.domain;
  * 挡板返回
  *
  * @author silence
- * @date 2022/4/12
+ * @since 2022/4/12
  */
 public class MockResponseInfo {
     private Boolean mockSuccess;

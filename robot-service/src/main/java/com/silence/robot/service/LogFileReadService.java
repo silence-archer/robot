@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  * 日志读取服务
  *
  * @author silence
- * @date 2021/2/5
+ * @since 2021/2/5
  */
 @Service
 public class LogFileReadService {
@@ -40,7 +40,7 @@ public class LogFileReadService {
     /**
      * 日志文件读取
      * @author silence
-     * @date 2021/4/10 1:30
+     * @since 2021/4/10 1:30
      * @param filePath 文件路径
      * @param fileName 文件名
      * @return java.util.List<com.silence.robot.domain.LogFileDto>
@@ -127,7 +127,7 @@ public class LogFileReadService {
     /**
      * 从文件指定位置开始读文件
      * @author silence
-     * @date 2021/4/16 17:21
+     * @since 2021/4/16 17:21
      * @param filePath 文件路径
      * @param fileName 文件名
      * @param startPos 起始偏移量

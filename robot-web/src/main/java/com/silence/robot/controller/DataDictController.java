@@ -17,7 +17,7 @@ import java.util.List;
  * 数据字典controller
  *
  * @author silence
- * @date 2021/5/4
+ * @since 2021/5/4
  */
 @RestController
 public class DataDictController {

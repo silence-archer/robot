@@ -100,7 +100,7 @@ public class LoanService {
      * @param request
      * @return com.alibaba.fastjson.JSONObject
      * @author silence
-     * @date 2021/5/22 21:07
+     * @since 2021/5/22 21:07
      */
     public JSONObject executeLoan(String uri, JSONObject request) {
         CommonUtils.deleteJsonEmptyStr(request);
@@ -126,7 +126,7 @@ public class LoanService {
      * @param request
      * @return com.alibaba.fastjson.JSONObject
      * @author silence
-     * @date 2021/5/22 21:07
+     * @since 2021/5/22 21:07
      */
     public JSONObject executeLoanVersion2(String uri, JSONObject request) {
         CommonUtils.deleteJsonEmptyStr(request);

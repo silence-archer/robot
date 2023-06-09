@@ -29,7 +29,7 @@ import java.util.List;
  * 数据字典
  *
  * @author silence
- * @date 2021/5/4
+ * @since 2021/5/4
  */
 @Service
 public class DataDictService {
@@ -71,7 +71,7 @@ public class DataDictService {
     /**
      * TODO
      * @author silence
-     * @date 2021/8/2 10:25
+     * @since 2021/8/2 10:25
      * @param path 文件名称
      */
     public void addDataDictFile(Path path) {

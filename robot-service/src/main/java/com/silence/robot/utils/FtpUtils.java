@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * @author silence
  * <Ftp工具类>
- * @date 2019年8月24日 下午1:42:02
+ * @since 2019年8月24日 下午1:42:02
  */
 public class FtpUtils {
 
@@ -38,7 +38,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @auther oe_machaohui
-     * @date 2020/6/13 15:07
+     * @since 2020/6/13 15:07
      */
     public static void upload(FtpConfig ftpConfig, String remotePath, String remoteFile, String localPath, String localFile) {
         switch (FtpTypeEnum.valueOf(ftpConfig.getFtpType())) {
@@ -63,7 +63,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @auther oe_machaohui
-     * @date 2020/6/13 15:07
+     * @since 2020/6/13 15:07
      */
     public static void download(FtpConfig ftpConfig, String remotePath, String remoteFile, String localPath, String localFile) {
         switch (FtpTypeEnum.valueOf(ftpConfig.getFtpType())) {
@@ -86,7 +86,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @auther mazhaohui
-     * @date 2020/6/13 15:07
+     * @since 2020/6/13 15:07
      */
     public static long getFileSize(FtpConfig ftpConfig, String remotePath, String remoteFile) {
         long fileSize = 0;
@@ -112,7 +112,7 @@ public class FtpUtils {
      * @param localPath  本地路径
      * @param remotePath 远程路径
      * @auther oe_machaohui
-     * @date 2020/6/13 15:07
+     * @since 2020/6/13 15:07
      */
     public static void downloadAll(FtpConfig ftpConfig, String remotePath, String localPath) {
         switch (FtpTypeEnum.valueOf(ftpConfig.getFtpType())) {
@@ -135,7 +135,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @auther oe_machaohui
-     * @date 2020/6/13 15:07
+     * @since 2020/6/13 15:07
      */
     public static boolean isExists(FtpConfig ftpConfig, String remotePath, String remoteFile) {
         boolean result = false;
@@ -161,7 +161,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @auther oe_machaohui
-     * @date 2020/6/13 15:07
+     * @since 2020/6/13 15:07
      */
     public static void delete(FtpConfig ftpConfig, String remotePath, String remoteFile) {
         switch (FtpTypeEnum.valueOf(ftpConfig.getFtpType())) {
@@ -296,7 +296,7 @@ public class FtpUtils {
      * @param localPath  本地路径
      * @param remotePath 远程路径
      * @author silence
-     * @date 2019年8月24日 下午1:52:48
+     * @since 2019年8月24日 下午1:52:48
      */
     private static void downloadAllForFtp(FtpConfig ftpConfig, String remotePath, String localPath) {
         FileOutputStream out = null;
@@ -332,7 +332,7 @@ public class FtpUtils {
      * @param localPath  本地路径
      * @param remotePath 远程路径
      * @author silence
-     * @date 2019年8月24日 下午1:52:48
+     * @since 2019年8月24日 下午1:52:48
      */
     private static void downloadAllForSftp(FtpConfig ftpConfig, String remotePath, String localPath) {
         Session session = null;
@@ -368,7 +368,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @author silence
-     * @date 2019年8月24日 下午1:52:48
+     * @since 2019年8月24日 下午1:52:48
      */
     private static void downloadForFtp(FtpConfig ftpConfig, String remotePath, String remoteFile, String localPath, String localFile) {
         FileOutputStream out = null;
@@ -404,7 +404,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @author silence
-     * @date 2019年8月24日 下午1:52:48
+     * @since 2019年8月24日 下午1:52:48
      */
     private static long getFileSizeForFtp(FtpConfig ftpConfig, String remotePath, String remoteFile) {
         FileOutputStream out = null;
@@ -433,7 +433,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @author silence
-     * @date 2019年8月24日 下午1:52:48
+     * @since 2019年8月24日 下午1:52:48
      */
     private static void downloadForSftp(FtpConfig ftpConfig, String remotePath, String remoteFile, String localPath, String localFile) {
         Session session = null;
@@ -465,7 +465,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @author mazhaohui
-     * @date 2019年8月24日 下午1:52:48
+     * @since 2019年8月24日 下午1:52:48
      */
     private static long getFileSizeForSftp(FtpConfig ftpConfig, String remotePath, String remoteFile) {
         Session session = null;
@@ -499,7 +499,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @auther oe_machaohui
-     * @date 2020/6/13 15:07
+     * @since 2020/6/13 15:07
      */
     private static void uploadForSftp(FtpConfig ftpConfig, String remotePath, String remoteFile, String localPath, String localFile) {
         Session session = null;
@@ -530,7 +530,7 @@ public class FtpUtils {
      * @param remoteFile 远程文件名
      * @param remotePath 远程路径
      * @auther oe_machaohui
-     * @date 2020/6/13 15:07
+     * @since 2020/6/13 15:07
      */
     private static void uploadForFtp(FtpConfig ftpConfig, String remotePath, String remoteFile, String localPath, String localFile) {
         FTPClient ftpClient = null;
@@ -565,7 +565,7 @@ public class FtpUtils {
      * @param remotePath 远程路径-从ftp的根路径开始以/开头
      * @return 远程路径下的文件名
      * @author silence
-     * @date 2019年8月24日 下午1:53:02
+     * @since 2019年8月24日 下午1:53:02
      */
     private static List<String> getFileList(FTPClient ftpClient, String remotePath) throws IOException {
         List<String> fileList = new ArrayList<>();
@@ -589,7 +589,7 @@ public class FtpUtils {
      * @param remotePath  远程路径
      * @return 远程路径下的文件名
      * @author silence
-     * @date 2019年8月24日 下午1:53:02
+     * @since 2019年8月24日 下午1:53:02
      */
     private static List<String> getFileList(ChannelSftp channelSftp, String remotePath) throws SftpException {
         List<String> fileList = new ArrayList<>();
@@ -608,7 +608,7 @@ public class FtpUtils {
      * @param ftpConfig ftp配置信息
      * @return ftp操作类
      * @author silence
-     * @date 2019年8月24日 下午1:49:27
+     * @since 2019年8月24日 下午1:49:27
      */
     private static FTPClient getFtpClient(FtpConfig ftpConfig) throws IOException {
         FTPClient ftpClient = new FTPClient();
@@ -642,7 +642,7 @@ public class FtpUtils {
      * @param out       输出流
      * @param ftpClient ftp操作类
      * @author silence
-     * @date 2019年8月24日 下午1:49:50
+     * @since 2019年8月24日 下午1:49:50
      */
     private static void close(InputStream in, OutputStream out, FTPClient ftpClient) {
         if (null != in) {
@@ -676,7 +676,7 @@ public class FtpUtils {
      * @param session     SFTP连接会话
      * @param channelSftp SFTP连接管道
      * @author silence
-     * @date 2019年8月24日 下午1:49:50
+     * @since 2019年8月24日 下午1:49:50
      */
     private static void close(Session session, ChannelSftp channelSftp) {
         if (channelSftp != null) {
@@ -745,7 +745,7 @@ public class FtpUtils {
      * @param remotePath 远程路径
      * @param sftp       sftp操作类
      * @auther oe_machaohui
-     * @date 2020/6/13 12:11
+     * @since 2020/6/13 12:11
      */
     private static void createDirectory(String remotePath, ChannelSftp sftp) throws SftpException {
         if (CommonUtils.isEmpty(remotePath)) {
