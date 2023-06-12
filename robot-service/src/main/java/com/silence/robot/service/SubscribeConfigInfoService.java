@@ -34,8 +34,8 @@ import java.util.List;
  * 〈杂类参数service〉
  *
  * @author silence
- * @create 2020/2/16
- * @since 1.0.0
+ * @since 2020/2/16
+ * 
  */
 @Service
 public class SubscribeConfigInfoService {

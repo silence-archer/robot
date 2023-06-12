@@ -20,8 +20,8 @@ import javax.xml.bind.annotation.XmlType;
  * 〈〉
  *
  * @author silence
- * @create 2020/1/2
- * @since 1.0.0
+ * @since 2020/1/2
+ * 
  */
 @XmlRootElement(name = "xml")
 @XmlType(propOrder = {"toUserName","fromUserName","createTime","msgType","content","msgId"})

@@ -26,8 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 〈websocket服务〉
  *
  * @author silence
- * @create 2019/11/8
- * @since 1.0.0
+ * @since 2019/11/8
+ * 
  */
 @ServerEndpoint("/websocket/{sid}")
 @Component

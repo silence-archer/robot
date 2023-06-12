@@ -10,23 +10,24 @@
  */
 package com.silence.robot.listener;
 
-import com.silence.robot.domain.UserInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.concurrent.ConcurrentHashMap;
 
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import java.util.concurrent.ConcurrentHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.silence.robot.domain.UserInfo;
 
 /**
  * 〈一句话功能简述〉<br> 
  * 〈session listener〉
  *
  * @author silence
- * @create 2019/12/3
- * @since 1.0.0
+ * @since 2019/12/3
+ * 
  */
 public class SessionListener implements HttpSessionListener {
     private final Logger logger = LoggerFactory.getLogger(SessionListener.class);

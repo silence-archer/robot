@@ -28,8 +28,8 @@ import java.time.LocalTime;
  * 〈事务传播机制测试〉
  *
  * @author silence
- * @create 2020/4/16
- * @since 1.0.0
+ * @since 2020/4/16
+ * 
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)

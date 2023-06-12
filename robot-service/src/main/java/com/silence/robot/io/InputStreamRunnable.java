@@ -27,8 +27,8 @@ import java.nio.file.Paths;
  * 〈正常输入流处理〉
  *
  * @author silence
- * @create 2019/10/22
- * @since 1.0.0
+ * @since 2019/10/22
+ * 
  */
 public class InputStreamRunnable implements Runnable {
 

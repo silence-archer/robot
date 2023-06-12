@@ -15,8 +15,8 @@ package com.silence.robot.domain;
  * 〈svn info〉
  *
  * @author silence
- * @create 2019/10/28
- * @since 1.0.0
+ * @since 2019/10/28
+ * 
  */
 public class SvnInfo {
 

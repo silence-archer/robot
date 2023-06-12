@@ -26,8 +26,8 @@ import javax.servlet.http.HttpSession;
  * 〈登录拦截〉
  *
  * @author silence
- * @create 2019/12/4
- * @since 1.0.0
+ * @since 2019/12/4
+ * 
  */
 public class LoginInterceptor implements HandlerInterceptor {
 

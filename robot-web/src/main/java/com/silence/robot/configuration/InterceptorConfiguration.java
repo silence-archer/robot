@@ -25,8 +25,8 @@ import java.util.List;
  * 〈拦截器配置〉
  *
  * @author silence
- * @create 2019/12/4
- * @since 1.0.0
+ * @since 2019/12/4
+ * 
  */
 @Configuration
 @EnableConfigurationProperties(SilenceConfigurationProperties.class)

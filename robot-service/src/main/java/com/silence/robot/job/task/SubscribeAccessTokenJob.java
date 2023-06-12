@@ -31,8 +31,8 @@ import javax.annotation.Resource;
  * 〈〉
  *
  * @author silence
- * @create 2019/12/30
- * @since 1.0.0
+ * @since 2019/12/30
+ * 
  */
 @Component
 public class SubscribeAccessTokenJob implements RobotQuartzTask {

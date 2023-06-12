@@ -17,8 +17,8 @@ import java.util.Date;
  * 〈〉
  *
  * @author silence
- * @create 2019/12/27
- * @since 1.0.0
+ * @since 2019/12/27
+ * 
  */
 public class CronTaskInfo {
 

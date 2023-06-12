@@ -24,8 +24,8 @@ import javax.annotation.Resource;
  * 〈图片试别〉
  *
  * @author silence
- * @create 2020/1/7
- * @since 1.0.0
+ * @since 2020/1/7
+ * 
  */
 @Service
 public class ImageOcrService {

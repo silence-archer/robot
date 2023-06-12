@@ -10,17 +10,18 @@
  */
 package com.silence.robot.io;
 
-import com.silence.robot.utils.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.silence.robot.utils.CommonUtils;
 
 /**
  * 〈一句话功能简述〉<br> 
  * 〈process执行线程〉
  *
  * @author silence
- * @create 2019/10/28
- * @since 1.0.0
+ * @since 2019/10/28
+ * 
  */
 public class CmdOperateRunnable implements Runnable {
 

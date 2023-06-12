@@ -19,8 +19,8 @@ import java.util.List;
  * 〈属性文件配置〉
  *
  * @author silence
- * @create 2019/12/4
- * @since 1.0.0
+ * @since 2019/12/4
+ * 
  */
 @ConfigurationProperties(prefix = "silence.interceptor")
 public class SilenceConfigurationProperties {

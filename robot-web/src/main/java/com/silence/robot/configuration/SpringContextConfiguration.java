@@ -19,8 +19,8 @@ import org.springframework.context.annotation.Configuration;
  * 〈configuration〉
  *
  * @author silence
- * @create 2019/11/6
- * @since 1.0.0
+ * @since 2019/11/6
+ * 
  */
 @Configuration
 public class SpringContextConfiguration {

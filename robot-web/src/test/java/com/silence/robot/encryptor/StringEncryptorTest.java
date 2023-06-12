@@ -42,8 +42,8 @@ import java.util.stream.Stream;
  * 〈数据库密码加密测试〉
  *
  * @author silence
- * @create 2019/12/5
- * @since 1.0.0
+ * @since 2019/12/5
+ * 
  */
 //我们在测试使用 websocket的时候需要启动一个完整的服务器，而使用这个注解就是说每次测试都会选用一个随即可用的端口模拟启动一个完整的服务器
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

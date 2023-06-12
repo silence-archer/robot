@@ -31,8 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 〈bean 操作工具类〉
  *
  * @author silence
- * @create 2020/1/2
- * @since 1.0.0
+ * @since 2020/1/2
+ * 
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils {
 

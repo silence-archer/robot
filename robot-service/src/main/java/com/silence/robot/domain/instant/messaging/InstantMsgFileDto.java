@@ -15,8 +15,8 @@ package com.silence.robot.domain.instant.messaging;
  * 〈文件交互dto〉
  *
  * @author silence
- * @create 2019/11/7
- * @since 1.0.0
+ * @since 2019/11/7
+ * 
  */
 public class InstantMsgFileDto {
 

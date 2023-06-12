@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 〈动态数据源配置〉
  *
  * @author silence
- * @create 2020/4/21
- * @since 1.0.0
+ * @since 2020/4/21
+ * 
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
 

@@ -30,8 +30,8 @@ import javax.annotation.Resource;
  * 〈scheduler test〉
  *
  * @author silence
- * @create 2019/12/26
- * @since 1.0.0
+ * @since 2019/12/26
+ * 
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)

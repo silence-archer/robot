@@ -15,8 +15,8 @@ package com.silence.robot.domain;
  * 〈file dto〉
  *
  * @author silence
- * @create 2019/10/29
- * @since 1.0.0
+ * @since 2019/10/29
+ * 
  */
 public class FileDto {
 

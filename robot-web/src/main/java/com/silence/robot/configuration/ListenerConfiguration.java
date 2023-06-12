@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Configuration;
  * 〈listener configuration〉
  *
  * @author silence
- * @create 2019/12/3
- * @since 1.0.0
+ * @since 2019/12/3
+ * 
  */
 @Configuration
 public class ListenerConfiguration {

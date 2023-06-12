@@ -19,8 +19,8 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
  * 〈定时任务调度scheduler工厂〉
  *
  * @author silence
- * @create 2019/12/26
- * @since 1.0.0
+ * @since 2019/12/26
+ * 
  */
 @Configuration
 public class SchedulerJobConfiguration {

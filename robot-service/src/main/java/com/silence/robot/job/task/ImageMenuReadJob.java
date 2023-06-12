@@ -29,8 +29,8 @@ import java.time.LocalTime;
  * 〈〉
  *
  * @author silence
- * @create 2020/1/9
- * @since 1.0.0
+ * @since 2020/1/9
+ * 
  */
 @Component
 public class ImageMenuReadJob implements RobotQuartzTask {

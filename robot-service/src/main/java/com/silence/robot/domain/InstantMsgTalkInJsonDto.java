@@ -17,8 +17,8 @@ import com.silence.robot.domain.instant.messaging.InstantMsgTalkDto;
  * 〈DTO〉
  *
  * @author silence
- * @create 2019/11/15
- * @since 1.0.0
+ * @since 2019/11/15
+ * 
  */
 public class InstantMsgTalkInJsonDto {
 

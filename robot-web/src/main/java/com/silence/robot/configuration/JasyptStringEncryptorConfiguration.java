@@ -22,8 +22,8 @@ import org.springframework.context.annotation.Configuration;
  * 〈数据库信息加密配置〉
  *
  * @author silence
- * @create 2019/12/5
- * @since 1.0.0
+ * @since 2019/12/5
+ * 
  */
 @Configuration
 public class JasyptStringEncryptorConfiguration {

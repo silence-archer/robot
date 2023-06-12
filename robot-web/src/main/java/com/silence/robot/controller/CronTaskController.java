@@ -26,8 +26,8 @@ import java.util.List;
  * 〈定时任务参数配置〉
  *
  * @author silence
- * @create 2019/12/27
- * @since 1.0.0
+ * @since 2019/12/27
+ * 
  */
 @RestController
 public class CronTaskController {

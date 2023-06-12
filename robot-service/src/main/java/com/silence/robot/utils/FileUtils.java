@@ -42,8 +42,8 @@ import java.util.concurrent.TimeUnit;
  * 〈文件工具类〉
  *
  * @author silence
- * @create 2019/10/29
- * @since 1.0.0
+ * @since 2019/10/29
+ * 
  */
 public class FileUtils {
 

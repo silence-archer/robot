@@ -33,8 +33,8 @@ import java.util.List;
  * 〈订阅号controller〉
  *
  * @author silence
- * @create 2019/12/23
- * @since 1.0.0
+ * @since 2019/12/23
+ * 
  */
 @RestController
 @RequestMapping("/signature")
