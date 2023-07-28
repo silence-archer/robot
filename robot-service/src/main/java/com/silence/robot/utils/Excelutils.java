@@ -10,6 +10,9 @@
  */
 package com.silence.robot.utils;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -17,9 +20,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -54,20 +54,18 @@ public class Excelutils {
         }
     }
 
-    public static Workbook createExcel(String sheetName, List<String> list) {
+    public static Workbook createExcel(String sheetName, List<List<String>> list) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet(sheetName);
         for (int i = 0; i < list.size(); i++) {
-            Row row = sheet.createRow(i);
-            Cell cell = row.createCell(0);
-            cell.setCellValue(list.get(i));
+            for (int i1 = 0; i1 < list.get(i)
+                .size(); i1++) {
+                Row row = sheet.createRow(i);
+                Cell cell = row.createCell(i1);
+                cell.setCellValue(list.get(i).get(i1));
+            }
         }
-
-
-
         return workbook;
-
-
     }
 
 }

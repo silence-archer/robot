@@ -10,32 +10,50 @@
  */
 package com.silence.robot.utils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONReader;
-import com.silence.robot.domain.FileDto;
-import com.silence.robot.io.BufferedRandomAccessFile;
-import com.silence.robot.thread.HandlerThreadFactory;
-import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.swing.filechooser.FileSystemView;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import javax.swing.filechooser.FileSystemView;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONReader;
+import com.silence.robot.domain.FileDto;
+import com.silence.robot.io.BufferedRandomAccessFile;
+import com.silence.robot.thread.HandlerThreadFactory;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -1003,4 +1021,10 @@ public class FileUtils {
         return stringBuilder.substring(0, stringBuilder.length()-1);
     }
 
+    public static List<List<String>> readCsvFile(String filepath, String filename) {
+        List<String> lines = readAllLines(filepath, filename);
+        return lines.stream().map(line -> {
+           return Arrays.asList(line.split(","));
+        }).collect(Collectors.toList());
+    }
 }

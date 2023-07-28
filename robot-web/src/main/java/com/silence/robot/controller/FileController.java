@@ -1,7 +1,18 @@
 package com.silence.robot.controller;
 
-import com.silence.robot.utils.Excelutils;
-import com.silence.robot.utils.HttpUtils;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,12 +26,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.URLEncoder;
-import java.util.Arrays;
+import com.silence.robot.utils.Excelutils;
+import com.silence.robot.utils.FileUtils;
+import com.silence.robot.utils.HttpUtils;
 
 /**
  * 文件上传下载controller
@@ -75,9 +83,25 @@ public class FileController {
     @PostMapping("/getExcel")
     public void getExcel(HttpServletRequest request, HttpServletResponse response) {
 
-        Workbook workbook = Excelutils.createExcel("测试1", Arrays.asList("测试2", "测试3", "测试4"));
+        List<List<String>> list = new ArrayList<>();
+        list.add(new ArrayList<>());
+        Workbook workbook = Excelutils.createExcel("test", list);
 
+        downloadExcel(request, response, workbook);
 
+    }
+
+    @PostMapping("/convertCsvToExcel")
+    public void convertCsvToExcel(HttpServletRequest request, HttpServletResponse response) {
+        String filepath = request.getParameter("filepath");
+        String filename = request.getParameter("filename");
+        List<List<String>> list = FileUtils.readCsvFile(filepath, filename);
+        Workbook workbook = Excelutils.createExcel("test", list);
+        downloadExcel(request, response, workbook);
+
+    }
+
+    private void downloadExcel(HttpServletRequest request, HttpServletResponse response, Workbook workbook) {
         OutputStream fos = null;
         try {
             fos = response.getOutputStream();
@@ -90,7 +114,7 @@ public class FileController {
                     fileName = URLEncoder.encode(fileName, "utf8");
                 }
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                logger.error("下载文件编码解析失败", e);
             }
 
             response.setCharacterEncoding("UTF-8");
@@ -100,8 +124,7 @@ public class FileController {
             workbook.write(fos);
             fos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("下载文件失败", e);
         }
-
     }
 }
